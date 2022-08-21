@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": ["esnext", "dom"],
+    "baseUrl": ".",
+    "paths": {}
+  },
+  "include": [
+    "vitest.config.ts",
+    "vite.config.base.ts",
+    "./packages/**/*.ts",
+    "./packages/**/*.tsx",
+    "./packages/**/*.vue"
+  ]
+}

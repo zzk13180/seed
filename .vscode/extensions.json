@@ -1,0 +1,13 @@
+{
+  // @recommended
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "mrmlnc.vscode-less",
+    "mikestead.dotenv",
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
+    "rust-lang.rust-analyzer"
+  ]
+}

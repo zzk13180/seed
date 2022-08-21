@@ -1,0 +1,12 @@
+{
+  "name": "@seed/app",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "ta": "tauri",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
