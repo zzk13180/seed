@@ -19,6 +19,7 @@
     "paths": {}
   },
   "include": [
+    "types",
     "vitest.config.ts",
     "vite.config.base.ts",
     "./packages/**/*.ts",

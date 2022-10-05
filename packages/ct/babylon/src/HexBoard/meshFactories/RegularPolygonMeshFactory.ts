@@ -8,6 +8,9 @@ export class RegularPolygonMeshFactory {
   constructor(private readonly hexDefinition: Hexagonal) {}
 
   getMesh(item: Item, scene: Scene) {
+    if (!item.diameter) item.diameter = 40
+    if (!item.thickness) item.thickness = 5
+    if (!item.color) item.color = '#000000'
     const cylinder = MeshBuilder.CreateCylinder(
       item.id,
       {

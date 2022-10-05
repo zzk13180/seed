@@ -17,6 +17,10 @@ export class TwoDVectorMeshFactory {
   constructor(private readonly hexDefinition: Hexagonal) {}
 
   getMesh(item: Item, scene: Scene) {
+    if (!item.vectorU) item.vectorU = 1
+    if (!item.vectorV) item.vectorV = 0
+    if (!item.lineWidth) item.lineWidth = 3
+
     const vectorPixelCoordinates = this.hexDefinition.getPixelCoordinates(
       item.vectorU,
       item.vectorV,

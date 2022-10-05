@@ -33,7 +33,8 @@ class FloatArith implements IFloatArith {
   }
 
   public mul(num1: number, num2: number, ...others: number[]): number {
-    if (others.length) return this.mul(this.mul(num1, num2), others[0], ...others.slice(1))
+    if (others.length)
+      return this.mul(this.mul(num1, num2), others[0], ...others.slice(1))
     if (this.isExponentialNotation(num1, num2)) return num1 * num2
     const num1Changed = this.f2i(num1)
     const num2Changed = this.f2i(num2)
@@ -43,21 +44,24 @@ class FloatArith implements IFloatArith {
   }
 
   public plus(num1: number, num2: number, ...others: number[]): number {
-    if (others.length) return this.plus(this.plus(num1, num2), others[0], ...others.slice(1))
+    if (others.length)
+      return this.plus(this.plus(num1, num2), others[0], ...others.slice(1))
     if (this.isExponentialNotation(num1, num2)) return num1 + num2
     const baseNum = 10 ** Math.max(this.getLength(num1), this.getLength(num2))
     return (this.mul(num1, baseNum) + this.mul(num2, baseNum)) / baseNum
   }
 
   public sub(num1: number, num2: number, ...others: number[]): number {
-    if (others.length) return this.sub(this.sub(num1, num2), others[0], ...others.slice(1))
+    if (others.length)
+      return this.sub(this.sub(num1, num2), others[0], ...others.slice(1))
     if (this.isExponentialNotation(num1, num2)) return num1 - num2
     const baseNum = 10 ** Math.max(this.getLength(num1), this.getLength(num2))
     return (this.mul(num1, baseNum) - this.mul(num2, baseNum)) / baseNum
   }
 
   public div(num1: number, num2: number, ...others: number[]): number {
-    if (others.length) return this.div(this.div(num1, num2), others[0], ...others.slice(1))
+    if (others.length)
+      return this.div(this.div(num1, num2), others[0], ...others.slice(1))
     if (this.isExponentialNotation(num1, num2)) return num1 / num2
     const num1Changed = this.f2i(num1)
     const num2Changed = this.f2i(num2)

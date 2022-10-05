@@ -1,9 +1,9 @@
-[Nodejs](https://nodejs.org/
+[Nodejs](https://nodejs.org/)
 [Rust](https://www.rust-lang.org/learn/get-started)
 
-1. npm install pnpm -g
+- cargo install tauri-cli
+- pnpm i
 
-1. pnpm i
+- cd packages/app && pnpm dev
+- cd crates/seed && cargo tauri dev
 
-1. cd packages/app && pnpm dev
-1. cd packages/app && pnpm ta dev

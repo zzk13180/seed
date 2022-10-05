@@ -2,15 +2,16 @@ export interface Item {
   id: string
   u?: number
   v?: number
-  lineWidth?: number
-  borderWidth?: number
   lineColor?: string
+  lineWidth?: number
+  rotation?: number
+  color?: string
+  size?: number
+  borderWidth?: number
   fillColor?: string
   borderColor?: string
   scaleLength?: number
-  rotation?: number
   scaleWidth?: number
-  size?: number
   angle?: number
   thickness?: number
   diameter?: number
@@ -21,7 +22,6 @@ export interface Item {
   vertical?: boolean
   type?: string
   img?: string
-  color?: string
   backgroundColor?: string
   onClick?: Fn
   vectors?: any

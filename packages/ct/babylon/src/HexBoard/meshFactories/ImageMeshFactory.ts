@@ -14,6 +14,9 @@ export class ImageMeshFactory {
   constructor(private readonly hexDefinition: Hexagonal) {}
 
   getMesh(item: Item, scene: Scene) {
+    if (!item.size) item.size = 50
+    if (!item.img) item.img = './test.svg'
+
     const diameter = (item.size * this.hexDefinition.hexagon_edge_to_edge_width) / 100
 
     const square = MeshBuilder.CreatePlane('plane', { size: diameter }, scene)

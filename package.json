@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@seed/common": "workspace:*",
-    "@seed/theme": "workspace:*",
     "@seed/ct": "workspace:*",
     "vue": "^3.2.37",
     "rxjs": "^7.5.6",
@@ -48,7 +47,6 @@
     "date-fns": "^2.29.1"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.0.5",
     "vite": "^3.0.5",
     "vitest": "^0.21.1",
     "typescript": "^4.7.4",

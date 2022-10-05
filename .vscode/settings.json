@@ -2,7 +2,10 @@
   "typescript.tsdk": "./node_modules/typescript/lib",
   "npm.packageManager": "pnpm",
   "editor.tabSize": 2,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.wordWrap": "on",
+  "editor.renderWhitespace": "all",
+  "editor.detectIndentation": false,
+  "editor.bracketPairColorization.enabled": false,
   "files.eol": "\n",
   "workbench.editor.wrapTabs": true,
   "stylelint.enable": true,
@@ -88,5 +91,8 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
   }
 }

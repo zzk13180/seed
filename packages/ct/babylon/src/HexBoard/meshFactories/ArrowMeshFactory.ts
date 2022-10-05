@@ -6,6 +6,7 @@ import {
   StandardMaterial,
   Scene,
 } from '@babylonjs/core'
+import { hex2color3 } from '@seed/common/utils/conver.util'
 import type { Hexagonal } from '@seed/common/utils/hexagonal.util'
 import type { Item } from '../types'
 
@@ -13,6 +14,8 @@ export class ArrowMeshFactory {
   constructor(private readonly hexDefinition: Hexagonal) {}
 
   getMesh(item: Item, scene: Scene) {
+    if (!item.lineWidth) item.lineWidth = 3
+    if (!item.lineColor) item.lineColor = '#000000'
     const segment1 = MeshBuilder.CreateTube(
       'segment1',
       {
@@ -226,7 +229,7 @@ export class ArrowMeshFactory {
     ])
 
     const arrowBorderMaterial = new StandardMaterial('arrowBorderMaterial', scene)
-    let rgb = item.lineColor
+    let rgb = hex2color3(item.lineColor)
     arrowBorderMaterial.diffuseColor = new Color3(rgb.r / 256, rgb.g / 256, rgb.b / 256)
     arrowBorderMaterial.emissiveColor = new Color3(rgb.r / 256, rgb.g / 256, rgb.b / 256)
     arrow.material = arrowBorderMaterial
@@ -286,7 +289,7 @@ export class ArrowMeshFactory {
       )
 
       const arrowCenterMaterial = new StandardMaterial('arrowCenterMaterial', scene)
-      rgb = item.fillColor
+      rgb = hex2color3(item.fillColor)
       arrowCenterMaterial.diffuseColor = new Color3(rgb.r / 256, rgb.g / 256, rgb.b / 256)
       arrowCenterMaterial.specularColor = new Color3(
         rgb.r / 256,
@@ -305,7 +308,7 @@ export class ArrowMeshFactory {
 
     arrow.scaling.x = item.scaleLength
     arrow.scaling.y = item.scaleWidth
-    arrow.rotation.z = (item.rotation * Math.PI) / 180
+    arrow.rotation.z = ((item.rotation || 0) * Math.PI) / 180
 
     arrow.data = {}
     arrow.data.item = item

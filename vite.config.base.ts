@@ -20,8 +20,8 @@ export const baseconfig = async ({ command }) => {
     },
     resolve: { alias },
     clearScreen: false,
-    envDir: '../variables',
-    publicDir: '../public',
+    envDir: '../../',
+    publicDir: '../../public',
     build: {
       outDir: '../../out/',
       emptyOutDir: true,

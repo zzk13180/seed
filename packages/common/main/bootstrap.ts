@@ -1,6 +1,6 @@
 import 'virtual:windi.css'
 import 'virtual:windi-devtools'
-import '@seed/theme/index.less'
+import '../../../theme/index.less'
 import { createApp, h, resolveComponent } from 'vue'
 import { idux, IduxProvider } from '@seed/ct/idux'
 import { router } from './router'

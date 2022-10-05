@@ -1,5 +1,2 @@
 [workspace]
-
-members = [
-  "packages/**/src-tauri/"
-]
+members = ["crates/*"]

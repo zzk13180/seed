@@ -1,13 +1,14 @@
 {
   "build": {
-    "distDir": "../out",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "distDir": "../../out",
     "devPath": "http://127.0.0.1:8080",
-    "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build"
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "seed",
-    "version": "0.0.1"
+    "version": "0.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -16,7 +17,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "MIT",
+      "copyright": "",
       "deb": {
         "depends": []
       },
@@ -57,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "app",
+        "title": "seed",
         "width": 800
       }
     ]
