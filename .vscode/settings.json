@@ -1,6 +1,6 @@
 {
-  "typescript.tsdk": "./node_modules/typescript/lib",
   "npm.packageManager": "pnpm",
+  "stylelint.packageManager": "pnpm",
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "editor.renderWhitespace": "all",
@@ -9,7 +9,24 @@
   "files.eol": "\n",
   "workbench.editor.wrapTabs": true,
   "stylelint.enable": true,
-  "stylelint.packageManager": "pnpm",
+  "explorer.confirmDelete": false,
+  "extensions.ignoreRecommendations": true,
+  "workbench.startupEditor": "none",
+  "search.followSymlinks": false,
+  "volar.codeLens.pugTools": false,
+  "volar.codeLens.references": false,
+  "volar.codeLens.scriptSetupTools": false,
+  "volar.icon.splitEditors": false,
+  "volar.autoCompleteRefs": false,
+  "volar.preview.transparentGrid": false,
+  "volar.preview.port": 3456,
+  "html.hover.references": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.ignoreMissingGitWarning": true,
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "javascript.updateImportsOnFileMove.enabled": "never",
   "search.exclude": {
     "**/node_modules": true,
     "**/*.log": true,
@@ -92,7 +109,13 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

@@ -1,1 +1,1 @@
-# @pms/ct
+# common templates

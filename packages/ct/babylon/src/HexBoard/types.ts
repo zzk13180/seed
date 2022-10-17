@@ -1,7 +1,7 @@
 export interface Item {
   id: string
-  u?: number
-  v?: number
+  u: number
+  v: number
   lineColor?: string
   lineWidth?: number
   rotation?: number

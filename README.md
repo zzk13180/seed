@@ -1,9 +1,16 @@
-[Nodejs](https://nodejs.org/)
-[Rust](https://www.rust-lang.org/learn/get-started)
+# ***seed project***
 
-- cargo install tauri-cli
-- pnpm i
-
-- cd packages/app && pnpm dev
-- cd crates/seed && cargo tauri dev
-
+- pnpm
+- monorepo
+- typescript
+- vue3
+- vite
+- tauri
+- astro
+- stencil
+- nestjs
+- idux
+- rxjs
+- babylonjs
+- windicss
+- codemirror

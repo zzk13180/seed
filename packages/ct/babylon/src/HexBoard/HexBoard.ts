@@ -1,5 +1,3 @@
-import { watchEffect } from 'vue'
-import { of, map } from 'rxjs'
 import {
   IPointerEvent,
   Ray,
@@ -20,17 +18,6 @@ import { hex2color3 } from '@seed/common/utils/conver.util'
 import { emitGlobalEvent } from '@seed/common/utils/event.util'
 import { GridContext } from './contexts/GridContext'
 import { StarryContext } from './contexts/StarryContext'
-import { SphereMeshFactory } from './meshFactories/SphereMeshFactory'
-import { ArrowMeshFactory } from './meshFactories/ArrowMeshFactory'
-import { ImageMeshFactory } from './meshFactories/ImageMeshFactory'
-import { TwoDVectorMeshFactory } from './meshFactories/TwoDVectorMeshFactory'
-import { RegularPolygonMeshFactory } from './meshFactories/RegularPolygonMeshFactory'
-import { FieldOfSquaresMeshFactory } from './meshFactories/FieldOfSquaresMeshFactory'
-import { DataSource } from './DataSource'
-import { ItemMappingPipelineNode } from './pipeline/ItemMappingPipelineNode'
-import { PlanarPositioningPipelineNode } from './pipeline/PlanarPositioningPipelineNode'
-import { ZStackingPipelineNode } from './pipeline/ZStackingPipelineNode'
-import { VectorDecoratingPipelineNode } from './pipeline/VectorDecoratingPipelineNode'
 import { CameraControllingMouseListener } from './listeners/CameraControllingMouseListener'
 
 export class HexBoard {
@@ -239,6 +226,7 @@ export class HexBoard {
     this.positionData.mapX = pickResult.x
     this.positionData.mapY = pickResult.y
     this.positionData.mouseMoved = this.mouseMoved
+    this.positionData.clickedItem = null
     emitGlobalEvent('pointerUp', this.positionData)
     if (!this.mouseMoved) {
       const hexagonalCoordinates = this.hexDimensions.getReferencePoint(e.x, e.y)
@@ -339,98 +327,6 @@ export class HexBoard {
     window.addEventListener('resize', handleWindowResize)
     new GridContext(this.hexDimensions, this, hex2color3('#808080'), 15, 15, 0.5)
     new StarryContext(this, 2000)
-    const sphereMeshFactory = new SphereMeshFactory(this.hexDimensions)
-    const arrowMeshFactory = new ArrowMeshFactory(this.hexDimensions)
-    const imageMeshFactory = new ImageMeshFactory(this.hexDimensions)
-    const twoDVectorMeshFactory = new TwoDVectorMeshFactory(this.hexDimensions)
-    const regularPolygonMeshFactory = new RegularPolygonMeshFactory(this.hexDimensions)
-    const fieldOfSquaresMeshFactory = new FieldOfSquaresMeshFactory(
-      this.hexDimensions,
-      9,
-      20,
-      ['#8d8468', '#86775f', '#7a6a4f', '#7f7053'],
-    )
-
-    const itemMap: any = {}
-    itemMap.arrow = (item, scene) => {
-      return arrowMeshFactory.getMesh(item, scene)
-    }
-    itemMap.asteroids = (item, scene) => {
-      return fieldOfSquaresMeshFactory.getMesh(item, scene)
-    }
-    itemMap.ship = (item, scene) => {
-      return imageMeshFactory.getMesh(item, scene)
-    }
-    itemMap.polygon = (item, scene) => {
-      return regularPolygonMeshFactory.getMesh(item, scene)
-    }
-    itemMap.vector = (item, scene) => {
-      return twoDVectorMeshFactory.getMesh(item, scene)
-    }
-    const proxyGetMesh = (item, scene) => {
-      const getMeshParams: any = {
-        size: item.size,
-        lineWidth: item.lineWidth,
-        greatCircleAngles: [0, Math.PI / 3, -Math.PI / 3],
-        latitudeAngles: [0, Math.PI / 6, Math.PI / 3, -Math.PI / 6, -Math.PI / 3],
-        lineColor: item.lineColor,
-        backgroundColor: item.backgroundColor,
-      }
-      if (item.type === 'star') {
-        getMeshParams.borderStar = {
-          radius1: 3,
-          radius2: 6,
-          points: 20,
-          borderColor: item.lineColor,
-        }
-      } else {
-        getMeshParams.borderWidth = 2
-        getMeshParams.borderColor = item.borderColor
-      }
-      const mesh = sphereMeshFactory.getMesh(getMeshParams, scene)
-      mesh.data.item = item
-      return mesh
-    }
-    itemMap.planet = proxyGetMesh
-    itemMap.moon = proxyGetMesh
-    itemMap.star = proxyGetMesh
-    const dataSource = new DataSource()
-    const itemMappingPipelineNode = new ItemMappingPipelineNode(itemMap, this.scene)
-    const planarPositioningPipelineNode = new PlanarPositioningPipelineNode(
-      this.hexDimensions,
-    )
-    const zStackingPipelineNode = new ZStackingPipelineNode(10)
-    const vectorDecoratingPipelineNode = new VectorDecoratingPipelineNode(
-      twoDVectorMeshFactory,
-      this.scene,
-    )
-    watchEffect(
-      () => {
-        of(dataSource.data)
-          .pipe(
-            map((data) => {
-              return itemMappingPipelineNode.pipeData(data)
-            }),
-          )
-          .pipe(
-            map((data) => {
-              return planarPositioningPipelineNode.pipeData(data)
-            }),
-          )
-          .pipe(
-            map((data) => {
-              return zStackingPipelineNode.pipeData(data)
-            }),
-          )
-          .subscribe((data) => {
-            vectorDecoratingPipelineNode.pipeData(data)
-          })
-      },
-      {
-        flush: 'sync',
-      },
-    )
-    dataSource.init()
     new CameraControllingMouseListener(this)
     const light = new PointLight('light1', new Vector3(0, 0, 1), this.scene)
     light.intensity = 0.5

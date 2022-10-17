@@ -1,0 +1,24 @@
+---
+import { Counter } from '@seed/ct/demo'
+
+import { Content, rawContent } from '../md/test.md'
+---
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main>
+      <Counter client:visible>
+        <div>
+          {rawContent.toString()}
+          <Content />
+        </div>
+      </Counter>
+    </main>
+  </body>
+</html>

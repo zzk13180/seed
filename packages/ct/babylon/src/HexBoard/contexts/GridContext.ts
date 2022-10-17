@@ -4,6 +4,7 @@ import {
   Color4,
   SolidParticleSystem,
   Mesh,
+  Scene,
   MeshBuilder,
 } from '@babylonjs/core'
 import { onGlobalEvent } from '@seed/common/utils/event.util'
@@ -11,11 +12,11 @@ import type { Hexagonal } from '@seed/common/utils/hexagonal.util'
 import type { HexBoard } from '../HexBoard'
 
 export class GridContext {
-  private scene
+  private scene: Scene
   private middleX = 0
   private middleY = 0
-  private positionArray
-  private gridParent
+  private positionArray: { x: number; y: number }[]
+  private gridParent: Mesh
 
   constructor(
     private readonly hexDimensions: Hexagonal,
@@ -27,12 +28,6 @@ export class GridContext {
   ) {
     this.scene = this.board.scene
     this.positionArray = this.createPositionArray(hexDimensions, radius + fadeRadius)
-    const myPositionFunction = (particle, i) => {
-      particle.position.x = this.positionArray[i].x
-      particle.position.y = this.positionArray[i].y
-      particle.position.z = 0
-      particle.rotation.z = Math.PI / 2
-    }
 
     const hexagon = MeshBuilder.CreateDisc(
       't',
@@ -53,11 +48,13 @@ export class GridContext {
 
     SPS.initParticles = () => {
       for (let p = 0; p < SPS.nbParticles; p++) {
-        myPositionFunction(SPS.particles[p], p)
-        SPS.particles[p].rotation.z = Math.PI / 2
+        SPS.particles[p]!.position.x = this.positionArray[p]!.x
+        SPS.particles[p]!.position.y = this.positionArray[p]!.y
+        SPS.particles[p]!.position.z = 0
+        SPS.particles[p]!.rotation.z = Math.PI / 2
         const distanceFromViewPoint = Math.sqrt(
-          Math.pow(SPS.particles[p].position.x - this.middleX, 2) +
-            Math.pow(SPS.particles[p].position.y - this.middleY, 2),
+          Math.pow(SPS.particles[p]!.position.x - this.middleX, 2) +
+            Math.pow(SPS.particles[p]!.position.y - this.middleY, 2),
         )
         let alpha = this.baseAlpha
         if (
@@ -77,7 +74,7 @@ export class GridContext {
         ) {
           alpha = 0
         }
-        SPS.particles[p].color = new Color4(
+        SPS.particles[p]!.color = new Color4(
           this.color.r / 256,
           this.color.g / 256,
           this.color.b / 256,
@@ -100,15 +97,12 @@ export class GridContext {
         this.board.positionData.middleX,
         this.board.positionData.middleY,
       )
-
       const centerHexPixelCoordinates = this.hexDimensions.getPixelCoordinates(
         hexCoordinates.u,
         hexCoordinates.v,
       )
-
       this.gridParent.position.x = centerHexPixelCoordinates.x
       this.gridParent.position.y = centerHexPixelCoordinates.y
-
       this.middleX = this.board.positionData.middleX - centerHexPixelCoordinates.x
       this.middleY = this.board.positionData.middleY - centerHexPixelCoordinates.y
       SPS.setParticles()
