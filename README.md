@@ -1,4 +1,4 @@
-# ***seed project***
+# **_seed project_**
 
 - pnpm
 - monorepo
@@ -7,7 +7,7 @@
 - vite
 - tauri
 - astro
-- stencil
+- lit
 - nestjs
 - idux
 - rxjs

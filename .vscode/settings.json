@@ -77,7 +77,8 @@
     "**/yarn.lock": true
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll": false,
+    "source.organizeImports": false
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

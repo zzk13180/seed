@@ -7,7 +7,7 @@ export default defineConfig(async ({ command }) => {
     ...baseConfig,
     base: '/app/',
     build: {
-      outDir: './app/',
+      outDir: './out/',
       emptyOutDir: true,
       sourcemap: false,
     },

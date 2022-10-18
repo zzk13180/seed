@@ -32,7 +32,7 @@ module.exports = {
     },
   ],
   rules: {
-    'no-console': ['warn', { allow: ['error'] }],
+    // 'no-console': ['warn', { allow: ['error'] }],
     semi: ['warn', 'never'],
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     camelcase: ['error', { properties: 'never' }],

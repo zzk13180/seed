@@ -1,0 +1,16 @@
+{
+  "name": "my-element",
+  "private": true,
+  "version": "0.0.1",
+  "author": "zhangzhankui <zzk13180@gmail.com>",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "keywords": [],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}

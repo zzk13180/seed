@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <p>Welcome</p>
+    <my-element>
+      <h1>Lit</h1>
+    </my-element>
     <div class="row">
       <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
       <img src="/javascript.svg" class="logo vanilla" alt="JavaScript logo" />
@@ -24,6 +27,7 @@
   import { CodemirrorEditor } from '@seed/ct/editors'
   import { useGo } from '@seed/common/hooks/useGo'
   import { invoke } from '@tauri-apps/api'
+  import '@seed/components/my-element'
 
   const go = useGo()
   const name = ref('')

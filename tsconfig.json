@@ -37,6 +37,8 @@
     "allowUnusedLabels": false,
     // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
+    // Lit
+    "useDefineForClassFields": false,
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
