@@ -8,6 +8,9 @@
     "types"
   ],
   "keywords": [],
+  "type": "module",
+  "main": "dist/my-element.mjs",
+  "module": "dist/my-element.mjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

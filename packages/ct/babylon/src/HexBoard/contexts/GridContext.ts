@@ -21,10 +21,10 @@ export class GridContext {
   constructor(
     private readonly hexDimensions: Hexagonal,
     private readonly board: HexBoard,
-    private readonly color,
+    private readonly color: Color3,
     private readonly radius: number,
-    private readonly fadeRadius,
-    private readonly baseAlpha,
+    private readonly fadeRadius: number,
+    private readonly baseAlpha: number,
   ) {
     this.scene = this.board.scene
     this.positionArray = this.createPositionArray(hexDimensions, radius + fadeRadius)

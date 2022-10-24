@@ -9,6 +9,7 @@ export class CameraControllingMouseListener {
   priorCanvasY = 0
   rotateMultiplier = 1 / 500
   zoomMultiplier = 5
+
   constructor(private board: HexBoard) {
     onGlobalEvent('pointerDown', () => {
       if (this.board.positionData.clickedItem) {

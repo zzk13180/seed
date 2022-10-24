@@ -12,7 +12,6 @@
 /fw/
 /loader/
 **/www
-**/out
 **/dist
 **/target
 **/node_modules

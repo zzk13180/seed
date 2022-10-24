@@ -1,12 +1,7 @@
 [package]
 name = "seed"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
 edition = "2021"
-rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -17,7 +12,7 @@ tauri-build = { version = "1.1", features = [] }
 common = { path = "../common", package = "seed_common" }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.1", features = ["api-all"] }
+tauri = { version = "1.1.1", features = ["api-all", "system-tray"] }
 
 [features]
 # by default Tauri runs in production mode

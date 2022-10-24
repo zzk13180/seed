@@ -31,8 +31,8 @@ export const baseconfig = async ({ command }) => {
     publicDir: '../../public',
     build: {
       outDir: '../../out/',
-      emptyOutDir: true,
-      sourcemap: false,
+      emptyOutDir: false,
+      sourcemap: true,
       rollupOptions: {
         external: /^lit/,
       },

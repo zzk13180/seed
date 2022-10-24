@@ -12,6 +12,7 @@ import {
   FxaaPostProcess,
   Matrix,
   PointLight,
+  Nullable,
 } from '@babylonjs/core'
 import { Hexagonal } from '@seed/common/utils/hexagonal.util'
 import { hex2color3 } from '@seed/common/utils/conver.util'

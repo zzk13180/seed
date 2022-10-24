@@ -1,5 +1,10 @@
 {
   "name": "@seed/components",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zzk13180/seed.git",
+    "directory": "packages/components"
+  }
 }

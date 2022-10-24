@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   base: '/my-element/',
@@ -9,6 +9,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
+      external: /^lit/,
       input: {
         main: resolve(__dirname, 'index.html'),
       },

@@ -24,7 +24,7 @@ importers:
       '@seed/common': workspace:*
       '@seed/components': workspace:*
       '@seed/ct': workspace:*
-      '@tauri-apps/api': ^1.0.2
+      '@tauri-apps/api': ^1.1.0
       '@types/codemirror': ^5.60.5
       '@types/crypto-js': ^4.1.1
       '@types/intro.js': ^5.1.0
@@ -105,7 +105,7 @@ importers:
       '@seed/common': link:packages/common
       '@seed/components': link:packages/components
       '@seed/ct': link:packages/ct
-      '@tauri-apps/api': 1.0.2
+      '@tauri-apps/api': 1.1.0
       astro: 1.5.0_yforsi4gqizcfuvkq44t5zascq
       axios: 0.27.2
       codemirror: 6.0.1
@@ -217,6 +217,9 @@ importers:
     specifiers: {}
 
   packages/components:
+    specifiers: {}
+
+  packages/components/my-element:
     specifiers: {}
 
   packages/ct:
@@ -1527,8 +1530,8 @@ packages:
       tsm: 2.2.2
     dev: false
 
-  /@tauri-apps/api/1.0.2:
-    resolution: {integrity: sha512-yuNW0oeJ1/ZA7wNF1KgxhHrSu5viPVzY/UgUczzN5ptLM8dH15Juy5rEGkoHfeXGju90Y/l22hi3BtIrp/za+w==}
+  /@tauri-apps/api/1.1.0:
+    resolution: {integrity: sha512-n13pIqdPd3KtaMmmAcrU7BTfdMtIlGNnfZD0dNX8L4p8dgmuNyikm6JAA+yCpl9gqq6I8x5cV2Y0muqdgD0cWw==}
     engines: {node: '>= 12.22.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 

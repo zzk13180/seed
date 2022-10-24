@@ -4,16 +4,20 @@ import {
   Vector3,
   SolidParticleSystem,
   MeshBuilder,
+  Nullable,
+  Scene,
+  Mesh,
 } from '@babylonjs/core'
 import { hex2color3 } from '@seed/common/utils/conver.util'
 import { onGlobalEvent } from '@seed/common/utils/event.util'
 import type { HexBoard } from '../HexBoard'
 
 export class StarryContext {
-  private scene
-  private outerRadius
-  private starColors
-  private mesh
+  private scene: Nullable<Scene> | undefined
+  private outerRadius: number
+  private starColors: string[]
+  private mesh: Mesh
+
   constructor(private readonly board: HexBoard, private readonly density) {
     this.scene = this.board.scene
     this.outerRadius = this.board.camera.maxZ - 50

@@ -1,11 +1,45 @@
 declare module '*.scss?inline' {
-  import { CSSResult} from 'lit';
-  const styles: CSSResult;
-  export default styles;
+  import { CSSResult } from 'lit'
+  const styles: CSSResult
+  export default styles
 }
 
 declare module '*.scss' {
-  import { CSSResult} from 'lit';
-  const styles: CSSResult;
-  export default styles;
+  import { CSSResult } from 'lit'
+  const styles: CSSResult
+  export default styles
+}
+
+// images
+declare module '*.jpg' {
+  const src: string
+  export default src
+}
+declare module '*.jpeg' {
+  const src: string
+  export default src
+}
+declare module '*.png' {
+  const src: string
+  export default src
+}
+declare module '*.gif' {
+  const src: string
+  export default src
+}
+declare module '*.svg' {
+  const src: string
+  export default src
+}
+declare module '*.ico' {
+  const src: string
+  export default src
+}
+declare module '*.webp' {
+  const src: string
+  export default src
+}
+declare module '*.avif' {
+  const src: string
+  export default src
 }

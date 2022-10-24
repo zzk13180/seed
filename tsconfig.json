@@ -11,8 +11,7 @@
     "resolveJsonModule": true,
     // Enable stricter transpilation for better output.
     "isolatedModules": true,
-    // Astro directly run TypeScript code, no transpilation needed.
-    "noEmit": true,
+    "emitDeclarationOnly": true,
     // Report an error when importing a file using a casing different from the casing on disk.
     "forceConsistentCasingInFileNames": true,
     // Properly support importing CJS modules in ESM
@@ -28,7 +27,7 @@
     // Report an error when a parameter is declared but never used.
     "noUnusedParameters": true,
     // Force the usage of the indexed syntax to access fields declared using an index signature.
-    "noUncheckedIndexedAccess": true,
+    // "noUncheckedIndexedAccess": true,
     // Report an error when the value `undefined` is given to an optional property that doesn't specify `undefined` as a valid value.
     "exactOptionalPropertyTypes": true,
     // Report an error for unreachable code instead of just a warning.
@@ -36,18 +35,21 @@
     // Report an error for unused labels instead of just a warning.
     "allowUnusedLabels": false,
     // Enable node-style module resolution, for things like npm package imports.
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     // Lit
     "useDefineForClassFields": false,
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
-    "sourceMap": true,
+    "sourceMap": false,
+    "declaration": true,
+    "declarationMap": false,
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
+    // "outDir": "./types",
     "paths": {}
   },
   "include": [
