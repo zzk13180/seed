@@ -10,6 +10,7 @@
     "tauri-apps.tauri-vscode",
     "rust-lang.rust-analyzer",
     "runem.lit-plugin",
-    "bungcip.better-toml"
+    "bungcip.better-toml",
+    "astro-build.astro-vscode"
   ]
 }

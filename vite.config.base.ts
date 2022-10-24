@@ -16,7 +16,20 @@ export const baseconfig = async ({ command }) => {
   const plugins = [VueJsx(), Vue(vueOptions), windiCSS()]
   const postcssPlugins = []
   const alias = {}
-  const proxy = {}
+  const proxy = {
+    '^/demo/(?=static|theme|sso|api|files)': {
+      target: 'https://127.0.0.1:4000',
+      configure: (proxy: any) => {
+        proxy.on('proxyRes', function (proxyRes: any) {
+          const location = proxyRes.headers['location']
+          console.log(location)
+          // if (location) {
+          //   proxyRes.headers['location'] = location.replace(/https/, 'http')
+          // }
+        })
+      },
+    },
+  }
   const include = []
   return defineConfig({
     plugins,
@@ -27,7 +40,7 @@ export const baseconfig = async ({ command }) => {
     },
     resolve: { alias },
     clearScreen: false,
-    envDir: '../../',
+    envDir: '../../variables',
     publicDir: '../../public',
     build: {
       outDir: '../../out/',
