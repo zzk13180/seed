@@ -27,7 +27,9 @@ export class Jsonp {
   ): Promise<R> {
     let timeoutId: any
     let canceler = () => {}
-    if (this.config.timeout) timeoutId = setTimeout(() => canceler(), this.config.timeout)
+    if (this.config.timeout) {
+      timeoutId = setTimeout(() => canceler(), this.config.timeout)
+    }
     const done = () => timeoutId && clearTimeout(timeoutId)
     return new Promise((resolve, reject) => {
       canceler = this.handle(requestConfig, resolve, reject, done)
@@ -58,7 +60,9 @@ export class Jsonp {
       // Firstly, delete this callback.
       delete window[callbackName]
       // Next, make sure the request wasn't cancelled in the meantime.
-      if (cancelled) return
+      if (cancelled) {
+        return
+      }
       // Set state to indicate data was received.
       body = data
       finished = true
@@ -68,14 +72,18 @@ export class Jsonp {
       // clearTimeout
       done()
       // Remove the <script> tag if it's still on the page.
-      if (node.parentNode) node.parentNode.removeChild(node)
+      if (node.parentNode) {
+        node.parentNode.removeChild(node)
+      }
       // Remove the response callback from the window
       delete window[callbackName]
     }
     // success callback
     const onLoad = () => {
       // Do nothing if the request has been cancelled.
-      if (cancelled) return
+      if (cancelled) {
+        return
+      }
       // wrap it in an extra Promise, to ensure the microtask
       this.resolvedPromise.then(() => {
         cleanup()
@@ -101,7 +109,9 @@ export class Jsonp {
     //  error callback
     const onError: any = (error: Error) => {
       done()
-      if (cancelled) return
+      if (cancelled) {
+        return
+      }
       cleanup()
       reject({
         response: error,

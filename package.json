@@ -2,14 +2,26 @@
   "name": "seed-monorepo",
   "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "packages/**/*",
+    "app/*"
+  ],
   "engines": {
     "node": ">=16",
     "pnpm": ">=7"
   },
-  "keywords": [],
+  "keywords": [
+    "sample",
+    "web",
+    "tauri",
+    "seed",
+    "monorepo"
+  ],
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "dev": "nx dev @seed/web",
+    "graph": "nx graph",
     "test": "vitest",
     "prepare": "husky install .githooks",
     "zhlint": "zhlint 'packages/**/*.md'",
@@ -19,7 +31,6 @@
     "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/"
   },
   "dependencies": {
-    "@seed/components": "workspace:*",
     "@seed/common": "workspace:*",
     "@seed/ct": "workspace:*",
     "vue": "^3.2.37",
@@ -55,8 +66,16 @@
   },
   "devDependencies": {
     "vite": "^3.1.8",
+    "lerna": "^6.0.1",
+    "nx": "^15.0.3",
+    "@nrwl/cli": "15.0.3",
+    "@nrwl/js": "15.0.3",
+    "@nrwl/nx-cloud": "latest",
+    "@nrwl/workspace": "15.0.3",
+    "prisma": "^4.5.0",
+    "@prisma/client": "^4.5.0",
     "vitest": "^0.21.1",
-    "typescript": "^4.7.4",
+    "typescript": "^4.8.4",
     "@types/lodash": "^4.14.182",
     "@types/codemirror": "^5.60.5",
     "@types/crypto-js": "^4.1.1",
@@ -64,8 +83,8 @@
     "@types/node": "^18.7.1",
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
     "@vitejs/plugin-vue": "^3.0.1",
     "@vitejs/plugin-vue-jsx": "^2.0.0",
     "@vue/test-utils": "^2.0.2",
@@ -74,6 +93,8 @@
     "cross-env": "^7.0.3",
     "cssnano": "^5.1.12",
     "eslint": "^8.21.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-unicorn": "^41.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-define-config": "^1.6.0",
     "eslint-plugin-import": "2.26.0",
@@ -129,13 +150,7 @@
   },
   "pnpm": {
     "peerDependencyRules": {
-      "ignoreMissing": [
-        "@algolia/client-search",
-        "vue",
-        "react",
-        "react-dom",
-        "@types/react"
-      ]
+      "ignoreMissing": []
     }
   }
 }

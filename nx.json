@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "npmScope": "seed-monorepo",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build"],
+        "accessToken": "ZGQ0NTBlOTUtZDhiNy00Y2ZlLWI5OTItOGQwYTk2MDQ3MmNkfHJlYWQtd3JpdGU="
+      }
+    }
+  },
+  "namedInputs": {
+    "nomd": ["!{projectRoot}/**/*.md"]
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["nomd"]
+    },
+    "dev": {
+      "dependsOn": ["^build"]
+    }
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "packages"
+  }
+}

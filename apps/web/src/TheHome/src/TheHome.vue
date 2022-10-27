@@ -27,7 +27,7 @@
   import { CodemirrorEditor } from '@seed/ct/editors'
   import { useGo } from '@seed/common/hooks/useGo'
   import { invoke } from '@tauri-apps/api'
-  import '@seed/components/my-element'
+  import '@seed/comp-my-element'
 
   const go = useGo()
   const name = ref('')

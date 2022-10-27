@@ -3,7 +3,7 @@
     <IxNotificationProvider>
       <IxModalProvider ref="modalProviderRef">
         <IxMessageProvider>
-          <IduxProviderRegister></IduxProviderRegister>
+          <IduxProviderRegister />
           <slot></slot>
         </IxMessageProvider>
       </IxModalProvider>

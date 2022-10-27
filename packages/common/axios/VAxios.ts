@@ -54,7 +54,9 @@ export class VAxios {
 
   private setupInterceptors() {
     const transform = this.getTransform()
-    if (!transform) return
+    if (!transform) {
+      return
+    }
     const {
       requestInterceptors,
       requestInterceptorsCatch,
@@ -98,7 +100,9 @@ export class VAxios {
 
     if (params.data) {
       Object.keys(params.data).forEach((key) => {
-        if (!params.data) return
+        if (!params.data) {
+          return
+        }
         const value = params.data[key]
         if (Array.isArray(value)) {
           value.forEach((item) => {

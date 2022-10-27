@@ -28,7 +28,9 @@ async function bootstrap() {
     const prototype = constructor.prototype
     for (let i = 0, len = mockConfigArr.length; i < len; i++) {
       const items: MockConfig[] = checkMockConfig(mockConfigArr[i])
-      if (!items.length) continue
+      if (!items.length) {
+        continue
+      }
       for (let j = 0, jlen = items.length; j < jlen; j++) {
         const item = items[j]
         const name = item.url.replace(/\//g, '')

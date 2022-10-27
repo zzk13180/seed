@@ -109,7 +109,9 @@ export class HexBoard {
     )
     const pickResult: any = this.intersectRayPlane(tRay, this.plane)
 
-    if (!pickResult) return
+    if (!pickResult) {
+      return
+    }
 
     const mousePickResult = this.scene.pick(relativeX, relativeY, (mesh) => {
       const getFurthestAncestor = (mesh: AbstractMesh) => {
@@ -220,7 +222,9 @@ export class HexBoard {
     )
     const pickResult: any = this.intersectRayPlane(tRay, this.plane)
 
-    if (!pickResult) return
+    if (!pickResult) {
+      return
+    }
 
     this.positionData.canvasX = relativeX
     this.positionData.canvasY = relativeY

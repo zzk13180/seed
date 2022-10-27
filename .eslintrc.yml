@@ -1,0 +1,133 @@
+root: true
+env:
+  node: true
+  es6: true
+  browser: true
+parser: 'vue-eslint-parser'
+parserOptions:
+  parser: '@typescript-eslint/parser'
+  ecmaVersion: 2020
+  sourceType: module
+  jsxPragma: React
+  ecmaFeatures:
+    jsx: true
+    modules: true
+plugins:
+  # - unicorn
+  - '@typescript-eslint'
+  - prettier
+  - import
+extends:
+  # - airbnb-typescript
+  # - plugin:unicorn/recommended
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:vue/vue3-recommended
+  - prettier
+overrides:
+  - files:
+      - '**/*.{vue,ts,tsx}'
+    rules:
+      no-undef: 0
+rules:
+  curly: error
+  # no-console: 2
+  semi: 
+    - warn
+    - never
+  no-restricted-syntax:
+    - error
+    - LabeledStatement
+    - WithStatement
+  camelcase:
+    - error
+    - properties: never
+  quotes:
+    - error
+    - single # has to match prettier quotes
+    - avoidEscape: true # has to always be true to not clash with prettier
+      allowTemplateLiterals: false
+  # '@typescript-eslint/explicit-function-return-type':
+  #   - error
+  #   - allowExpressions: true
+  no-var: error
+  no-empty:
+    - error
+    - allowEmptyCatch: true
+  prefer-const:
+    - warn
+    - destructuring: all
+      ignoreReadBeforeAssign: true
+  prefer-template: error
+  object-shorthand:
+    - error
+    - always
+    - ignoreConstructors: false
+      avoidQuotes: true
+  block-scoped-var: error
+  no-constant-condition:
+    - error
+    - checkLoops: false
+  # unicorn/no-null: 0
+  # unicorn/prefer-node-protocol: 0
+  # unicorn/filename-case: 0
+  # unicorn/no-array-for-each: 0
+  # unicorn/no-array-reduce: 0
+  # unicorn/no-array-callback-reference: 0
+  no-unreachable: 2
+  no-void: 0
+  '@typescript-eslint/naming-convention': 0
+
+  vue/no-v-html: 0
+  vue/require-default-prop': 0
+  vue/require-explicit-emits: 0
+  vue/multi-word-component-names: 0
+  no-redeclare: off
+  '@typescript-eslint/no-redeclare': error
+  '@typescript-eslint/ban-ts-comment': off
+  '@typescript-eslint/ban-types': off
+  '@typescript-eslint/explicit-module-boundary-types': off
+  '@typescript-eslint/no-empty-function': off
+  '@typescript-eslint/no-explicit-any': off
+  '@typescript-eslint/no-non-null-assertion': off
+  '@typescript-eslint/no-non-null-asserted-optional-chain': off
+  '@typescript-eslint/no-var-requires': off
+
+  '@typescript-eslint/no-unused-vars':
+    - error
+    - argsIgnorePattern: ^_
+      varsIgnorePattern: ^_
+  no-unused-vars:
+    - error
+    - argsIgnorePattern: ^_
+      varsIgnorePattern: ^_
+  prettier/prettier: error
+  import/first: error
+  import/no-duplicates: error
+  import/order:
+    - error
+    - groups:
+        - builtin
+        - external
+        - internal
+        - parent
+        - sibling
+        - index
+        - object
+        - type
+      pathGroups:
+        - pattern: vue
+          group: external
+          position: before
+        - pattern: '@vue/**'
+          group: external
+          position: before
+      pathGroupsExcludedImportTypes:
+        - type
+  vue/html-self-closing:
+    - error
+    - html:
+        normal: never
+        void: always
+      svg: always
+      math: always

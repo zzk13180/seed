@@ -22,7 +22,7 @@ export interface MockConfig {
 }
 export async function loadMockConfig(): Promise<MockConfig[]> {
   const basePath = './data'
-  const mockFiles = sync(`**/*.{ts,js}`, {
+  const mockFiles = sync('**/*.{ts,js}', {
     cwd: basePath,
   })
   const mockConfigs: MockConfig[] = []
@@ -66,13 +66,19 @@ async function loadConfigFromBundledFile(
 
 export function checkMockConfig(item: MockConfig): MockConfig[] {
   const result: MockConfig[] = []
-  if (!item) return result
+  if (!item) {
+    return result
+  }
   if (!item.url) {
     for (const key in item) {
       // Reflect.has(item,'url')
-      if (item[key].url) result.push(item[key])
+      if (item[key].url) {
+        result.push(item[key])
+      }
     }
   }
-  if (!result.length) result.push(item)
+  if (!result.length) {
+    result.push(item)
+  }
   return result
 }

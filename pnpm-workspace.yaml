@@ -1,5 +1,3 @@
-# https://pnpm.io/zh/workspaces
-# https://pnpm.io/workspaces
 packages:
-  - 'packages/**'
-  - 'http'
+  - 'packages/**/*'
+  - 'apps/*'

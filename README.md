@@ -18,3 +18,6 @@
 - poem
 - graphql
 - mongodb
+- prisma
+- postgresql
+- nx

@@ -43,7 +43,7 @@ export const baseconfig = async ({ command }) => {
     envDir: '../../variables',
     publicDir: '../../public',
     build: {
-      outDir: '../../out/',
+      outDir: '../../dist/',
       emptyOutDir: false,
       sourcemap: true,
       rollupOptions: {

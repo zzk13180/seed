@@ -5,7 +5,7 @@
     <button @click="add()">+</button>
   </div>
   <div class="counter-message">
-    <slot />
+    <slot></slot>
   </div>
 </template>
 

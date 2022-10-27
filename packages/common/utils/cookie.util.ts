@@ -1,4 +1,4 @@
-import { isNumber, isString } from '@seed/common/utils/is.util'
+import { isNumber, isString } from './is.util'
 
 function cookieWrite(
   name: string,
@@ -27,7 +27,9 @@ function cookieWrite(
 }
 
 function cookieRead(name: string, doc = document) {
-  if (!doc) return null
+  if (!doc) {
+    return null
+  }
   const match = doc.cookie.match(new RegExp(`(^|;\\s*)(${name})=([^;]*)`))
   return match ? decodeURIComponent(match[3]) : null
 }

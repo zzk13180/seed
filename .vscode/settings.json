@@ -5,7 +5,8 @@
   "editor.wordWrap": "on",
   "editor.renderWhitespace": "all",
   "editor.detectIndentation": false,
-  "editor.bracketPairColorization.enabled": false,
+  // "editor.bracketPairColorization.enabled": false,
+  "files.insertFinalNewline": true,
   "files.eol": "\n",
   "workbench.editor.wrapTabs": true,
   "stylelint.enable": true,
@@ -42,7 +43,6 @@
     "**/.vscode": false,
     "**/yarn.lock": true,
     "**/tmp": true,
-    "out": true,
     "dist": true,
     "node_modules": true,
     "CHANGELOG.md": true,
@@ -118,5 +118,8 @@
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   }
 }

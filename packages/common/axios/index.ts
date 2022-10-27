@@ -39,7 +39,9 @@ const transform: AxiosTransform = {
   requestInterceptors: (config, options) => {
     const token = '' // getToken()
     if (token && !config.headers?.Authorization) {
-      if (!config.headers) config.headers = {}
+      if (!config.headers) {
+        config.headers = {}
+      }
       config.headers.Authorization = options.authenticationScheme
         ? `${options.authenticationScheme} ${token}`
         : token
@@ -59,8 +61,12 @@ const transform: AxiosTransform = {
    */
   transformRequestHook: (respone: AxiosResponse<any>, options: RequestOptions) => {
     const { isTransformResponse, isReturnNativeResponse } = options
-    if (isReturnNativeResponse) return respone
-    if (!isTransformResponse) return respone.data
+    if (isReturnNativeResponse) {
+      return respone
+    }
+    if (!isTransformResponse) {
+      return respone.data
+    }
   },
   /**
    * 请求前 错误处理
@@ -80,7 +86,9 @@ const transform: AxiosTransform = {
   },
   requestCatchHook: (error: any, options: RequestOptions) => {
     const { isTransformError } = options
-    if (!isTransformError) return error
+    if (!isTransformError) {
+      return error
+    }
     return error // Promise.reject(error)
   },
 }

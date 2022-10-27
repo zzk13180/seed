@@ -7,7 +7,9 @@ export const emitGlobalEvent = (eventName: string, data: any) => {
 }
 
 export const onGlobalEvent = (eventName: string, handler: Fn) => {
-  if (!subjectsGlobal.has(eventName)) subjectsGlobal.set(eventName, new Subject())
+  if (!subjectsGlobal.has(eventName)) {
+    subjectsGlobal.set(eventName, new Subject())
+  }
   const subject = subjectsGlobal.get(eventName)!
   const subscription = subject.subscribe(handler)
   return () => {

@@ -1,4 +1,3 @@
-/out/*
 /dist/*
 .local
 .output.js
