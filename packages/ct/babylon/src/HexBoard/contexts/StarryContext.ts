@@ -23,7 +23,7 @@ export class StarryContext {
     this.outerRadius = this.board.camera.maxZ - 50
     this.starColors = ['#ffffff', '#ffe9c4', '#d4fbff']
 
-    const myPositionFunction = (particle) => {
+    const myPositionFunction = particle => {
       const u = Math.random()
       const v = Math.random()
       const longitude = 2 * Math.PI * u

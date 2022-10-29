@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import {
   IPointerEvent,
   Ray,
@@ -93,8 +94,8 @@ export class HexBoard {
     this.down = true
     this.mouseMoved = false
 
-    const pageX = e.pageX
-    const pageY = e.pageY
+    const { pageX } = e
+    const { pageY } = e
 
     const relativeX = pageX - this.canvas.offsetLeft
     this.initialDownX = relativeX
@@ -113,7 +114,7 @@ export class HexBoard {
       return
     }
 
-    const mousePickResult = this.scene.pick(relativeX, relativeY, (mesh) => {
+    const mousePickResult = this.scene.pick(relativeX, relativeY, mesh => {
       const getFurthestAncestor = (mesh: AbstractMesh) => {
         if (mesh.parent) {
           return getFurthestAncestor(mesh.parent)
@@ -123,17 +124,13 @@ export class HexBoard {
       const furthestAncestor = getFurthestAncestor(mesh)
       if (furthestAncestor.data && furthestAncestor.data.item) {
         if (mesh.data && mesh.data.hitTestAlpha) {
-          const meshPickResult = this.scene.pick(
-            relativeX,
-            relativeY,
-            function (predicateMesh) {
-              return (
-                predicateMesh.data &&
-                predicateMesh.data.item &&
-                predicateMesh.data.item.id === mesh.data.item.id
-              )
-            },
-          )
+          const meshPickResult = this.scene.pick(relativeX, relativeY, predicateMesh => {
+            return (
+              predicateMesh.data &&
+              predicateMesh.data.item &&
+              predicateMesh.data.item.id === mesh.data.item.id
+            )
+          })
 
           if (meshPickResult && meshPickResult.hit) {
             const textureCoordinates = meshPickResult.getTextureCoordinates()
@@ -167,8 +164,8 @@ export class HexBoard {
     if (this.down === false) {
       return
     }
-    const pageX = e.pageX
-    const pageY = e.pageY
+    const { pageX } = e
+    const { pageY } = e
 
     const relativeX = pageX - this.canvas.offsetLeft
     const relativeY = pageY - this.canvas.offsetTop
@@ -209,8 +206,8 @@ export class HexBoard {
       return
     }
     this.down = false
-    const pageX = e.pageX
-    const pageY = e.pageY
+    const { pageX } = e
+    const { pageY } = e
 
     const relativeX = pageX - this.canvas.offsetLeft
     const relativeY = pageY - this.canvas.offsetTop
@@ -245,8 +242,8 @@ export class HexBoard {
   }
 
   pan(dx: number, dy: number) {
-    this.cameraTargetX = this.cameraTargetX + dx
-    this.cameraTargetY = this.cameraTargetY + dy
+    this.cameraTargetX += dx
+    this.cameraTargetY += dy
     this.updatePosition()
   }
 
@@ -259,12 +256,12 @@ export class HexBoard {
   }
 
   spin(dBeta: number) {
-    this.cameraBeta = this.cameraBeta + dBeta
+    this.cameraBeta += dBeta
     this.updateCameraPosition()
   }
 
   zoom(dRadius: number) {
-    this.cameraRadius = this.cameraRadius + dRadius
+    this.cameraRadius += dRadius
     this.cameraRadius = Math.max(this.cameraRadius, this.radiusMin)
     this.updateCameraPosition()
   }

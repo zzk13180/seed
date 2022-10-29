@@ -8,10 +8,12 @@ export const router = createRouter({
 })
 
 export function resetRouter() {
-  router.getRoutes().forEach((route) => {
+  router.getRoutes().forEach(route => {
     const { name, meta } = route
     if (name && meta && !meta.isBasic) {
-      router.hasRoute(name) && router.removeRoute(name)
+      if (router.hasRoute(name)) {
+        router.removeRoute(name)
+      }
     }
   })
 }

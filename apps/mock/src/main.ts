@@ -9,6 +9,7 @@ import {
   checkMockConfig,
 } from './utils/mock.util'
 import 'reflect-metadata'
+
 async function bootstrap() {
   const mockConfigArr: MockConfig[] = await loadMockConfig()
 
@@ -17,15 +18,16 @@ async function bootstrap() {
   class RootController {
     @Get('test')
     async test(): Promise<string> {
-      return new Promise((res) => {
+      const res = await new Promise<string>(res => {
         setTimeout(() => {
           res('test')
         }, 5000)
       })
+      return res
     }
   }
   function registerMockDatas<T extends { new (...args: any[]): {} }>(constructor: T) {
-    const prototype = constructor.prototype
+    const { prototype } = constructor
     for (let i = 0, len = mockConfigArr.length; i < len; i++) {
       const items: MockConfig[] = checkMockConfig(mockConfigArr[i])
       if (!items.length) {

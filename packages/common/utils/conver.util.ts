@@ -27,9 +27,10 @@ export function url2Base64(url: string, mineType?: string): Promise<string> {
     const ctx = canvas!.getContext('2d')
     const img = new Image()
     img.crossOrigin = ''
-    img.onload = function () {
+    img.onload = () => {
       if (!canvas || !ctx) {
-        return reject()
+        reject()
+        return
       }
       canvas.height = img.height
       canvas.width = img.width

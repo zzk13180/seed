@@ -1,6 +1,7 @@
 import { resolve, extname } from 'path'
 import { build } from 'esbuild'
 import { sync } from 'fast-glob'
+
 interface NodeModuleWithCompile extends NodeModule {
   _compile(code: string, filename: string): any
 }
@@ -44,7 +45,7 @@ export async function loadMockConfig(): Promise<MockConfig[]> {
   return mockConfigs
 }
 
-async function loadConfigFromBundledFile(
+function loadConfigFromBundledFile(
   fileName: string,
   bundledCode: string,
 ): Promise<MockConfig> {

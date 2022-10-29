@@ -4,13 +4,9 @@ import { isFunction } from '@seed/common/utils/is.util'
 import omit from 'lodash/omit'
 import cloneDeep from 'lodash/cloneDeep'
 import { ContentTypeEnum, RequestEnum } from '@seed/common/enums/http.enum'
-import { VAxiosCanceler } from './VAxiosCanceler'
 import { Jsonp } from './jsonp'
-import type {
-  RequestOptions,
-  UploadFileParams,
-  CreateAxiosOptions,
-} from '@seed/common/axios'
+import type { RequestOptions, UploadFileParams, CreateAxiosOptions } from './index'
+// eslint-disable-next-line no-duplicate-imports
 import type { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios'
 
 export class VAxios {
@@ -64,11 +60,8 @@ export class VAxios {
       responseInterceptorsCatch,
     } = transform
 
-    const axiosCanceler = new VAxiosCanceler()
-
     // 发起请求前
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
-      axiosCanceler.addPending(config)
       if (requestInterceptors && isFunction(requestInterceptors)) {
         config = requestInterceptors(config, this.options)
       }
@@ -76,13 +69,12 @@ export class VAxios {
     }, undefined)
 
     // 发起请求前错误处理
-    requestInterceptorsCatch &&
-      isFunction(requestInterceptorsCatch) &&
+    if (isFunction(requestInterceptorsCatch)) {
       this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch)
+    }
 
     // 请求返回后
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
-      res && axiosCanceler.removePending(res.config)
       if (responseInterceptors && isFunction(responseInterceptors)) {
         res = responseInterceptors(res)
       }
@@ -90,22 +82,22 @@ export class VAxios {
     }, undefined)
 
     // 请求返回后错误处理
-    responseInterceptorsCatch &&
-      isFunction(responseInterceptorsCatch) &&
+    if (isFunction(responseInterceptorsCatch)) {
       this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch)
+    }
   }
 
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
     const formData = new window.FormData()
 
     if (params.data) {
-      Object.keys(params.data).forEach((key) => {
+      Object.keys(params.data).forEach(key => {
         if (!params.data) {
           return
         }
         const value = params.data[key]
         if (Array.isArray(value)) {
-          value.forEach((item) => {
+          value.forEach(item => {
             formData.append(`${key}[]`, item)
           })
           return

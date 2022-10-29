@@ -1,3 +1,4 @@
+/* eslint-disable import/no-mutable-exports */
 import '@idux/cdk/index.css'
 import '@idux/components/style/core/reset.default.css'
 import '@idux/components/style/core/reset-scroll.default.css'
@@ -17,13 +18,12 @@ import type { App } from 'vue'
 
 addIconDefinitions(IDUX_ICON_DEPENDENCIES)
 
-const loadIconDynamically = (iconName: string) => {
-  return fetch(`/idux-icons/${iconName}.svg`).then((res) => res.text())
+const loadIconDynamically = async (iconName: string) => {
+  const res = await fetch(`/idux-icons/${iconName}.svg`).then(res => res.text())
+  return res
 }
 
 const globalConfig = createGlobalConfig({
-  // import { enUS } from "@idux/components/locales"
-  // locale: enUS,
   icon: { loadIconDynamically },
 })
 

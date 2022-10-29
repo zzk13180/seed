@@ -4,7 +4,7 @@ import VueJsx from '@vitejs/plugin-vue-jsx'
 import windiCSS from 'vite-plugin-windicss'
 
 // https://vitejs.dev/config/
-export const baseconfig = async ({ command }) => {
+export const baseconfig = ({ command }) => {
   const isBuild = command === 'build'
   const vueOptions = {
     template: {
@@ -20,8 +20,8 @@ export const baseconfig = async ({ command }) => {
     '^/demo/(?=static|theme|sso|api|files)': {
       target: 'https://127.0.0.1:4000',
       configure: (proxy: any) => {
-        proxy.on('proxyRes', function (proxyRes: any) {
-          const location = proxyRes.headers['location']
+        proxy.on('proxyRes', (proxyRes: any) => {
+          const { location } = proxyRes.headers
           console.log(location)
           // if (location) {
           //   proxyRes.headers['location'] = location.replace(/https/, 'http')

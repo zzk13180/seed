@@ -16,6 +16,7 @@
   import { Codemirror } from 'vue-codemirror'
   import { javascript } from '@codemirror/lang-javascript'
   import { oneDark } from '@codemirror/theme-one-dark'
+
   const code = `[
     {
       description: 'simple enum validation',

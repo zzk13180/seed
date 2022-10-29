@@ -18,6 +18,7 @@ export class GridContext {
   private positionArray: { x: number; y: number }[]
   private gridParent: Mesh
 
+  // eslint-disable-next-line max-params
   constructor(
     private readonly hexDimensions: Hexagonal,
     private readonly board: HexBoard,

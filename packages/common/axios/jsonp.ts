@@ -11,6 +11,7 @@ export class Jsonp {
   private constructor(config: CreateAxiosOptions) {
     this.config = config
   }
+
   public static getInstance(config: CreateAxiosOptions = {}): Jsonp {
     if (!Jsonp.instance) {
       Jsonp.instance = new Jsonp(config)
@@ -31,9 +32,10 @@ export class Jsonp {
       timeoutId = setTimeout(() => canceler(), this.config.timeout)
     }
     const done = () => timeoutId && clearTimeout(timeoutId)
-    return new Promise((resolve, reject) => {
+    const res = await new Promise<R>((resolve, reject) => {
       canceler = this.handle(requestConfig, resolve, reject, done)
     })
+    return res
   }
 
   private handle(requestConfig, resolve, reject, done) {

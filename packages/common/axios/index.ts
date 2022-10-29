@@ -9,11 +9,11 @@ const transform: AxiosTransform = {
    * 此时请求还未发起
    * 处理 params
    */
-  beforeRequestHook: (config) => {
+  beforeRequestHook: config => {
     const params = config.params || {}
     const data = config.data || false
     if (isString(params)) {
-      config.url = config.url + params
+      config.url += params
       config.params = undefined
       return config
     }
@@ -60,13 +60,11 @@ const transform: AxiosTransform = {
    * 此时请求已完成
    */
   transformRequestHook: (respone: AxiosResponse<any>, options: RequestOptions) => {
-    const { isTransformResponse, isReturnNativeResponse } = options
+    const { isReturnNativeResponse } = options
     if (isReturnNativeResponse) {
       return respone
     }
-    if (!isTransformResponse) {
-      return respone.data
-    }
+    return respone.data
   },
   /**
    * 请求前 错误处理

@@ -9,7 +9,11 @@ function handleError(e: Error) {
 export function useGo(router: Router = globalRouter) {
   const { push, replace } = router
   function go(opt: RouteLocationRaw = RoutePathEnum.BASE_HOME, isReplace = false) {
-    isReplace ? replace(opt).catch(handleError) : push(opt).catch(handleError)
+    if (isReplace) {
+      replace(opt).catch(handleError)
+    } else {
+      push(opt).catch(handleError)
+    }
   }
   return go
 }

@@ -19,6 +19,6 @@ export const onGlobalEvent = (eventName: string, handler: Fn) => {
 }
 
 export const destroyGlobalEvent = () => {
-  subjectsGlobal.forEach((subject) => subject.unsubscribe())
+  subjectsGlobal.forEach(subject => subject.unsubscribe())
   subjectsGlobal.clear()
 }

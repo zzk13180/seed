@@ -20,9 +20,10 @@ export async function bootstrap(routes: RouteRecordRaw[], id?: string): Promise<
   }
   const app = createApp({ render })
   app.use(idux)
-  routes.forEach((route) => router.addRoute(route))
+  routes.forEach(route => router.addRoute(route))
   app.use(router)
   app.use(store)
+  await router.isReady()
   app.mount(id || '#app')
   return app
 }

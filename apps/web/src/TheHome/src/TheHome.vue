@@ -35,9 +35,9 @@
 
   function greet() {
     // tauri
-    invoke<string>('greet', { name: name.value }).then((res) => {
+    invoke<string>('greet', { name: name.value }).then(res => {
       msg.value = res
     })
-    invoke<boolean>('is_win_11').then((res) => console.log(res))
+    invoke<boolean>('is_win_11').then(res => console.log(res))
   }
 </script>
