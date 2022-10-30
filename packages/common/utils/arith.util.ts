@@ -1,13 +1,8 @@
 interface IFloatArith {
-  // 四舍五入 expect(floatArith.toFixed(0.7875, 3) === 0.788).toBe(true)
   toFixed(num: number, precision: number): number
-  // 乘法 expect(floatArith.mul(0.07, 0.01, 0.02) === 0.000014).toBe(true)
   mul(num1: number, num2: number, ...others: number[]): number
-  // 加法 expect(floatArith.plus(0.1, 0.2, 0.3) === 0.6).toBe(true)
   plus(num1: number, num2: number, ...others: number[]): number
-  // 减法 expect(floatArith.sub(0.07, 0.01, 0.02) === 0.04).toBe(true)
   sub(num1: number, num2: number, ...others: number[]): number
-  // 除法 expect(floatArith.div(4750.49269435, 4) === 1187.6231735875).toBe(true)
   div(num1: number, num2: number, ...others: number[]): number
 }
 

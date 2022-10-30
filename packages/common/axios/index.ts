@@ -1,5 +1,4 @@
 import { RequestEnum, ContentTypeEnum } from '@seed/common/enums/http.enum'
-import { isString } from '@seed/common/utils/is.util'
 import { VAxios } from './VAxios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
@@ -12,7 +11,7 @@ const transform: AxiosTransform = {
   beforeRequestHook: config => {
     const params = config.params || {}
     const data = config.data || false
-    if (isString(params)) {
+    if (typeof params === 'string') {
       config.url += params
       config.params = undefined
       return config
@@ -167,8 +166,7 @@ export abstract class AxiosTransform {
 }
 
 export interface UploadFileParams {
-  // Other parameters
-  data?: Recordable
+  data?: Record<string, any>
   name?: string
   file: File | Blob
   filename?: string

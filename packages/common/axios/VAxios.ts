@@ -1,6 +1,5 @@
 import axios from 'axios'
 import qs from 'qs'
-import { isFunction } from '@seed/common/utils/is.util'
 import omit from 'lodash/omit'
 import cloneDeep from 'lodash/cloneDeep'
 import { ContentTypeEnum, RequestEnum } from '@seed/common/enums/http.enum'
@@ -203,7 +202,6 @@ export class VAxios {
   jsonp<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
     let conf: CreateAxiosOptions = cloneDeep(config)
     conf.method = RequestEnum.GET
-    conf.isJsonp = true
     const transform = this.getTransform()
     const { requestOptions } = this.options
     const opt: RequestOptions = Object.assign({}, requestOptions, options)
@@ -236,4 +234,8 @@ export class VAxios {
         })
     })
   }
+}
+
+function isFunction(value: any): value is Function {
+  return typeof value === 'function'
 }

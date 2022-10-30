@@ -19,15 +19,13 @@
     <p id="greet-msg">{{ msg }}</p>
     <div style="cursor: pointer" @click="go('HexBoard')">click go HexBoard</div>
   </div>
-  <CodemirrorEditor />
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import { CodemirrorEditor } from '@seed/ct/editors'
   import { useGo } from '@seed/common/hooks/useGo'
   import { invoke } from '@tauri-apps/api'
-  import '@seed/comp-my-element'
+  import '@seed/my-element'
 
   const go = useGo()
   const name = ref('')

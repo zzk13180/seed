@@ -1,1 +1,1 @@
-# @seed/common
+# common typeScript

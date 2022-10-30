@@ -4,27 +4,14 @@
     <pre>{{ count }}</pre>
     <button @click="add()">+</button>
   </div>
-  <div class="counter-message">
-    <slot></slot>
-  </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
   import { ref } from 'vue'
 
-  export default {
-    setup() {
-      const count = ref(0)
-      const add = () => (count.value += 1)
-      const subtract = () => (count.value -= 1)
-
-      return {
-        count,
-        add,
-        subtract,
-      }
-    },
-  }
+  const count = ref(0)
+  const add = () => (count.value += 1)
+  const subtract = () => (count.value -= 1)
 </script>
 
 <style>
@@ -34,9 +21,5 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-top: 2em;
     place-items: center;
-  }
-
-  .counter-message {
-    text-align: center;
   }
 </style>

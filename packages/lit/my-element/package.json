@@ -1,7 +1,6 @@
 {
-  "name": "@seed/comp-my-element",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@seed/my-element",
+  "version": "0.0.0",
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "repository": {
     "type": "git",
@@ -9,12 +8,11 @@
     "directory": "packages/components/my-element"
   },
   "files": [
-    "dist",
-    "types"
+    "dist/my-element.js"
   ],
   "keywords": [],
   "type": "module",
-  "main": "dist/comp-my-element.js",
+  "main": "dist/my-element.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

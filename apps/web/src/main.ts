@@ -1,4 +1,4 @@
 import { bootstrap } from '@seed/common/main/bootstrap'
-import routes from './routes'
+import { RootRoute, HomeRoute, HexBoardRoute } from './routes'
 
-bootstrap(routes)
+bootstrap([RootRoute, HomeRoute, HexBoardRoute])

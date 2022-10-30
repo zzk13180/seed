@@ -9,6 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@seed/comp-my-element": "workspace:*"
+    "@seed/my-element": "workspace:*"
   }
 }

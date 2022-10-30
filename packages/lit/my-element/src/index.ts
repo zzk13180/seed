@@ -1,6 +1,6 @@
 import { LitElement, unsafeCSS, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import litLogo from './assets/lit.svg'
+import litLogo from '../assets/lit.svg'
 import styles from './index.scss?inline'
 
 @customElement('my-element')
@@ -14,11 +14,8 @@ export class MyElement extends LitElement {
   override render() {
     return html`
       <div>
-        <a href="https://lit.dev" target="_blank">
-          <img src=${litLogo} class="logo lit" alt="Lit logo" />
-        </a>
+        <img src=${litLogo} class="logo lit" alt="Lit logo" />
       </div>
-      <slot></slot>
       <div class="card">
         <p @click=${this._onClick}> count is ${this.count} </p>
       </div>

@@ -10,7 +10,6 @@
 - lit
 - nestjs
 - graphql
-- idux
 - rxjs
 - babylonjs
 - windicss

@@ -1,13 +1,13 @@
 import { TheHome } from './TheHome'
-import { HexBoard } from './HexBoard'
+import { TheDemo } from './TheDemo'
 import type { RouteRecordRaw } from 'vue-router'
 
-const RootRoute: RouteRecordRaw = {
+export const RootRoute: RouteRecordRaw = {
   path: '/',
   redirect: '/TheHome',
 }
 
-const HomeRoute: RouteRecordRaw = {
+export const HomeRoute: RouteRecordRaw = {
   path: '/TheHome',
   name: 'TheHome',
   component: TheHome,
@@ -20,10 +20,10 @@ const HomeRoute: RouteRecordRaw = {
   },
 }
 
-const HexBoardRoute: RouteRecordRaw = {
+export const HexBoardRoute: RouteRecordRaw = {
   path: '/HexBoard',
   name: 'HexBoard',
-  component: HexBoard,
+  component: TheDemo,
   meta: {
     title: 'HexBoard',
     hideTab: true,
@@ -32,5 +32,3 @@ const HexBoardRoute: RouteRecordRaw = {
     ignoreKeepAlive: true,
   },
 }
-
-export default [RootRoute, HomeRoute, HexBoardRoute]
