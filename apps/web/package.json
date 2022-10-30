@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@seed/my-element": "workspace:*"
+    "@seed/my-element": "workspace:*",
+    "@seed/vue": "workspace:*"
   }
 }

@@ -8,5 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
+  },
+  "dependencies": {
+    "@seed/vue": "workspace:*"
   }
 }

@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@seed/common": "workspace:*",
-    "@seed/vue": "workspace:*",
     "vue": "^3.2.37",
     "lit": "^2.4.0",
     "astro": "^1.5.0",
