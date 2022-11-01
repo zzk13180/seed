@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
 import angular from '@analogjs/vite-plugin-angular'
-import { baseconfig } from '../../vite.config.base'
 
-export default defineConfig(({ command }) => {
-  const baseConfig = baseconfig({ command })
+export default defineConfig(() => {
+  const baseConfig = require('@seed/configs/vite.config.base.cjs')
   const plugins = [angular()]
   return {
     ...baseConfig,

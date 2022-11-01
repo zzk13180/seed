@@ -1,15 +1,12 @@
-import { defineConfig } from 'vite'
-
-// https://vitejs.dev/config/
-export const baseconfig = ({ command }) => {
+module.exports = ({ command }) => {
   const isBuild = command === 'build'
   const postcssPlugins = []
   const alias = {}
   const proxy = {
     '^/demo/(?=static|theme|sso|api|files)': {
       target: 'https://127.0.0.1:4000',
-      configure: (proxy: any) => {
-        proxy.on('proxyRes', (proxyRes: any) => {
+      configure: (proxy) => {
+        proxy.on('proxyRes', (proxyRes) => {
           const { location } = proxyRes.headers
           console.log(location)
           // if (location) {
@@ -20,7 +17,7 @@ export const baseconfig = ({ command }) => {
     },
   }
   const include = []
-  return defineConfig({
+  return {
     server: {
       host: '127.0.0.1',
       port: 8080,
@@ -51,5 +48,5 @@ export const baseconfig = ({ command }) => {
     define: {
       __DEV__: !isBuild,
     },
-  })
+  }
 }

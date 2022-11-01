@@ -2,10 +2,9 @@ import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
 import windiCSS from 'vite-plugin-windicss'
-import { baseconfig } from '../../vite.config.base'
 
-export default defineConfig(async ({ command }) => {
-  const baseConfig = await baseconfig({ command })
+export default defineConfig(() => {
+  const baseConfig = require('@seed/configs/vite.config.base.cjs')
   const vueOptions = {
     template: {
       compilerOptions: {
