@@ -1,20 +1,8 @@
 import { defineConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
-import VueJsx from '@vitejs/plugin-vue-jsx'
-import windiCSS from 'vite-plugin-windicss'
-import angular from '@analogjs/vite-plugin-angular'
 
 // https://vitejs.dev/config/
 export const baseconfig = ({ command }) => {
   const isBuild = command === 'build'
-  const vueOptions = {
-    template: {
-      compilerOptions: {
-        isCustomElement: (tag: string) => tag.startsWith('my-'),
-      },
-    },
-  }
-  const plugins = [VueJsx(), Vue(vueOptions), windiCSS(), angular()]
   const postcssPlugins = []
   const alias = {}
   const proxy = {
@@ -33,7 +21,6 @@ export const baseconfig = ({ command }) => {
   }
   const include = []
   return defineConfig({
-    plugins,
     server: {
       host: '127.0.0.1',
       port: 8080,

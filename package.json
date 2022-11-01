@@ -21,7 +21,7 @@
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nx dev @seed/web && cd crates/seed && pnpm dev",
+    "dev": "nx dev @seed/web-vue",
     "graph": "nx graph",
     "clean": "lerna clean",
     "test": "vitest",
