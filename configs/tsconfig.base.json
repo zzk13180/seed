@@ -32,15 +32,5 @@
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
     "paths": {}
-  },
-  "include": [
-    "*.ts",
-    "types",
-    "./packages/**/*.ts",
-    "./packages/**/*.tsx",
-    "./packages/**/*.vue",
-    "./apps/**/*.ts",
-    "./apps/**/*.tsx",
-    "./apps/**/*.vue"
-  ]
+  }
 }

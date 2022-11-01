@@ -1,6 +1,6 @@
 ---
 import { Counter } from '@seed/vue/demo'
-
+import { Button } from '@seed/react/index'
 import { Content, rawContent } from '../md/test.md'
 ---
 
@@ -14,11 +14,10 @@ import { Content, rawContent } from '../md/test.md'
   <body>
     <main>
       <Counter client:visible>
-        <div>
-          {rawContent.toString()}
-          <Content />
-        </div>
+        <Button />
       </Counter>
+      <Content />
+      {rawContent}
     </main>
   </body>
 </html>

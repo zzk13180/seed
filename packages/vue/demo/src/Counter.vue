@@ -1,8 +1,9 @@
 <template>
   <div class="counter">
     <button @click="subtract()">-</button>
-    <pre>{{ count }}</pre>
+    <pre>Vue Counter {{ count }}</pre>
     <button @click="add()">+</button>
+    <slot></slot>
   </div>
 </template>
 

@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
 import windiCSS from 'vite-plugin-windicss'
+import angular from '@analogjs/vite-plugin-angular'
 
 // https://vitejs.dev/config/
 export const baseconfig = ({ command }) => {
@@ -13,7 +14,7 @@ export const baseconfig = ({ command }) => {
       },
     },
   }
-  const plugins = [VueJsx(), Vue(vueOptions), windiCSS()]
+  const plugins = [VueJsx(), Vue(vueOptions), windiCSS(), angular()]
   const postcssPlugins = []
   const alias = {}
   const proxy = {

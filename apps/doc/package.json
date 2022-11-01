@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@seed/vue": "workspace:*"
+    "@seed/vue": "workspace:*",
+    "@seed/react": "workspace:*"
   }
 }
