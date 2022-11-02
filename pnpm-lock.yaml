@@ -104,7 +104,6 @@ importers:
       '@astrojs/react': ^1.1.0
       '@astrojs/vue': ^1.1.0
       '@babel/core': ^7.19.3
-      '@seed/configs': workspace:*
       '@seed/react': workspace:*
       '@seed/vue': workspace:*
       '@types/react': ^18.0.17
@@ -118,7 +117,6 @@ importers:
       '@astrojs/react': 1.2.2_nsgh7lqw2e2kb5wanadocemtdi
       '@astrojs/vue': 1.1.0_fngzjfpc3tfov4brp2butdy67y
       '@babel/core': 7.19.3
-      '@seed/configs': link:../../packages/configs
       '@seed/react': link:../../packages/react
       '@seed/vue': link:../../packages/vue
       astro: 1.5.0
@@ -247,33 +245,26 @@ importers:
     specifiers: {}
 
   packages/common:
-    specifiers:
-      '@seed/configs': workspace:*
-    dependencies:
-      '@seed/configs': link:../configs
+    specifiers: {}
 
   packages/configs:
     specifiers: {}
 
   packages/lit/my-element:
     specifiers:
-      '@seed/configs': workspace:*
       lit: ^2.4.0
       vite: ^3.2.2
     dependencies:
-      '@seed/configs': link:../../configs
       lit: 2.4.0
     devDependencies:
       vite: 3.2.2
 
   packages/react:
     specifiers:
-      '@seed/configs': workspace:*
       '@types/react': ^18.0.24
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
-      '@seed/configs': link:../configs
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -284,7 +275,6 @@ importers:
 
   packages/vue:
     specifiers:
-      '@seed/configs': workspace:*
       axios: ^0.27.2
       lodash: ^4.17.21
       pinia: ^2.0.18
@@ -294,7 +284,6 @@ importers:
       vue: ^3.2.37
       vue-router: ^4.1.3
     dependencies:
-      '@seed/configs': link:../configs
       axios: 0.27.2
       lodash: 4.17.21
       pinia: 2.0.20_vue@3.2.37
