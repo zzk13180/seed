@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "packages/**/*",
-    "app/*"
+    "app/*",
+    "crates/*"
   ],
   "engines": {
     "node": ">=16",
@@ -20,9 +21,9 @@
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nx dev @seed/web-vue",
+    "dev": "lerna run dev --scope={@seed/web-vue,@seed/app-tauri}",
     "graph": "nx graph",
-    "clean": "lerna clean",
+    "clean": "lerna clean --yes",
     "test": "vitest",
     "prepare": "husky install .githooks",
     "zhlint": "zhlint 'packages/**/*.md'",
