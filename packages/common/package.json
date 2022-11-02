@@ -1,8 +1,5 @@
 {
   "name": "@seed/common",
   "version": "0.0.0",
-  "private": true,
-  "dependencies": {
-    "@seed/configs": "workspace:*"
-  }
+  "private": true
 }

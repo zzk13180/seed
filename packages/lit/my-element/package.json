@@ -19,7 +19,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@seed/configs": "workspace:*",
     "lit": "^2.4.0"
   },
   "devDependencies": {

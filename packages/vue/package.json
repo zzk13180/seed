@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@seed/configs": "workspace:*",
     "vue": "^3.2.37",
     "rxjs": "^7.5.6",
     "vue-router": "^4.1.3",
