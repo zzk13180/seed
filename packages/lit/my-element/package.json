@@ -18,5 +18,8 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@seed/configs": "workspace:*",
+    "lit": "^2.4.0"
+  }
 }

@@ -10,7 +10,20 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@seed/configs": "workspace:*",
     "@seed/vue": "workspace:*",
-    "@seed/react": "workspace:*"
+    "@seed/react": "workspace:*",
+    "astro": "^1.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@astrojs/vue": "^1.1.0",
+    "@astrojs/react": "^1.1.0",
+    "vue": "^3.2.37",
+    "vite": "^3.1.8",
+    "@babel/core": "^7.19.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6"
   }
 }
