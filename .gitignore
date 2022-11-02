@@ -27,11 +27,11 @@ lerna-debug.log*
 .yarn/install-state.gz
 .pnp.*
 
-!out
-**/out
 .turbo
 build/**
-**/dist
+configs/**/dist
+apps/**/dist
+packages/**/dist
 
 /tmp
 /out-tsc

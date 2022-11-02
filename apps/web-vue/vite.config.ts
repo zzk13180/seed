@@ -2,9 +2,9 @@ import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
 import windiCSS from 'vite-plugin-windicss'
+import { viteConfig, windiConfig } from '@seed/configs'
 
-export default defineConfig(() => {
-  const baseConfig = require('@seed/configs/vite.config.base.cjs')
+export default defineConfig(env => {
   const vueOptions = {
     template: {
       compilerOptions: {
@@ -12,10 +12,11 @@ export default defineConfig(() => {
       },
     },
   }
-  const plugins = [VueJsx(), Vue(vueOptions), windiCSS()]
+  const plugins = [VueJsx(), Vue(vueOptions), windiCSS(windiConfig)]
   return {
-    ...baseConfig,
-    base: '/app/',
+    ...viteConfig(env),
+    root: 'src',
+    publicDir: 'assets',
     plugins,
     build: {
       outDir: './dist/',

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@seed/my-element": "workspace:*",
-    "@seed/vue": "workspace:*"
+    "@seed/vue": "workspace:*",
+    "@seed/common": "workspace:*"
   }
 }

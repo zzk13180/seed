@@ -1,12 +1,14 @@
-module.exports = ({ command }) => {
+import type { UserConfigFn } from 'vite'
+
+export const viteConfig: UserConfigFn = ({ command }) => {
   const isBuild = command === 'build'
   const postcssPlugins = []
   const alias = {}
   const proxy = {
     '^/demo/(?=static|theme|sso|api|files)': {
       target: 'https://127.0.0.1:4000',
-      configure: (proxy) => {
-        proxy.on('proxyRes', (proxyRes) => {
+      configure: (proxy: any) => {
+        proxy.on('proxyRes', (proxyRes: any) => {
           const { location } = proxyRes.headers
           console.log(location)
           // if (location) {

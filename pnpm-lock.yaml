@@ -31,7 +31,6 @@ importers:
       '@nrwl/nx-cloud': latest
       '@nrwl/workspace': 15.0.3
       '@prisma/client': ^4.5.0
-      '@seed/common': workspace:*
       '@seed/configs': workspace:*
       '@tauri-apps/api': ^1.1.0
       '@types/codemirror': ^5.60.5
@@ -110,7 +109,6 @@ importers:
       '@angular/router': 14.2.8_ueh4h3acaixxom2eko5ckbmxie
       '@astrojs/react': 1.2.2_nsgh7lqw2e2kb5wanadocemtdi
       '@astrojs/vue': 1.1.0_tl77nxdy2qd3vi4tsxsexrhbbq
-      '@seed/common': link:packages/common
       '@seed/configs': link:configs
       '@tauri-apps/api': 1.1.0
       astro: 1.5.0_yforsi4gqizcfuvkq44t5zascq
@@ -139,7 +137,7 @@ importers:
       '@commitlint/config-conventional': 16.2.4
       '@nrwl/cli': 15.0.3
       '@nrwl/js': 15.0.3_6v7r44gayc5sdrsv56ipb2y5xq
-      '@nrwl/nx-cloud': 15.0.0
+      '@nrwl/nx-cloud': 15.0.1
       '@nrwl/workspace': 15.0.3_cmomofx3ghdbqsdpbenz7gqy74
       '@prisma/client': 4.5.0_prisma@4.5.0
       '@types/codemirror': 5.60.5
@@ -237,9 +235,11 @@ importers:
 
   apps/web-vue:
     specifiers:
+      '@seed/common': workspace:*
       '@seed/my-element': workspace:*
       '@seed/vue': workspace:*
     dependencies:
+      '@seed/common': link:../../packages/common
       '@seed/my-element': link:../../packages/lit/my-element
       '@seed/vue': link:../../packages/vue
 
@@ -4236,8 +4236,8 @@ packages:
       - typescript
     dev: true
 
-  /@nrwl/nx-cloud/15.0.0:
-    resolution: {integrity: sha512-KAYmbx8M4we9gUn14rDnt5vMz+yYwIa4xJNsByWf7mjzC4lvBVZKqFzFGaklWzp/gJN/xyNleZt/Fg64k/kF+A==}
+  /@nrwl/nx-cloud/15.0.1:
+    resolution: {integrity: sha512-EvUxiXF/t8czg6ORWRZ3bTPfUHH45Z3VMubmnBEWmcB3IOXQu25Du7KmUCEAqjqb1spuWrsWRzSxkIrpz8Xl9g==}
     hasBin: true
     dependencies:
       axios: 0.21.4

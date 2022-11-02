@@ -1,6 +1,3 @@
-import 'virtual:windi.css'
-import 'virtual:windi-devtools'
-import '../../../theme/index.less'
 import { createApp, h, resolveComponent } from 'vue'
 import { router } from './router'
 import { store } from './store'

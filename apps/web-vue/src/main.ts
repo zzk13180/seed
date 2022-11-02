@@ -1,4 +1,6 @@
-import { bootstrap } from '@seed/common/main/bootstrap'
-import { RootRoute, HomeRoute, HexBoardRoute } from './routes'
+import 'virtual:windi.css'
+import 'virtual:windi-devtools'
+import { bootstrap } from '@seed/vue/main/bootstrap'
+import { RootRoute, HomeRoute, TheDemoRoute } from './routes'
 
-bootstrap([RootRoute, HomeRoute, HexBoardRoute])
+bootstrap([RootRoute, HomeRoute, TheDemoRoute])

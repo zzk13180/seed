@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@seed/configs": "workspace:*",
-    "@seed/common": "workspace:*",
     "@angular/animations": "^14.2.8",
     "@angular/common": "^14.2.8",
     "@angular/compiler": "^14.2.8",

@@ -6,7 +6,7 @@
     </my-element>
     <div class="row">
       <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      <img src="/javascript.svg" class="logo vanilla" alt="JavaScript logo" />
+      <img class="w-16 md:w-32 lg:w-48" src="/javascript.svg" alt="JavaScript logo" />
     </div>
 
     <div class="row">
@@ -17,13 +17,13 @@
     </div>
 
     <p id="greet-msg">{{ msg }}</p>
-    <div style="cursor: pointer" @click="go('HexBoard')">click go HexBoard</div>
+    <div @click="go('TheDemo')">click go TheDemo</div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import { useGo } from '@seed/common/hooks/useGo'
+  import { useGo } from '@seed/vue/hooks/useGo'
   import { invoke } from '@tauri-apps/api'
   import '@seed/my-element'
 

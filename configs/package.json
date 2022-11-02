@@ -2,8 +2,12 @@
   "name": "@seed/configs",
   "version": "0.0.0",
   "private": true,
+  "main": "./dist/index.js",
   "files": [
     "tsconfig.base.json",
-    "vite.config.base.cjs"
-  ]
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p ./src"
+  }
 }

@@ -20,12 +20,12 @@ export const HomeRoute: RouteRecordRaw = {
   },
 }
 
-export const HexBoardRoute: RouteRecordRaw = {
-  path: '/HexBoard',
-  name: 'HexBoard',
+export const TheDemoRoute: RouteRecordRaw = {
+  path: '/TheDemo',
+  name: 'TheDemo',
   component: TheDemo,
   meta: {
-    title: 'HexBoard',
+    title: 'TheDemo',
     hideTab: true,
     isBasic: true,
     ignoreAuth: true,

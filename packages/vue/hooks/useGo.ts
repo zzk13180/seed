@@ -1,5 +1,5 @@
-import { router as globalRouter } from '@seed/common/main/router'
-import { RoutePathEnum } from '@seed/common/enums/route.enum'
+import { router as globalRouter } from '../main/router'
+import { RoutePathEnum } from '../enums/route.enum'
 import type { RouteLocationRaw, Router } from 'vue-router'
 
 function handleError(e: Error) {
