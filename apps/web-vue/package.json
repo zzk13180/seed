@@ -14,6 +14,7 @@
     "@seed/configs": "workspace:*",
     "@seed/my-element": "workspace:*",
     "vue": "^3.2.37",
+    "lit": "^2.4.0",
     "@tauri-apps/api": "^1.1.0",
     "vue-router": "^4.1.3",
     "pinia": "^2.0.18",
@@ -23,7 +24,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "vite": "^3.1.8",
+    "vite": "^3.2.2",
     "@vitejs/plugin-vue": "^3.0.1",
     "@vitejs/plugin-vue-jsx": "^2.0.0"
   }

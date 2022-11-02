@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import omit from 'lodash/omit'
 import cloneDeep from 'lodash/cloneDeep'
-import { ContentTypeEnum, RequestEnum } from '@seed/common/enums/http.enum'
+import { ContentTypeEnum, RequestEnum } from '../enums/http.enum'
 import { Jsonp } from './jsonp'
 import type { RequestOptions, UploadFileParams, CreateAxiosOptions } from './index'
 // eslint-disable-next-line no-duplicate-imports

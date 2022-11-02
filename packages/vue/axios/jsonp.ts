@@ -1,6 +1,6 @@
 import qs from 'qs'
+import type { CreateAxiosOptions } from '../axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
-import type { CreateAxiosOptions } from '@seed/common/axios'
 
 let nextRequestId = 0
 

@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <p>Welcome</p>
+    <p className="text-3xl font-bold underline">Welcome</p>
     <my-element>
       <h1>Lit</h1>
     </my-element>
     <div class="row">
       <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      <img class="w-16 md:w-32 lg:w-48" src="/javascript.svg" alt="JavaScript logo" />
+      <img class="logo vanill" src="/javascript.svg" alt="JavaScript logo" />
     </div>
 
     <div class="row">
