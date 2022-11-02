@@ -109,7 +109,7 @@ importers:
       '@angular/router': 14.2.8_ueh4h3acaixxom2eko5ckbmxie
       '@astrojs/react': 1.2.2_nsgh7lqw2e2kb5wanadocemtdi
       '@astrojs/vue': 1.1.0_tl77nxdy2qd3vi4tsxsexrhbbq
-      '@seed/configs': link:configs
+      '@seed/configs': link:packages/configs
       '@tauri-apps/api': 1.1.0
       astro: 1.5.0_yforsi4gqizcfuvkq44t5zascq
       axios: 0.27.2
@@ -243,10 +243,10 @@ importers:
       '@seed/my-element': link:../../packages/lit/my-element
       '@seed/vue': link:../../packages/vue
 
-  configs:
+  packages/common:
     specifiers: {}
 
-  packages/common:
+  packages/configs:
     specifiers: {}
 
   packages/lit/my-element:
