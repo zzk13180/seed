@@ -17,6 +17,7 @@ export default defineConfig(env => {
     ...viteConfig(env),
     root: 'src',
     publicDir: 'assets',
+    envDir: './env',
     plugins,
     build: {
       outDir: './dist/',

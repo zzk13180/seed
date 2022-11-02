@@ -27,16 +27,6 @@ export const viteConfig: UserConfigFn = ({ command }) => {
     },
     resolve: { alias },
     clearScreen: false,
-    envDir: '../../variables',
-    publicDir: '../../public',
-    build: {
-      outDir: '../../dist/',
-      emptyOutDir: false,
-      sourcemap: true,
-      rollupOptions: {
-        external: /^lit/,
-      },
-    },
     optimizeDeps: {
       include,
       exclude: ['vue-demi'],
