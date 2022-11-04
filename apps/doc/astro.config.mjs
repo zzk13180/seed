@@ -1,14 +1,18 @@
 import { defineConfig } from 'astro/config'
-import vue from '@astrojs/vue'
+import preact from '@astrojs/preact'
 import react from '@astrojs/react'
 
-// https://astro.build/config
 export default defineConfig({
-  integrations: [vue(), react()],
-  markdown: {
-    syntaxHighlight: 'shiki',
-    shikiConfig: {
-      theme: 'dracula',
-    },
+  integrations: [
+    // Enable Preact to support Preact JSX components.
+    preact(),
+    // Enable React for the Algolia search component.
+    react(),
+  ],
+  site: 'https://zzk13180.github.io',
+  base: '/seed',
+  output: 'static',
+  build: {
+    format: 'file',
   },
 })

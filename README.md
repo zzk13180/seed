@@ -1,31 +1,11 @@
 # **_monorepo seed project_**
 
-1. pnpm i
-2. cargo install tauri-cli
-3. pnpm dev
+![seed](./apps/doc/public/image.svg)
 
-- pnpm
-- lerna
-- nx
+<p align='center'>
+ <img src='./apps/doc/public/favicon.svg' alt='favicon' width='32'/>
+  <a href="https://zzk13180.github.io/seed">document🚀</a>
+</p>
+<br>
 
-- vite
-- typescript
-
-- Tauri
-- Angular
-- Vue
-- React
-- Lit
-- Astro
-
-- poem
-- prisma
-- async-graphql
-- nestjs
-
-- husky
-- commitlint
-- lint-staged
-- prettier
-- eslint
-- stylelint
+you can [create a repo from this template on GitHub](https://github.com/zzk13180/seed/generate). or clone to local free to tweak it.

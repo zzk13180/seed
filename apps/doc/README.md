@@ -1,1 +1,1 @@
-# astro
+# @seed/doc
