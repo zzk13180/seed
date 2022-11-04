@@ -1,9 +1,9 @@
 # **_monorepo seed project_**
 
-![seed](./apps/doc/public/image.svg)
+![seed](https://zzk13180.github.io/seed/image.svg)
 
 <p align='center'>
- <img src='./apps/doc/public/favicon.svg' alt='favicon' width='32'/>
+ <img src='https://zzk13180.github.io/seed/favicon.svg' alt='favicon' width='32'/>
   <a href="https://zzk13180.github.io/seed">document🚀</a>
 </p>
 <br>
