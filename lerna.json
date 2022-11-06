@@ -2,6 +2,6 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "useWorkspaces": true,
   "npmClient": "pnpm",
-  "workspaces": ["packages/**/*", "app/*", "crates/*"],
+  "workspaces": ["packages/**", "app/**", "crates/**"],
   "version": "0.0.1"
 }

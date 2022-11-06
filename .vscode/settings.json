@@ -1,4 +1,6 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "npm.packageManager": "pnpm",
   "stylelint.packageManager": "pnpm",
   "editor.tabSize": 2,
