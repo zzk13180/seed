@@ -24,15 +24,18 @@
   padding-left: 30px;
   padding-right: 1rem;
 }
+
 .language-select-wrapper .language-select:hover,
 .language-select-wrapper .language-select:focus {
   color: var(--theme-text);
   border-color: var(--theme-text-light);
 }
+
 .language-select-wrapper {
   color: var(--theme-text-light);
   position: relative;
 }
+
 .language-select-wrapper > svg {
   position: absolute;
   top: 7px;

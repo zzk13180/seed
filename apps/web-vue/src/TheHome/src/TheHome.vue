@@ -2,7 +2,7 @@
   <div class="container">
     <p className="text-3xl font-bold underline">Welcome</p>
     <div class="row">
-      <custom-element></custom-element>
+      <custom-element />
       <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
       <img class="logo vanill" src="/javascript.svg" alt="JavaScript logo" />
     </div>
