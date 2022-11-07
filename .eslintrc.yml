@@ -79,10 +79,6 @@ rules:
   no-void: 0
   '@typescript-eslint/naming-convention': 0
 
-  vue/no-v-html: 0
-  vue/require-default-prop': 0
-  vue/require-explicit-emits: 0
-  vue/multi-word-component-names: 0
   no-redeclare: off
   '@typescript-eslint/no-redeclare': error
   '@typescript-eslint/ban-ts-comment': off
@@ -107,14 +103,6 @@ rules:
     - arrowParens: avoid
   import/first: error
   import/no-duplicates: error
-  vue/html-self-closing:
-    - error
-    - html:
-        normal: never
-        void: always
-      svg: always
-      math: always
-
   for-direction: error
   no-prototype-builtins: error
   no-template-curly-in-string: error
@@ -193,7 +181,7 @@ rules:
     - never
   operator-assignment: warn
   padding-line-between-statements: error
-  no-duplicate-imports: error
+  # no-duplicate-imports: error
   no-useless-computed-key: error
   no-useless-rename: error
   prefer-arrow-callback: error
@@ -205,6 +193,19 @@ rules:
   prefer-rest-params: warn
   prefer-spread: warn
   no-undef: off
+
+  vue/no-v-html: 0
+  vue/require-default-prop': 0
+  vue/require-explicit-emits: 0
+  vue/multi-word-component-names: 0
+  vue/html-self-closing:
+  - error
+  - html:
+      normal: never
+      void: always
+    svg: always
+    math: always
+
   import/newline-after-import: error
   import/no-absolute-path: error
   import/no-amd: error

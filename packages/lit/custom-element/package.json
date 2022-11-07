@@ -1,18 +1,18 @@
 {
-  "name": "@seed/my-element",
+  "name": "@seed/custom-element",
   "version": "0.0.0",
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/zzk13180/seed.git",
-    "directory": "packages/components/my-element"
+    "directory": "packages/components/custom-element"
   },
   "files": [
-    "dist/my-element.js"
+    "dist/custom-element.js"
   ],
   "keywords": [],
   "type": "module",
-  "main": "dist/my-element.js",
+  "main": "dist/custom-element.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

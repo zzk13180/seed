@@ -1,11 +1,17 @@
 {
   "root": true,
   "plugins": ["stylelint-order"],
-  "customSyntax": "postcss-html",
+  "customSyntax": "postcss-less",
   "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
   "rules": {
+    "keyframes-name-pattern": null,
     "function-no-unknown": null,
+    "no-duplicate-selectors": null,
+    "no-invalid-double-slash-comments": null,
+    "no-invalid-position-at-import-rule": null,
+    "selector-not-notation": null,
     "selector-class-pattern": null,
+    "max-line-length": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {

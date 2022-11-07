@@ -1,3 +1,4 @@
+import { colorPalette, genLessVars } from './theme'
 import type { UserConfigFn } from 'vite'
 
 export const viteConfig: UserConfigFn = ({ command }) => {
@@ -35,7 +36,15 @@ export const viteConfig: UserConfigFn = ({ command }) => {
       postcss: {
         plugins: postcssPlugins,
       },
-      preprocessorOptions: {},
+      preprocessorOptions: {
+        less: {
+          globalVars: genLessVars(),
+          javascriptEnabled: true,
+          functions: {
+            colorPalette,
+          },
+        },
+      },
     },
     define: {
       __DEV__: !isBuild,

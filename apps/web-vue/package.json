@@ -11,8 +11,10 @@
   "dependencies": {
     "@seed/vue": "workspace:*",
     "@seed/common": "workspace:*",
-    "@seed/configs": "workspace:*",
-    "@seed/my-element": "workspace:*",
+    "@seed/viteconfig": "workspace:*",
+    "@seed/custom-element": "workspace:*",
+    "@seed/vue-components": "workspace:*",
+    "@seed/vue-composables": "workspace:*",
     "vue": "^3.2.37",
     "lit": "^2.4.0",
     "@tauri-apps/api": "^1.1.0",

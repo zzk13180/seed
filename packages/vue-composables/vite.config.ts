@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import { viteConfig } from '@seed/configs'
+import { viteConfig } from '@seed/viteconfig'
 
 export default defineConfig(env => {
   const plugins = [VueJsx(), Vue()]

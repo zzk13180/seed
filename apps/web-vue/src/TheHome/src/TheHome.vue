@@ -1,10 +1,8 @@
 <template>
   <div class="container">
     <p className="text-3xl font-bold underline">Welcome</p>
-    <my-element>
-      <h1>Lit</h1>
-    </my-element>
     <div class="row">
+      <custom-element></custom-element>
       <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
       <img class="logo vanill" src="/javascript.svg" alt="JavaScript logo" />
     </div>
@@ -12,12 +10,12 @@
     <div class="row">
       <div>
         <input v-model="name" placeholder="Enter a name..." />
-        <button type="button" @click="greet">Greet</button>
+        <SampleButton @click="greet">Greet</SampleButton>
       </div>
     </div>
 
     <p id="greet-msg">{{ msg }}</p>
-    <div @click="go('TheDemo')">click go TheDemo</div>
+    <SampleButton mode="default" @click="go('TheDemo')">click go TheDemo</SampleButton>
   </div>
 </template>
 
@@ -25,7 +23,9 @@
   import { ref } from 'vue'
   import { useGo } from '@seed/vue/hooks/useGo'
   import { invoke } from '@tauri-apps/api'
-  import '@seed/my-element'
+
+  import { SampleButton } from '@seed/vue-components'
+  import '@seed/custom-element'
 
   const go = useGo()
   const name = ref('')

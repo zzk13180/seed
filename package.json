@@ -43,6 +43,7 @@
   "scripts": {
     "nx": "nx",
     "prisma": "prisma",
+    "dev:web": "lerna run dev --scope=@seed/web-vue",
     "dev": "lerna run dev --scope={@seed/web-vue,@seed/app-tauri}",
     "graph": "nx graph",
     "clean": "lerna clean --yes",
@@ -55,7 +56,8 @@
     "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/ --config .stylelintrc.json"
   },
   "dependencies": {
-    "@seed/tsconfig": "workspace:*"
+    "@seed/tsconfig": "workspace:*",
+    "@seed/types": "workspace:*"
   },
   "devDependencies": {
     "lerna": "^6.0.1",

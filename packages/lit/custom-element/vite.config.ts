@@ -2,7 +2,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/my-element/',
+  base: '/custom-element/',
   build: {
     lib: {
       entry: './index.ts',

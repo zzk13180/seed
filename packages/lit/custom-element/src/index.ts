@@ -3,8 +3,8 @@ import { customElement, property } from 'lit/decorators.js'
 import litLogo from '../assets/lit.svg'
 import styles from './index.scss?inline'
 
-@customElement('my-element')
-export class MyElement extends LitElement {
+@customElement('custom-element')
+export class CustomElement extends LitElement {
   @property()
   docsHint = 'Lit'
 
@@ -13,13 +13,11 @@ export class MyElement extends LitElement {
 
   override render() {
     return html`
-      <div>
-        <img src=${litLogo} class="logo lit" alt="Lit logo" />
-      </div>
-      <div class="card">
+      <img src=${litLogo} class="logo lit" alt="Lit logo" />
+      <!-- <div class="card">
         <p @click=${this._onClick}> count is ${this.count} </p>
       </div>
-      <p class="read-the-docs">${this.docsHint}</p>
+      <p class="read-the-docs">${this.docsHint}</p> -->
     `
   }
 
@@ -32,6 +30,6 @@ export class MyElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'my-element': MyElement
+    'custom-element': MyElement
   }
 }

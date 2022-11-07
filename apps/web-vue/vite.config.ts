@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import { viteConfig } from '@seed/configs'
+import { viteConfig } from '@seed/viteconfig'
 
 export default defineConfig(env => {
   const vueOptions = {
     template: {
       compilerOptions: {
-        isCustomElement: (tag: string) => tag.startsWith('my-'),
+        isCustomElement: (tag: string) => tag.startsWith('custom-'),
       },
     },
   }
