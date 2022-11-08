@@ -41,7 +41,6 @@
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "commit": "cz",
     "nx": "nx",
     "prisma": "prisma",
     "dev:web": "lerna run dev --scope=@seed/web-vue",
@@ -54,7 +53,9 @@
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:stylelint",
     "lint:eslint": "eslint --cache --max-warnings 0 \"**/*.{cjs,vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write \"**/*.{cjs,json,tsx,vue,html,css,scss}\"",
-    "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/ --config .stylelintrc.json"
+    "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/ --config .stylelintrc.json",
+    "commit": "cz",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
     "@seed/tsconfig": "workspace:*",
@@ -70,6 +71,8 @@
     "typescript": "^4.8.4",
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
+    "conventional-changelog": "^3.1.25",
+    "conventional-changelog-cli": "^2.2.2",
     "@nrwl/cli": "15.0.5",
     "@nrwl/js": "15.0.5",
     "@nrwl/nx-cloud": "^15.0.1",
@@ -110,6 +113,7 @@
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "commitizen": "^4.2.5",
+    "cz-conventional-changelog": "^3.3.0",
     "zhlint": "^0.6.2"
   },
   "optionalDependencies": {
