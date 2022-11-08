@@ -63,6 +63,7 @@ button {
   font-size: 1em;
   color: #0f0f0f;
   transition: border-color 0.25s;
+  outline: none;
 }
 
 button {
@@ -71,11 +72,6 @@ button {
 
 button:hover {
   border-color: #396cd8;
-}
-
-input,
-button {
-  outline: none;
 }
 
 #greet-input {
