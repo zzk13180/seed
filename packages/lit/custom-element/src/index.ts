@@ -30,6 +30,6 @@ export class CustomElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'custom-element': MyElement
+    'custom-element': CustomElement
   }
 }
