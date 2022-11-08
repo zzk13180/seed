@@ -53,7 +53,7 @@
       [`${prefixCls}-${size}`]: true,
     })
   })
-  const prefixCls = 'seed-sample-button'
+  const prefixCls = 'seed-sample-button' // TODO : rootprefix
 </script>
 
 <style lang="less">

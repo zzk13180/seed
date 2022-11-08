@@ -79,7 +79,11 @@
   "overrides": [
     {
       "files": ["*.vue", "**/*.vue", "*.html", "**/*.html"],
-      "extends": ["stylelint-config-recommended"],
+      "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-recommended-vue",
+        "stylelint-config-prettier"
+      ],
       "customSyntax": "postcss-html",
       "rules": {
         "keyframes-name-pattern": null,
@@ -96,11 +100,6 @@
           }
         ]
       }
-    },
-    {
-      "files": ["*.less", "**/*.less"],
-      "customSyntax": "postcss-less",
-      "extends": ["stylelint-config-standard", "stylelint-config-recommended-vue"]
     }
   ]
 }

@@ -3,7 +3,7 @@
 ![seed](https://zzk13180.github.io/seed/image.svg)
 
 <p align='center'>
- <img src='https://zzk13180.github.io/seed/favicon.svg' alt='favicon' width='32'/>
+  <img src='https://zzk13180.github.io/seed/favicon.svg' alt='favicon' width='32'/>
   <a href="https://zzk13180.github.io/seed">document🚀</a>
 </p>
 <br>
