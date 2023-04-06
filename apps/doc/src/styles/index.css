@@ -161,10 +161,7 @@ a > code {
 a > code::before {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   display: block;
   background: var(--theme-accent);
   opacity: var(--theme-accent-opacity);

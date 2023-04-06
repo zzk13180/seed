@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# before committing your code. Run linters on git staged files.
 pnpm exec lint-staged

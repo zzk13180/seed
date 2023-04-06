@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx --no -- commitlint --edit ${1}
+# Check if the commit message follows the conventional commit format.
+# If not, abort the commit.
+pnpm exec commitlint -e ${1}

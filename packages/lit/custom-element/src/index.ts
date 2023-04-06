@@ -12,17 +12,7 @@ export class CustomElement extends LitElement {
   count = 0
 
   override render() {
-    return html`
-      <img src=${litLogo} class="logo lit" alt="Lit logo" />
-      <!-- <div class="card">
-        <p @click=${this._onClick}> count is ${this.count} </p>
-      </div>
-      <p class="read-the-docs">${this.docsHint}</p> -->
-    `
-  }
-
-  private _onClick() {
-    this.count++
+    return html`<img src=${litLogo} class="logo lit" alt="Lit logo" />`
   }
 
   static override styles = unsafeCSS(styles)

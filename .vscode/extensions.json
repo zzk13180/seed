@@ -14,6 +14,7 @@
     "bungcip.better-toml",
     "astro-build.astro-vscode",
     "prisma.prisma",
-    "Angular.ng-template"
+    "angular.ng-template",
+    "nrwl.angular-console"
   ]
 }

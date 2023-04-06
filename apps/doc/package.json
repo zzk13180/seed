@@ -11,29 +11,29 @@
     "gh": "gh-pages -d dist"
   },
   "dependencies": {
+    "@algolia/client-search": "^4.17.0",
+    "@astrojs/preact": "^2.1.0",
+    "@astrojs/react": "^2.1.1",
+    "@astrojs/vue": "^2.1.1",
+    "@babel/core": "^7.21.4",
+    "@docsearch/css": "^3.3.3",
+    "@docsearch/react": "^3.3.3",
     "@seed/common": "workspace:*",
-    "@seed/vue": "workspace:*",
     "@seed/react": "workspace:*",
-    "astro": "^1.5.0",
-    "preact": "^10.7.3",
+    "@seed/vue": "workspace:*",
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "astro": "^2.2.0",
+    "preact": "^10.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@astrojs/vue": "^1.1.0",
-    "@astrojs/preact": "^1.2.0",
-    "@astrojs/react": "^1.1.0",
-    "@algolia/client-search": "^4.13.1",
-    "vue": "^3.2.37",
-    "vite": "^3.2.2",
-    "@docsearch/css": "^3.1.0",
-    "@docsearch/react": "^3.1.0",
-    "@types/react": "^17.0.45",
-    "@types/node": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@babel/core": "^7.19.3"
+    "vite": "^4.2.1",
+    "vue": "^3.2.47"
   },
   "devDependencies": {
-    "gh-pages": "latest",
     "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6"
+    "@types/react-dom": "^18.0.6",
+    "gh-pages": "^5.0.0"
   }
 }

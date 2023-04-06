@@ -4,7 +4,7 @@
 
 <p align='center'>
   <img src='https://zzk13180.github.io/seed/favicon.svg' alt='favicon' width='32'/>
-  <a href="https://zzk13180.github.io/seed">document🚀</a>
+  <a href="https://zzk13180.github.io/seed">Documentation🚀</a>
 </p>
 <br>
 

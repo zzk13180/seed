@@ -12,7 +12,7 @@ export class Jsonp {
     this.config = config
   }
 
-  public static getInstance(config: CreateAxiosOptions = {}): Jsonp {
+  public static getInstance(config: CreateAxiosOptions): Jsonp {
     if (!Jsonp.instance) {
       Jsonp.instance = new Jsonp(config)
     }

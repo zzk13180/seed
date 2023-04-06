@@ -22,7 +22,7 @@ export const viteConfig: UserConfigFn = ({ command }) => {
   const include = []
   return {
     server: {
-      host: '127.0.0.1',
+      host: '0.0.0.0', // listen on all addresses
       port: 8080,
       proxy,
     },

@@ -12,13 +12,9 @@
       }
     }
   },
-  "namedInputs": {
-    "nomd": ["!{projectRoot}/**/*.md"]
-  },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["nomd"]
+      "dependsOn": ["^build"]
     },
     "dev": {
       "dependsOn": ["^build"]

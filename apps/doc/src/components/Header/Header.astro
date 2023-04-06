@@ -29,11 +29,11 @@ const lang = getLanguageFromURL(currentPage);
       </a>
     </div>
     <div style="flex-grow: 1;"></div>
-    {KNOWN_LANGUAGE_CODES.length > 1 && <LanguageSelect lang={lang} client:idle />}
     <div class="search-item">
       <Search client:idle />
     </div>
-    <div>
+    {KNOWN_LANGUAGE_CODES.length > 1 && <LanguageSelect lang={lang} client:idle />}
+    <div class="github-log">
       <GitHubLogo/>
     </div>
   </nav>
@@ -56,8 +56,6 @@ const lang = getLanguageFromURL(currentPage);
 	.logo {
 		flex: 1;
 		display: flex;
-		overflow: hidden;
-		width: 30px;
 		font-size: 2rem;
 		flex-shrink: 0;
 		font-weight: 600;
@@ -101,6 +99,11 @@ const lang = getLanguageFromURL(currentPage);
 		max-width: 82em;
 		padding: 0 1rem;
 	}
+
+  .github-log {
+    position: relative;
+    top: 3px;
+  }
 
 	@media (min-width: 50em) {
 		header {
