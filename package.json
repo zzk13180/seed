@@ -43,8 +43,9 @@
   "scripts": {
     "nx": "nx",
     "graph": "nx graph",
+    "dev": "lerna run dev --scope=@seed/app-tauri",
+    "build": "lerna run build --scope=@seed/app-tauri",
     "dev:web": "nx dev @seed/web-vue",
-    "dev": "lerna run dev --scope={@seed/web-vue,@seed/app-tauri}",
     "commit": "cz",
     "prisma": "prisma",
     "clean": "lerna clean --yes",

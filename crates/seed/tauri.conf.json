@@ -1,7 +1,7 @@
 {
   "build": {
-    "beforeDevCommand": "",
-    "beforeBuildCommand": "",
+    "beforeDevCommand": "nx run @seed/web-vue:dev",
+    "beforeBuildCommand": "nx run @seed/web-vue:build",
     "distDir": "../../dist",
     "devPath": "http://127.0.0.1:8080",
     "withGlobalTauri": true

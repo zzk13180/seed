@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cargo tauri dev",
+    "build": "cargo tauri build",
     "ad-init": "cargo tauri android init",
     "ad-dev": "cargo tauri android dev"
   }
