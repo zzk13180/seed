@@ -7,7 +7,6 @@
     "module": "ESNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "emitDeclarationOnly": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,

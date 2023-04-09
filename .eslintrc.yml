@@ -3,9 +3,9 @@ env:
   node: true
   es6: true
   browser: true
-parser: 'vue-eslint-parser'
+parser: "vue-eslint-parser"
 parserOptions:
-  parser: '@typescript-eslint/parser'
+  parser: "@typescript-eslint/parser"
   ecmaVersion: 2020
   sourceType: module
   jsxPragma: React
@@ -14,7 +14,7 @@ parserOptions:
     modules: true
 plugins:
   # - unicorn
-  - '@typescript-eslint'
+  - "@typescript-eslint"
   - prettier
   - import
 extends:
@@ -27,13 +27,13 @@ extends:
   - prettier
 overrides:
   - files:
-      - '**/*.{vue,ts,tsx}'
+      - "**/*.{vue,ts,tsx}"
     rules:
       no-undef: 0
 rules:
   curly: error
   # no-console: 2
-  semi: 
+  semi:
     - warn
     - never
   no-restricted-syntax:
@@ -77,20 +77,20 @@ rules:
   # unicorn/no-array-callback-reference: 0
   no-unreachable: 2
   no-void: 0
-  '@typescript-eslint/naming-convention': 0
+  "@typescript-eslint/naming-convention": 0
 
   no-redeclare: off
-  '@typescript-eslint/no-redeclare': error
-  '@typescript-eslint/ban-ts-comment': off
-  '@typescript-eslint/ban-types': off
-  '@typescript-eslint/explicit-module-boundary-types': off
-  '@typescript-eslint/no-empty-function': off
-  '@typescript-eslint/no-explicit-any': off
-  '@typescript-eslint/no-non-null-assertion': off
-  '@typescript-eslint/no-non-null-asserted-optional-chain': off
-  '@typescript-eslint/no-var-requires': off
+  "@typescript-eslint/no-redeclare": error
+  "@typescript-eslint/ban-ts-comment": off
+  "@typescript-eslint/ban-types": off
+  "@typescript-eslint/explicit-module-boundary-types": off
+  "@typescript-eslint/no-empty-function": off
+  "@typescript-eslint/no-explicit-any": off
+  "@typescript-eslint/no-non-null-assertion": off
+  "@typescript-eslint/no-non-null-asserted-optional-chain": off
+  "@typescript-eslint/no-var-requires": off
 
-  '@typescript-eslint/no-unused-vars':
+  "@typescript-eslint/no-unused-vars":
     - error
     - argsIgnorePattern: ^_
       varsIgnorePattern: ^_
@@ -98,7 +98,7 @@ rules:
     - error
     - argsIgnorePattern: ^_
       varsIgnorePattern: ^_
-  prettier/prettier: 
+  prettier/prettier:
     - error
     - arrowParens: avoid
   import/first: error
@@ -110,7 +110,7 @@ rules:
   array-callback-return: error
   complexity: error
   consistent-return: error
-  eqeqeq: 
+  eqeqeq:
     - error
     - smart
   guard-for-in: error
@@ -138,7 +138,7 @@ rules:
   no-sequences: error
   no-throw-literal: error
   no-unmodified-loop-condition: error
-  no-unused-expressions: 
+  no-unused-expressions:
     - error
     - allowShortCircuit: true
   no-useless-call: error
@@ -158,7 +158,7 @@ rules:
     - warn
     - declaration
     - allowArrowFunctions: true
-  lines-between-class-members: 
+  lines-between-class-members:
     - error
     - always
     - exceptAfterSingleLine: true
@@ -199,12 +199,12 @@ rules:
   vue/require-explicit-emits: 0
   vue/multi-word-component-names: 0
   vue/html-self-closing:
-  - error
-  - html:
-      normal: never
-      void: always
-    svg: always
-    math: always
+    - error
+    - html:
+        normal: never
+        void: always
+      svg: always
+      math: always
 
   import/newline-after-import: error
   import/no-absolute-path: error
@@ -230,7 +230,7 @@ rules:
         - pattern: vue
           group: external
           position: before
-        - pattern: '@vue/**'
+        - pattern: "@vue/**"
           group: external
           position: before
       pathGroupsExcludedImportTypes:
