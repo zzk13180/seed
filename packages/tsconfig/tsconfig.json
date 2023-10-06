@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "strict": true,
-    "importsNotUsedAsValues": "error",
     "target": "ESNext",
     "module": "ESNext",
     "resolveJsonModule": true,
@@ -30,7 +29,7 @@
     "skipLibCheck": true,
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
-    "types": ["vite/client", "vitest/globals", "@seed/types"],
+    "types": ["vite/client", "@seed/types"],
     "paths": {}
   }
 }

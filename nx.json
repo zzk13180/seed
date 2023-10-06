@@ -1,12 +1,11 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "seed-monorepo",
+  "extends": "nx/presets/npm.json",
   "affected": {
     "defaultBase": "main"
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "nx/tasks-runners/default",
       "options": {
         "cacheableOperations": ["build"]
       }

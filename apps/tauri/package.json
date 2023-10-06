@@ -1,0 +1,9 @@
+{
+  "name": "@seed/tauri",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd ./crates/seed && cargo tauri dev",
+    "build": "cd ./crates/seed && cargo tauri build"
+  }
+}

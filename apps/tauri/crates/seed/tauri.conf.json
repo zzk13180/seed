@@ -1,0 +1,60 @@
+{
+  "build": {
+    "beforeDevCommand": "nx run @seed/web:dev",
+    "beforeBuildCommand": "nx run @seed/web:build",
+    "distDir": "../../dist",
+    "devPath": "http://127.0.0.1:8080",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "seed",
+    "version": "0.0.1"
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "seed",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 600,
+        "resizable": true,
+        "title": "seed",
+        "width": 800
+      }
+    ]
+  }
+}
