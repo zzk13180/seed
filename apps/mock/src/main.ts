@@ -1,6 +1,15 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { NestFactory } from '@nestjs/core'
-import { Module, Controller, Logger, Get } from '@nestjs/common'
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  UseInterceptors,
+  CallHandler,
+  Module,
+  Controller,
+  Logger,
+} from '@nestjs/common'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import {
   loadMockConfig,
@@ -9,38 +18,48 @@ import {
   checkMockConfig,
 } from './utils/mock.util'
 import 'reflect-metadata'
+import type { Observable } from 'rxjs'
+
+const prefix = 'api-mock'
+const requestMap = new Map()
+
+@Injectable()
+class TransformInterceptor<T> implements NestInterceptor<T, T> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<T> {
+    const ctx = context.switchToHttp()
+    const request = ctx.getRequest()
+    const regex = new RegExp(`/${prefix}/|/|(\\?.*)`, 'g')
+    requestMap.set(request.url.replace(regex, ''), {
+      query: request.query,
+      body: request.body,
+    })
+    return next.handle()
+  }
+}
 
 async function bootstrap() {
-  const mockConfigArr: MockConfig[] = await loadMockConfig()
+  const mockConfigs: MockConfig[] = await loadMockConfig()
 
-  @registerMockDatas
-  @Controller(process.env.NODE_ENV === 'production' ? 'api' : 'api-mock')
-  class RootController {
-    @Get('test')
-    async test(): Promise<string> {
-      const res = await new Promise<string>(res => {
-        setTimeout(() => {
-          res('test')
-        }, 5000)
-      })
-      return res
-    }
-  }
-  function registerMockDatas<T extends { new (...args: any[]): {} }>(constructor: T) {
+  const registerMockEndpoints = <T extends { new (...args: any[]): {} }>(
+    constructor: T,
+  ) => {
     const { prototype } = constructor
-    for (let i = 0, len = mockConfigArr.length; i < len; i++) {
-      const items: MockConfig[] = checkMockConfig(mockConfigArr[i])
-      if (!items.length) {
+    for (let i = 0, len = mockConfigs.length; i < len; i++) {
+      const validConfigs: MockConfig[] = checkMockConfig(mockConfigs[i])
+      if (!validConfigs.length) {
         continue
       }
-      for (let j = 0, jlen = items.length; j < jlen; j++) {
-        const item = items[j]
-        const name = item.url.replace(/\//g, '')
-        prototype[name] = (): string => JSON.stringify(item.response)
-        Reflect.defineMetadata('path', item.url, prototype[name])
+      for (let j = 0, jlen = validConfigs.length; j < jlen; j++) {
+        const config = validConfigs[j]
+        const name = config.url.replace(/\//g, '')
+        prototype[name] = (): string => {
+          const req = requestMap.get(name)
+          return JSON.stringify(config.response(req))
+        }
+        Reflect.defineMetadata('path', config.url, prototype[name])
         Reflect.defineMetadata(
           'method',
-          RequestMethod[item.method?.toUpperCase() || 'GET'],
+          RequestMethod[config.method?.toUpperCase() || 'GET'],
           prototype[name],
         )
       }
@@ -48,11 +67,16 @@ async function bootstrap() {
     return class extends constructor {}
   }
 
+  @UseInterceptors(TransformInterceptor)
+  @registerMockEndpoints
+  @Controller(prefix)
+  class RootController {}
+
   @Module({
     imports: [
       ServeStaticModule.forRoot({
         rootPath: join(__dirname, '..', 'html'),
-        exclude: ['/api*'],
+        exclude: [`/${prefix}*`],
       }),
     ],
     controllers: [RootController],
@@ -60,7 +84,7 @@ async function bootstrap() {
   class RootModule {}
   const app = await NestFactory.create(RootModule)
   await app.listen(3333)
-  Logger.log('http://127.0.0.1:3333/api-mock/test\nhttp://127.0.0.1:3333/')
+  Logger.log(`🔥 http://127.0.0.1:3333/${prefix}/hello`)
 }
 
 bootstrap()

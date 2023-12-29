@@ -1,7 +1,11 @@
 export const ApiGetHello = {
-  url: '/hello',
+  url: 'hello',
   method: 'get',
-  response: {
-    hello: 'hello',
+  response: (req: any) => {
+    return {
+      hello: 'helllo world',
+      body: req?.body,
+      query: req?.query,
+    }
   },
 }
