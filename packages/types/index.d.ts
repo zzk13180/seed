@@ -1,1 +1,2 @@
-declare const __DEV__: boolean
+// vite global constant https://vitejs.dev/config/shared-options.html#define
+declare const __APP_VERSION__: string

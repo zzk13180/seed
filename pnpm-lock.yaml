@@ -247,7 +247,7 @@ importers:
       '@seed/custom-element':
         specifier: workspace:*
         version: link:../../packages/lit/custom-element
-      '@seed/viteconfig':
+      '@seed/vite-config':
         specifier: workspace:*
         version: link:../../packages/viteconfig
       '@seed/vue':
@@ -365,7 +365,7 @@ importers:
 
   packages/vue-components:
     dependencies:
-      '@seed/viteconfig':
+      '@seed/vite-config':
         specifier: workspace:*
         version: link:../viteconfig
       vue:
@@ -384,7 +384,7 @@ importers:
 
   packages/vue-composables:
     dependencies:
-      '@seed/viteconfig':
+      '@seed/vite-config':
         specifier: workspace:*
         version: link:../viteconfig
       vue:

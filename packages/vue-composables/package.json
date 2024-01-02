@@ -19,7 +19,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@seed/viteconfig": "workspace:*",
+    "@seed/vite-config": "workspace:*",
     "vue": "^3.3.4"
   },
   "devDependencies": {

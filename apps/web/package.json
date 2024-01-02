@@ -11,7 +11,7 @@
   "dependencies": {
     "@seed/common": "workspace:*",
     "@seed/custom-element": "workspace:*",
-    "@seed/viteconfig": "workspace:*",
+    "@seed/vite-config": "workspace:*",
     "@seed/vue": "workspace:*",
     "@seed/vue-components": "workspace:*",
     "@seed/vue-composables": "workspace:*",

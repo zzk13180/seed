@@ -47,7 +47,7 @@ export const viteConfig: UserConfigFn = ({ command }) => {
       },
     },
     define: {
-      __DEV__: !isBuild,
+      __APP_VERSION__: JSON.stringify('v0.0.1'),
     },
   }
 }
