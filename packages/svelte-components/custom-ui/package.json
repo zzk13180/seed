@@ -1,0 +1,23 @@
+{
+  "name": "@seed/custom-ui",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build -c= vite.lib.config.js",
+    "preview": "vite preview",
+    "prepare": "svelte-kit sync || echo ''"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@sveltejs/adapter-static": "3.0.8",
+    "@sveltejs/kit": "^2.20.8",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "svelte": "^5.28.2",
+    "svelte-check": "^4.1.7"
+  }
+}

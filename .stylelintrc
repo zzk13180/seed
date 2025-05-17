@@ -1,0 +1,153 @@
+# 根配置文件标识，stylelint 不会再往上查找其他配置文件
+root: true
+
+# 使用的插件列表
+plugins:
+  - stylelint-order # 使用 stylelint-order 插件来排序 CSS 规则
+  - stylelint-scss # 使用 stylelint-scss 插件来支持 SCSS 语法
+
+# 自定义语法解析器
+customSyntax: postcss-scss # 使用 postcss-scss 解析器来解析 SCSS 语法
+
+# 继承的基础配置
+extends:
+  - stylelint-config-standard # 标准的 stylelint 配置
+
+# 自定义规则配置
+rules:
+  media-query-no-invalid: null
+  declaration-block-no-redundant-longhand-properties: null
+
+  # 允许任意命名 keyframes
+  keyframes-name-pattern: null
+
+  # 允许使用未知的函数
+  function-no-unknown: null
+
+  # 允许重复的选择器
+  no-duplicate-selectors: null
+
+  # 允许无效的双斜杠注释
+  no-invalid-double-slash-comments: null
+
+  # 允许使用 :not() 伪类
+  selector-not-notation: null
+
+  # 允许任意类名模式
+  selector-class-pattern: null
+
+  # 忽略特定的伪类（如 global）
+  selector-pseudo-class-no-unknown:
+    - true # 禁止使用未知的伪类选择器
+    - ignorePseudoClasses:
+        - global # 忽略 global 伪类选择器
+
+  # 忽略特定的伪元素（如 v-deep）
+  selector-pseudo-element-no-unknown:
+    - true # 禁止使用未知的伪元素选择器
+    - ignorePseudoElements:
+        - v-deep # 忽略 v-deep 伪元素选择器
+
+  # 忽略特定的 @ 规则（如 tailwind, apply 等）
+  at-rule-no-unknown:
+    - true # 禁止使用未知的 at 规则
+    - ignoreAtRules:
+      - import
+      - tailwind
+      - apply
+      - variants
+      - responsive
+      - screen
+      - function
+      - if
+      - else
+      - warn
+      - each
+      - include
+      - mixin
+      - use
+
+  # 指定 scss @import 导入样式文件时使用字符串（"string"）或 URL（"url"）表示法
+  import-notation: string
+
+  # 允许空源码文件
+  no-empty-source: null
+
+  # 允许空块
+  block-no-empty: null
+
+  # 允许无效的命名网格区域
+  named-grid-areas-no-invalid: null
+
+  # 允许特异性降序
+  no-descending-specificity: null
+
+  # 允许缺少通用字体系列关键字
+  font-family-no-missing-generic-family-keyword: null
+
+  # 规则前必须有空行，忽略注释后和嵌套规则的第一条
+  rule-empty-line-before:
+    - always
+    - ignore:
+        - after-comment
+        - first-nested
+
+  # 忽略特定的未知单位（如 rpx）
+  unit-no-unknown:
+    - true
+    - ignoreUnits:
+        - rpx
+
+  # 定义 CSS 属性的顺序
+  order/order:
+    - - dollar-variables
+      - custom-properties
+      - at-rules
+      - declarations
+      - type: at-rule
+        name: supports
+      - type: at-rule
+        name: media
+      - rules
+    - severity: warning
+
+# 忽略的文件或目录
+ignoreFiles:
+  - '**/*.js'
+  - '**/*.jsx'
+  - '**/*.tsx'
+  - '**/*.ts'
+  - '**/dist/'
+
+# 针对特定文件的覆盖配置
+overrides:
+  - files:
+      - '*.vue'
+      - '**/*.vue'
+      - '*.html'
+      - '**/*.html'
+    # 继承的基础配置
+    extends:
+      - stylelint-config-standard
+      - stylelint-config-recommended-vue
+    # 自定义语法解析器，用于解析 Vue 和 HTML 文件
+    customSyntax: postcss-html
+    # 自定义规则配置
+    rules:
+      # 允许任意命名 keyframes
+      keyframes-name-pattern: null
+
+      # 忽略特定的伪类（如 deep, global）
+      selector-pseudo-class-no-unknown:
+        - true
+        - ignorePseudoClasses:
+            - deep
+            - global
+
+      # 忽略特定的伪元素（如 v-deep, v-global, v-slotted）
+      selector-pseudo-element-no-unknown:
+        - true
+        - ignorePseudoElements:
+            - v-deep
+            - v-global
+            - v-slotted

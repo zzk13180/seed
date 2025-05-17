@@ -1,0 +1,71 @@
+.vv-card-table-wrapper {
+  flex: 1;
+
+  .el-card__body {
+    height: calc(100% - 96px); // 48 header + 32 pagination + 16 padding bottom
+    .el-table {
+      height: 100%;
+    }
+  }
+
+  .vv-card-table-header-actions {
+    gap: 16px;
+  }
+}
+
+.vv-search-condition {
+  margin-bottom: 16px;
+
+  .el-form-item {
+    margin-bottom: 16px;
+  }
+
+  .el-card__body {
+    padding-bottom: 0;
+  }
+
+  .el-form--inline .el-select,
+  .el-form--inline .el-date-editor,
+  .el-form--inline .el-input {
+    width: 228px;
+  }
+}
+
+.vv-dropdown-menu {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--el-border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .el-dropdown-menu__item {
+    color: var(--el-text-color-primary);
+  }
+
+  .el-dropdown-menu__item:not(.is-disabled):active {
+    background-color: var(--el-bg-color-page);
+    color: var(--el-color-primary) !important;
+    font-weight: 600;
+  }
+
+  .el-dropdown-menu__item:not(.is-disabled):focus,
+  .el-dropdown-menu__item:not(.is-disabled):hover {
+    background-color: var(--el-fill-color-lighter);
+    color: var(--el-text-color-primary);
+  }
+}
+
+.vv-tree-dept {
+  width: 180px;
+
+  .el-card__body {
+    padding: 0;
+  }
+
+  .el-input__wrapper {
+    width: 100%;
+    height: 32px;
+  }
+}

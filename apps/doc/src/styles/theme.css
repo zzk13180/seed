@@ -1,12 +1,14 @@
 /* stylelint-disable */
 :root {
-  --font-fallback: -apple-system, blinkmacsystemfont, segoe ui, helvetica, arial,
-    sans-serif, apple color emoji, segoe ui emoji;
+  --font-fallback:
+    -apple-system, blinkmacsystemfont, segoe ui, helvetica, arial, sans-serif,
+    apple color emoji, segoe ui emoji;
   --font-body: system-ui, var(--font-fallback);
-  --font-mono: 'IBM Plex Mono', consolas, 'Andale Mono WT', 'Andale Mono',
-    'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono',
-    'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', monaco, 'Courier New',
-    courier, monospace;
+  --font-mono:
+    "IBM Plex Mono", consolas, "Andale Mono WT", "Andale Mono",
+    "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono",
+    "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", monaco,
+    "Courier New", courier, monospace;
 
   /*
    * Variables with --color-base prefix define

@@ -1,8 +1,8 @@
 /** @jsxImportSource react */
-import { KNOWN_LANGUAGES, langPathRegex } from '../../languages'
-import './LanguageSelect.css'
-import { BASE } from '../../config'
-import type { FunctionComponent } from 'react'
+import { KNOWN_LANGUAGES, langPathRegex } from "../../languages";
+import "./LanguageSelect.css";
+import { BASE } from "../../config";
+import type { FunctionComponent } from "react";
 
 const LanguageSelect: FunctionComponent<{ lang: string }> = ({ lang }) => {
   return (
@@ -28,15 +28,15 @@ const LanguageSelect: FunctionComponent<{ lang: string }> = ({ lang }) => {
       <select
         className="language-select"
         value={lang}
-        onChange={e => {
-          const newLang = e.target.value
+        onChange={(e) => {
+          const newLang = e.target.value;
           let actualDest = window.location.pathname
-            .replace(langPathRegex, '/')
-            .replace(`/${BASE}`, '')
-          if (actualDest === '/') {
-            actualDest = '/introduction'
+            .replace(langPathRegex, "/")
+            .replace(`/${BASE}`, "");
+          if (actualDest === "/") {
+            actualDest = "/introduction";
           }
-          window.location.pathname = `${BASE}/${newLang}${actualDest}`
+          window.location.pathname = `${BASE}/${newLang}${actualDest}`;
         }}
       >
         {Object.entries(KNOWN_LANGUAGES).map(([key, value]) => {
@@ -44,11 +44,11 @@ const LanguageSelect: FunctionComponent<{ lang: string }> = ({ lang }) => {
             <option value={value} key={value}>
               {key}
             </option>
-          )
+          );
         })}
       </select>
     </div>
-  )
-}
+  );
+};
 
-export default LanguageSelect
+export default LanguageSelect;

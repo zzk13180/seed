@@ -1,0 +1,284 @@
+// 对 element-plus 组件库默认样式的覆盖请写在这里
+// 注意：在 Vue 组件内，请勿使用不加 scoped 的方式覆盖组件库样式，这会造成全局样式污染
+// 建议做法：在组件内使用 scoped 属性，并通过 :deep() 选择器来覆盖组件库样式
+// 如果不想加 scoped 属性或遇到 popper-class 等情况，请提高选择器的特异性来确保不会造成全局样式污染
+
+.el-card__body {
+  position: relative;
+}
+
+// 自定义的插槽
+.el-card__empty {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+// btn 之间的间距
+.el-button + .el-button {
+  margin-left: 16px;
+}
+
+.el-button > span {
+  gap: 4px;
+}
+
+.el-button,
+.el-button.is-round {
+  padding: 5px 16px;
+}
+
+.el-button.is-link:hover {
+  color: #4369dc;
+}
+
+.el-button.is-link.is-disabled {
+  color: #90aeed;
+}
+
+.el-button:focus-visible {
+  outline: 0;
+}
+
+body {
+  .el-tag,
+  .el-tag.el-tag--primary {
+    --el-tag-border-color: var(--el-color-primary);
+
+    padding: 0 4px;
+  }
+
+  .el-tag.el-tag--success {
+    --el-tag-bg-color: var(--el-color-white);
+    --el-tag-border-color: var(--el-color-success);
+    --el-tag-hover-color: var(--el-color-success);
+  }
+
+  .el-tag.el-tag--warning {
+    --el-tag-bg-color: var(--el-color-white);
+    --el-tag-border-color: var(--el-color-warning);
+    --el-tag-hover-color: var(--el-color-warning);
+  }
+
+  .el-tag.el-tag--danger {
+    --el-tag-bg-color: var(--el-color-white);
+    --el-tag-border-color: var(--el-color-danger);
+    --el-tag-hover-color: var(--el-color-danger);
+  }
+
+  .el-tag.el-tag--error {
+    --el-tag-bg-color: var(--el-color-white);
+    --el-tag-border-color: var(--el-color-error);
+    --el-tag-hover-color: var(--el-color-error);
+  }
+
+  .el-tag.el-tag--info {
+    --el-tag-bg-color: var(--el-color-white);
+    --el-tag-border-color: var(--el-color-info);
+    --el-tag-hover-color: var(--el-color-info);
+  }
+
+  // label 和 input 之间的间距
+  .el-form-item__label {
+    padding: 0 8px 0 0;
+  }
+
+  // input 左右内边距
+  .el-range-editor.el-input__wrapper,
+  .el-select__wrapper,
+  .el-input__wrapper {
+    padding: 1px 8px;
+  }
+
+  .el-select__input,
+  .el-input__inner {
+    font-size: 16px;
+    color: var(--el-text-color-primary);
+  }
+
+  .el-input {
+    .el-input__clear {
+      font-size: 24px;
+    }
+  }
+
+  .el-input--large .el-input__wrapper {
+    padding: 1px 16px;
+  }
+
+  .el-message-box {
+    .el-message-box__header {
+      height: var(--vv-dialog-header-height);
+      padding: 0 24px;
+      background-color: var(--el-bg-color-page);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .el-message-box__title {
+        span {
+          font-weight: 600;
+          font-size: 14px;
+          color: var(--el-text-color-primary);
+        }
+      }
+
+      .el-message-box__headerbtn {
+        position: unset;
+        display: block;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .el-message-box__container {
+      min-height: 22px;
+      padding: 16px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--el-text-color-primary);
+      font-weight: 400;
+    }
+
+    .el-message-box__input {
+      padding: 0 24px;
+    }
+
+    .el-message-box__btns {
+      padding: 16px 24px 16px 0;
+    }
+  }
+
+  .el-dialog {
+    // 小(宽480px)、中(宽640px)、大(宽960px)、三类弹窗
+    // 弹窗最大高度为屏幕高度的80%。
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+
+    > header {
+      flex: 0 0 auto;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    > footer {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    .el-dialog__title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--el-text-color-primary);
+    }
+
+    .el-dialog__body {
+      flex: 1;
+      padding: 24px 24px 0;
+      overflow: auto;
+    }
+
+    // 和 .el-message-box__header 一致
+    .el-dialog__header {
+      height: 44px;
+      padding: 0 24px;
+      background-color: var(--el-bg-color-page);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .el-dialog-box__title {
+        span {
+          font-weight: 600;
+          font-size: 14px;
+          color: var(--el-text-color-primary);
+        }
+      }
+
+      .el-dialog-box__headerbtn {
+        position: unset;
+        display: block;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    // 和 el-message-box__btns 一致
+    .el-dialog__footer {
+      padding: 16px 24px 16px 0;
+    }
+  }
+}
+
+.app-wrapper {
+  // 所有 icon 默认 16x16
+  .el-icon {
+    font-size: 16px;
+  }
+
+  .el-menu-item,
+  .el-sub-menu__title {
+    color: var(--vv-sidebar-color);
+  }
+
+  .el-card.is-always-shadow,
+  .el-card.is-hover-shadow:focus,
+  .el-card.is-hover-shadow:hover {
+    box-shadow: none;
+  }
+
+  .el-form-item__label {
+    color: var(--el-text-color-primary);
+  }
+
+  .el-card {
+    border: 0;
+
+    .el-card__header {
+      border: 0;
+      padding: var(--el-card-padding);
+      padding-bottom: 0;
+    }
+  }
+
+  .el-table {
+    --el-table-header-bg-color: var(--el-bg-color-page);
+    --el-table-border-color: var(--el-border-color);
+    --el-table-text-color: var(--el-text-color-primary);
+    --el-table-header-text-color: var(--el-text-color-regular);
+
+    .el-table__inner-wrapper {
+      .el-table__header {
+        border: 1px solid var(--el-table-border-color);
+        border-bottom: 0;
+      }
+
+      .el-table__row {
+        > td:first-child {
+          border-left: 1px solid var(--el-table-border-color);
+        }
+
+        > td:last-child {
+          border-right: 1px solid var(--el-table-border-color);
+        }
+      }
+
+      .el-table-fixed-column--right {
+        border-right: 1px solid var(--el-table-border-color);
+      }
+    }
+  }
+
+  .el-table--fit .el-table__inner-wrapper::before {
+    width: 0;
+  }
+}
+
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  color: var(--el-color-primary);
+  font-weight: 600;
+}

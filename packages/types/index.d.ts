@@ -1,2 +1,6 @@
-// vite global constant https://vitejs.dev/config/shared-options.html#define
-declare const __APP_VERSION__: string
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference types="vite/client" />
+/// <reference types="@types/node" />
+
+/// <reference path="src/vite-env.d.ts" />
+/// <reference path="src/api-global.d.ts" />

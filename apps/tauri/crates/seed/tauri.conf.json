@@ -1,9 +1,9 @@
 {
   "build": {
-    "beforeDevCommand": "nx run @seed/web:dev",
-    "beforeBuildCommand": "nx run @seed/web:build",
+    "beforeDevCommand": "nx run @seed/admin:dev",
+    "beforeBuildCommand": "nx run @seed/admin:build",
     "distDir": "../../dist",
-    "devPath": "http://127.0.0.1:8080",
+    "devPath": "http://127.0.0.1:5173",
     "withGlobalTauri": true
   },
   "package": {

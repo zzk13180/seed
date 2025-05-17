@@ -1,0 +1,97 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import { AccessTokenUtil } from '@/utils/token.util'
+import TheLayout from '@/layout/TheLayout.vue'
+
+const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    component: TheLayout,
+    redirect: '/panel',
+    meta: {
+      hideMenu: true,
+    },
+    children: [
+      {
+        path: '/panel',
+        component: () => import('./panel.vue'),
+        meta: {
+          requiresAuth: true,
+          title: '控制面板',
+          icon: 'camera-control',
+        },
+      },
+    ],
+  },
+  {
+    path: '/user',
+    component: TheLayout,
+    meta: {
+      hideMenu: true,
+    },
+    children: [
+      {
+        path: 'profile',
+        component: () => import('./user-profile.vue'),
+        meta: {
+          requiresAuth: true,
+          hideMenu: true,
+        },
+      },
+    ],
+  },
+  {
+    path: '/login',
+    component: () => import('./login.vue'),
+    meta: {
+      hideMenu: true,
+    },
+  },
+  {
+    path: '/redirect',
+    component: () => import('./redirect.vue'),
+    meta: {
+      hideMenu: true,
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('./404.vue'),
+    meta: {
+      hideMenu: true,
+    },
+  },
+  {
+    path: '/401',
+    component: () => import('./401.vue'),
+    meta: {
+      hideMenu: true,
+    },
+  },
+]
+
+export const router = createRouter({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  history: createWebHistory(import.meta.env.BASE_PATH),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
+  strict: true,
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !AccessTokenUtil.token) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    })
+  } else {
+    next()
+  }
+})

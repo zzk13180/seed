@@ -1,33 +1,24 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    // "exactOptionalPropertyTypes": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "moduleResolution": "Node",
-    "useDefineForClassFields": false,
-    "allowJs": false,
-    "allowSyntheticDefaultImports": true,
-    "jsx": "preserve",
-    "sourceMap": false,
-    "declaration": true,
-    "declarationMap": false,
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "lib": ["esnext", "dom"],
-    "types": ["vite/client", "@seed/types"],
+    "target": "esnext", // 指定生成JavaScript的ECMAScript目标版本
+    "module": "esnext", // 指定生成的模块系统代码
+    // "useDefineForClassFields": true,
+    "moduleResolution": "bundler", // 指定模块解析策略
+    "strict": true, // 启用所有严格类型检查选项
+    "jsx": "preserve", // 指定JSX代码处理方式 保留JSX供后续工具处理
+    "strictNullChecks": false, // 关闭严格的null和undefined检查
+    "sourceMap": true, // 生成.map文件
+    "resolveJsonModule": true, // 允许导入.json文件
+    "esModuleInterop": true, // 允许使用import语法导入CommonJS模块
+    "strictFunctionTypes": false, // 关闭函数参数的双向协变检查
+    "noImplicitAny": false, // 允许隐式any类型
+    "allowJs": true, // 允许编译JavaScript文件
+    "experimentalDecorators": true, // 启用装饰器特性
+    "lib": ["esnext", "dom", "WebWorker"],
+    "types": ["@seed/types"],
+    "skipLibCheck": true, // 跳过声明文件的类型检查
+    "removeComments": true, // 删除编译后文件中的注释
+    "forceConsistentCasingInFileNames": true // 强制文件名大小写一致性
   }
 }

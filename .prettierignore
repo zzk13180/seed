@@ -1,12 +1,7 @@
-/dist/*
-.local
-.output.js
-/node_modules/**
-/target/**
-
+**/dist/
+**/public/
+**/node_modules/
 **/*.svg
 **/*.sh
 
-/public/*
-
-*.cjs
+pnpm-lock.yaml

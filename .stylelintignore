@@ -1,3 +1,6 @@
-/dist/*
-/public/*
-/target/*
+**/dist/
+**/public/
+**/node_modules/
+**/.svelte-kit/
+apps/doc/
+packages/element-plus/

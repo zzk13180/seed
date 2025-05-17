@@ -1,38 +1,39 @@
 /** @jsxImportSource react */
-import { useState, useCallback, useRef } from 'react'
-import '@docsearch/css'
-import './Search.css'
-import { createPortal } from 'react-dom'
-import * as docSearchReact from '@docsearch/react'
-import { ALGOLIA } from '../../config'
+import { useState, useCallback, useRef } from "react";
+import "@docsearch/css";
+import "./Search.css";
+import { createPortal } from "react-dom";
+import * as docSearchReact from "@docsearch/react";
+import { ALGOLIA } from "../../config";
 
 /** FIXME: This is still kinda nasty, but DocSearch is not ESM ready. */
 const DocSearchModal =
-  docSearchReact.DocSearchModal || (docSearchReact as any).default.DocSearchModal
+  docSearchReact.DocSearchModal ||
+  (docSearchReact as any).default.DocSearchModal;
 const useDocSearchKeyboardEvents =
   docSearchReact.useDocSearchKeyboardEvents ||
-  (docSearchReact as any).default.useDocSearchKeyboardEvents
+  (docSearchReact as any).default.useDocSearchKeyboardEvents;
 
 export default function Search() {
-  const [isOpen, setIsOpen] = useState(false)
-  const searchButtonRef = useRef<HTMLButtonElement>(null)
-  const [initialQuery, setInitialQuery] = useState('')
+  const [isOpen, setIsOpen] = useState(false);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const [initialQuery, setInitialQuery] = useState("");
 
   const onOpen = useCallback(() => {
-    setIsOpen(true)
-  }, [setIsOpen])
+    setIsOpen(true);
+  }, [setIsOpen]);
 
   const onClose = useCallback(() => {
-    setIsOpen(false)
-  }, [setIsOpen])
+    setIsOpen(false);
+  }, [setIsOpen]);
 
   const onInput = useCallback(
-    e => {
-      setIsOpen(true)
-      setInitialQuery(e.key)
+    (e) => {
+      setIsOpen(true);
+      setInitialQuery(e.key);
     },
     [setIsOpen, setInitialQuery],
-  )
+  );
 
   useDocSearchKeyboardEvents({
     isOpen,
@@ -40,7 +41,7 @@ export default function Search() {
     onClose,
     onInput,
     searchButtonRef,
-  })
+  });
 
   return (
     <>
@@ -80,22 +81,22 @@ export default function Search() {
             indexName={ALGOLIA.indexName}
             appId={ALGOLIA.appId}
             apiKey={ALGOLIA.apiKey}
-            transformItems={items => {
-              return items.map(item => {
+            transformItems={(items) => {
+              return items.map((item) => {
                 // We transform the absolute URL into a relative URL to
                 // work better on localhost, preview URLS.
-                const a = document.createElement('a')
-                a.href = item.url
-                const hash = a.hash === '#overview' ? '' : a.hash
+                const a = document.createElement("a");
+                a.href = item.url;
+                const hash = a.hash === "#overview" ? "" : a.hash;
                 return {
                   ...item,
                   url: `${a.pathname}${hash}`,
-                }
-              })
+                };
+              });
             }}
           />,
           document.body,
         )}
     </>
-  )
+  );
 }
