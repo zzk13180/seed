@@ -5,3 +5,4 @@
 **/*.sh
 
 pnpm-lock.yaml
+auto-import-*.d.ts
