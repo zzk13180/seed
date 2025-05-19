@@ -23,7 +23,7 @@ export default defineConfig([
       '**/dist/',
       '**/node_modules/',
       '**/.svelte-kit/',
-      'apps/doc/',
+      'apps/docs/',
       'packages/element-plus/',
     ],
   },

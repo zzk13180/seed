@@ -2,5 +2,5 @@
 **/public/
 **/node_modules/
 **/.svelte-kit/
-apps/doc/
+apps/docs/
 packages/element-plus/

@@ -1,1 +1,1 @@
-# @seed/doc
+# @seed/docs
