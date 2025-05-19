@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(seed_ros_nodes)
+project(seed_core)
 
 find_package(catkin REQUIRED COMPONENTS
     dynamic_reconfigure

@@ -5,15 +5,15 @@ import sys
 import subprocess
 import rospy
 
-from seed_ros_nodes.srv import ManageNode, ManageNodeResponse
-from seed_ros_nodes.srv import ListPackages, ListPackagesResponse
-from seed_ros_nodes.srv import ListExecutables, ListExecutablesResponse
+from seed_core.srv import ManageNode, ManageNodeResponse
+from seed_core.srv import ListPackages, ListPackagesResponse
+from seed_core.srv import ListExecutables, ListExecutablesResponse
 
 class ServiceManager:
     """ROS服务管理类，负责节点的启动、关闭、信息查询及包/可执行文件的列举。"""
 
     def __init__(self):
-        rospy.init_node('seed_ros_nodes_service_handler')
+        rospy.init_node('seed_core_service_handler')
         self.packages = self._get_packages()
 
         # 注册服务
@@ -22,15 +22,15 @@ class ServiceManager:
 
     def _register_services(self):
         self.node_kill_service = rospy.Service(
-            'seed_ros_nodes/node/kill', ManageNode, self.handle_node_kill)
+            'seed_core/node/kill', ManageNode, self.handle_node_kill)
         self.node_start_service = rospy.Service(
-            'seed_ros_nodes/node/start', ManageNode, self.handle_node_start)
+            'seed_core/node/start', ManageNode, self.handle_node_start)
         self.node_info_service = rospy.Service(
-            'seed_ros_nodes/node/info', ManageNode, self.handle_node_info)
+            'seed_core/node/info', ManageNode, self.handle_node_info)
         self.list_packages_service = rospy.Service(
-            'seed_ros_nodes/list_packages', ListPackages, self.handle_list_packages)
+            'seed_core/list_packages', ListPackages, self.handle_list_packages)
         self.list_executables_service = rospy.Service(
-            'seed_ros_nodes/list_executables', ListExecutables, self.handle_list_executables)
+            'seed_core/list_executables', ListExecutables, self.handle_list_executables)
 
     def _get_packages(self):
         """获取所有ROS包及其路径。"""

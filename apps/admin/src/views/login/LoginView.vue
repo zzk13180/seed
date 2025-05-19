@@ -46,48 +46,65 @@
 </template>
 
 <script setup lang="ts">
+  import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import TheLogo from '@/components/TheLogo.vue'
   import { AccessTokenUtil } from '@/utils/token.util'
 
   const router = useRouter()
+  const loginRef = ref()
+  const loading = ref(false)
 
   const loginForm = ref({
-    tenantId: '000000',
     username: 'admin',
-    password: 'admin123',
+    password: 'admin',
     rememberMe: false,
-    code: '',
-    uuid: '',
   })
 
   const loginRules = {
-    tenantId: [{ required: true, trigger: 'blur', message: '请输入您的租户编号' }],
     username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
     password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
-    code: [{ required: true, trigger: 'blur', message: '请输入验证码' }],
   }
 
-  const loading = ref(false)
-
-  const loginRef = ref()
-
   const handleLogin = () => {
-    AccessTokenUtil.setToken('mock-token')
-    router.push('/')
+    loginRef.value.validate((valid: boolean) => {
+      if (valid) {
+        loading.value = true
+
+        try {
+          AccessTokenUtil.setToken('mock-token')
+          if (loginForm.value.rememberMe) {
+            localStorage.setItem('username', loginForm.value.username)
+            localStorage.setItem('password', loginForm.value.password)
+            localStorage.setItem('rememberMe', 'true')
+          } else {
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
+            localStorage.removeItem('rememberMe')
+          }
+
+          router.push('/')
+        } catch (error) {
+          console.error('登录失败', error)
+        } finally {
+          loading.value = false
+        }
+      }
+    })
   }
 
   const getLoginData = () => {
-    const tenantId = localStorage.getItem('tenantId')
     const username = localStorage.getItem('username')
     const password = localStorage.getItem('password')
     const rememberMe = localStorage.getItem('rememberMe')
-    loginForm.value = {
-      tenantId: tenantId === null ? String(loginForm.value.tenantId) : tenantId,
-      username: username === null ? String(loginForm.value.username) : username,
-      password: password === null ? String(loginForm.value.password) : String(password),
-      rememberMe: rememberMe === null ? false : Boolean(rememberMe),
-    } as any
+
+    if (username && password && rememberMe) {
+      loginForm.value = {
+        username,
+        password,
+        rememberMe: true,
+      }
+    }
   }
 
   onMounted(() => {
@@ -145,28 +162,6 @@
         justify-content: center;
         align-items: center;
 
-        .login-form-the-logo-container {
-          width: 100%;
-          height: 128px;
-
-          :deep(.the-logo) {
-            user-select: none;
-            pointer-events: none;
-            gap: 4px;
-
-            .the-logo-svg {
-              color: var(--el-color-primary);
-              position: relative;
-              top: 1.5px;
-            }
-
-            h1 {
-              font-size: 24px;
-              color: var(--el-text-color-primary);
-            }
-          }
-        }
-
         .login-form-welcome {
           width: 100%;
           font-weight: 600;
@@ -187,42 +182,6 @@
             height: 22px;
             font-weight: 400;
             font-size: 14px;
-          }
-        }
-
-        .login-input-icon {
-          height: 40px;
-          width: 14px;
-          margin-left: 0;
-        }
-
-        .login-form-code {
-          :deep(.el-input__suffix) {
-            padding: 0;
-            height: 43.5px;
-
-            .el-input__suffix-inner {
-              display: flex;
-              flex-direction: row-reverse;
-
-              .login-code {
-                height: 100%;
-                width: 100px;
-
-                img {
-                  border-top: 1px solid transparent;
-                  border-bottom: 1px solid transparent;
-                  width: 100%;
-                  height: 100%;
-                  cursor: pointer;
-                  border-radius: 0 4px 4px 0;
-                }
-              }
-            }
-          }
-
-          :deep(.el-input__wrapper) {
-            padding: 0 1px 0 16px;
           }
         }
 

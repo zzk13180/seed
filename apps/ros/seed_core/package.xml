@@ -1,7 +1,7 @@
 <package format="2">
-  <name>seed_ros_nodes</name>
+  <name>seed_core</name>
   <version>0.0.1</version>
-  <description>The seed_ros_nodes package provides service and topic handlers.</description>
+  <description>The seed_core package provides service and topic handlers.</description>
   <maintainer email="zzk13180@gmail.com">zhangzhankui</maintainer>
   <license>MIT</license>
 

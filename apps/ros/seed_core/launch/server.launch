@@ -5,7 +5,7 @@
   <arg name="delay_between_messages" default="0" />
   <arg name="max_message_size" default="None" />
 
-  <node name="seed_ros_rosbridge" pkg="rosbridge_server" type="rosbridge_websocket" output="screen">
+  <node name="seed_core_rosbridge" pkg="rosbridge_server" type="rosbridge_websocket" output="screen">
     <param name="authenticate" value="false" />
     <param name="port" value="$(arg port_rosbridge)" />
     <param name="address" value="" />
@@ -17,7 +17,9 @@
     <param name="unregister_timeout" value="99999999" />
   </node>
 
-  <node name="seed_ros_rosapi" pkg="rosapi" type="rosapi_node" />
-  <node name="seed_ros_topic_handler_node" pkg="seed_ros_nodes" type="topic_handler.py" output="screen" />
-  <node name="seed_ros_service_handler_node" pkg="seed_ros_nodes" type="service_handler.py" output="screen" />
+  <node name="seed_core_rosapi" pkg="rosapi" type="rosapi_node" />
+  <node name="seed_core_topic_handler_node" pkg="seed_core_nodes" type="topic_handler.py"
+    output="screen" />
+  <node name="seed_core_service_handler_node" pkg="seed_core_nodes" type="service_handler.py"
+    output="screen" />
 </launch>

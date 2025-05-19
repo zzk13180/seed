@@ -8,18 +8,18 @@ from rospy.exceptions import ROSTimeMovedBackwardsException
 
 class TFConsolidator:
     """
-    订阅 /tf 话题，合并所有收到的变换，定期清理超时变换，并发布到 /seed_ros_nodes/tf_consolidated。
+    订阅 /tf 话题，合并所有收到的变换，定期清理超时变换，并发布到 /seed_core/tf_consolidated。
     """
 
     def __init__(self):
-        rospy.init_node('seed_ros_tf_consolidator')
+        rospy.init_node('seed_core_tf_consolidator')
         self.lock = threading.Lock()
         self.transforms = {}           # {child_frame_id: transform}
         self.transform_time = {}       # {child_frame_id: last_update_time}
         self.updated = False
 
         self.tf_sub = rospy.Subscriber('/tf', TFMessage, self.tf_callback)
-        self.tf_pub = rospy.Publisher('/seed_ros_nodes/tf_consolidated', TFMessage, queue_size=1, latch=True)
+        self.tf_pub = rospy.Publisher('/seed_core/tf_consolidated', TFMessage, queue_size=1, latch=True)
 
         self.timeout = 10.0            # 超时时间（秒）
         self.publish_rate = 30         # 发布频率（Hz）

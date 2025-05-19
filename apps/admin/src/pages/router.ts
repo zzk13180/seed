@@ -8,7 +8,25 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: TheLayout,
-    redirect: '/panel',
+    redirect: '/map',
+    meta: {
+      hideMenu: true,
+    },
+    children: [
+      {
+        path: '/map',
+        component: () => import('./map.vue'),
+        meta: {
+          requiresAuth: true,
+          title: '地图导航',
+          icon: 'map',
+        },
+      },
+    ],
+  },
+  {
+    path: '/panel',
+    component: TheLayout,
     meta: {
       hideMenu: true,
     },
@@ -24,6 +42,7 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+
   {
     path: '/user',
     component: TheLayout,
