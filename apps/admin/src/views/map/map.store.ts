@@ -3,19 +3,17 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { MapController } from './map.controller'
 
 export interface MapState {
-  rosBridgeServerUrl: string // ROS Bridge 服务器 URL
-  viewCenter: { x: number; y: number }
-  viewScale: number
-  inputMovement: boolean
-  viewChangeCallback?: (view: { center: { x: number; y: number }; scale: number }) => void
-  // 网格配置
+  rosBridgeServerUrl: string // ROS Bridge 服务器的 WebSocket URL
+  viewCenter: { x: number; y: number } // 当前视图中心点的地图坐标
+  viewScale: number // 当前视图缩放比例（地图单位到屏幕像素的比例）
+  inputMovement: boolean // 是否允许通过鼠标/触摸拖动地图
   gridConfig: {
-    size: number
-    thickness: number
-    colour: string
-    colour_sub: string
-    autoscale: 'Off' | 'Very Fine' | 'Fine' | 'Coarse' | 'Rough'
-    subdivisions: number
+    size: number // 主网格线的间距（地图单位，米）
+    thickness: number // 主网格线的线宽（像素）
+    colour: string // 主网格线颜色
+    colour_sub: string // 子网格线颜色
+    autoscale: 'Off' | 'Very Fine' | 'Fine' | 'Coarse' | 'Rough' // 网格自适应级别
+    subdivisions: number // 每个主网格的细分数量
   }
 }
 
@@ -39,52 +37,9 @@ export const useMapStore = defineStore('map', () => {
 
   const computedExample = computed(() => controller.computedExample)
 
-  // 公开视图控制功能
-  const initializeMapView = (container: HTMLElement) => {
-    controller.initialize(container)
-  }
-
-  const destroyMapView = () => {
-    controller.destroy()
-  }
-
-  const setViewCenter = (center: { x: number; y: number }) => {
-    controller.setView(center, undefined)
-  }
-
-  const setViewScale = (scale: number) => {
-    controller.setView(undefined, scale)
-  }
-
-  const resetView = () => {
-    controller.resetView()
-  }
-
-  // 网格相关方法
-  const initializeGrid = (canvas: HTMLCanvasElement) => {
-    controller.initializeGrid(canvas)
-  }
-
-  const updateGridConfig = (config: Partial<MapState['gridConfig']>) => {
-    Object.assign(state.gridConfig, config)
-    controller.drawGrid()
-  }
-
-  const resizeGridCanvas = () => {
-    controller.resizeGridCanvas()
-  }
-
   return {
     state,
     controller,
-    initializeMapView,
-    destroyMapView,
-    setViewCenter,
-    setViewScale,
-    resetView,
-    initializeGrid,
-    updateGridConfig,
-    resizeGridCanvas,
     getter: {
       computedExample,
     },
