@@ -1,12 +1,11 @@
 import { reactive, markRaw, computed } from 'vue'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { MapController } from './map.controller'
+import type { ViewState } from '@/managers/view.manager'
 
 export interface MapState {
   rosBridgeServerUrl: string // ROS Bridge 服务器的 WebSocket URL
-  viewCenter: { x: number; y: number } // 当前视图中心点的地图坐标
-  viewScale: number // 当前视图缩放比例（地图单位到屏幕像素的比例）
-  inputMovement: boolean // 是否允许通过鼠标/触摸拖动地图
+  viewState: ViewState
   gridConfig: {
     size: number // 主网格线的间距（地图单位，米）
     thickness: number // 主网格线的线宽（像素）
@@ -14,15 +13,19 @@ export interface MapState {
     colour_sub: string // 子网格线颜色
     autoscale: 'Off' | 'Very Fine' | 'Fine' | 'Coarse' | 'Rough' // 网格自适应级别
     subdivisions: number // 每个主网格的细分数量
+    maxGridLines: number // 最大网格线数量限制
+    subGridOpacity: number // 子网格线透明度
   }
 }
 
 export const useMapStore = defineStore('map', () => {
   const state = reactive<MapState>({
     rosBridgeServerUrl: 'ws://10.211.55.5:5001',
-    viewCenter: { x: 0, y: 0 },
-    viewScale: 50.0,
-    inputMovement: true,
+    viewState: {
+      viewCenter: { x: 0, y: 0 },
+      viewScale: 50.0,
+      inputMovement: true,
+    },
     gridConfig: {
       size: 1.0,
       thickness: 1,
@@ -30,19 +33,16 @@ export const useMapStore = defineStore('map', () => {
       colour_sub: '#294056',
       autoscale: 'Coarse',
       subdivisions: 2,
+      maxGridLines: 300,
+      subGridOpacity: 0.65,
     },
   })
 
   const controller = markRaw(new MapController(state))
 
-  const computedExample = computed(() => controller.computedExample)
-
   return {
     state,
     controller,
-    getter: {
-      computedExample,
-    },
   }
 })
 

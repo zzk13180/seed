@@ -22,7 +22,6 @@
 </template>
 
 <script lang="ts">
-  // @ts-nocheck
   import { computed, defineComponent, inject } from 'vue'
   import { ElIcon } from '@element-plus/components/icon'
   import { useNamespace } from '@element-plus/hooks'

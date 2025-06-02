@@ -88,7 +88,6 @@
   </div>
 </template>
 <script lang="ts">
-  // @ts-nocheck
   import {
     computed,
     defineComponent,
@@ -213,6 +212,7 @@
       function onItemLeave() {
         const contentEl = unref(contentRef)
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         trigger.value.includes('hover') && contentEl?.focus()
         currentTabId.value = null
       }

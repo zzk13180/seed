@@ -28,7 +28,7 @@
   const CURRENT_TAB_ID_CHANGE_EVT = 'currentTabIdChange'
 
   const ENTRY_FOCUS_EVT = 'rovingFocusGroup.entryFocus'
-  // eslint-disable-next-line no-undef
+
   const EVT_OPTS: EventInit = { bubbles: false, cancelable: true }
   export default defineComponent({
     name: 'RovingFocusGroupImpl',

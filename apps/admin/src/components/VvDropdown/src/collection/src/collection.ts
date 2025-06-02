@@ -1,6 +1,6 @@
 import { defineComponent, h, inject, onBeforeUnmount, onMounted, provide, ref, unref } from 'vue'
 import type { InjectionKey } from 'vue'
-import type { SetupContext } from '@vue/runtime-core'
+import type { SetupContext } from 'vue'
 import type { CollectionInjectionContext, CollectionItemInjectionContext } from './tokens'
 
 export const COLLECTION_ITEM_SIGN = 'data-el-collection-item'

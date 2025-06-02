@@ -1,22 +1,38 @@
 <template>
   <div class="map-view-container">
-    <el-card class="map-header">
-      <div>iconbar</div>
+    <el-card class="map-view-header">
+      <template v-if="isControllerInitialized">
+        <div>iconbar</div>
+      </template>
     </el-card>
-    <el-card class="map-content">
-      <div class="map-canvas-container" ref="mapCanvasContainer">
-        <MapGridCanvas />
+    <el-card class="map-view-content">
+      <div class="map-view-canvas-container" ref="canvasContainerRef">
+        <template v-if="isControllerInitialized">
+          <MapGridCanvas />
+        </template>
       </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { provide, ref } from 'vue'
   import MapGridCanvas from './MapGridCanvas/MapGridCanvas.vue'
+  import { useMapStore } from './map.store'
 
-  const mapCanvasContainer = ref<HTMLDivElement | null>(null)
-  provide('container', mapCanvasContainer)
+  const canvasContainerRef = ref<HTMLDivElement | null>(null)
+
+  const { state, controller } = useMapStore()
+  const isControllerInitialized = ref(false)
+
+  onMounted(() => {
+    console.log('MapView mounted', performance.now())
+    controller.initialize(canvasContainerRef.value)
+    isControllerInitialized.value = true
+  })
+
+  onBeforeUnmount(() => {
+    controller.destroy()
+  })
 </script>
 
 <style scoped lang="scss">
@@ -32,13 +48,13 @@
       height: 100%;
     }
 
-    .map-header {
+    .map-view-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .map-content {
+    .map-view-content {
       flex: 1;
       position: relative;
 
@@ -46,7 +62,7 @@
         padding: 0;
       }
 
-      .map-canvas-container {
+      .map-view-canvas-container {
         width: 100%;
         height: 100%;
         position: absolute;

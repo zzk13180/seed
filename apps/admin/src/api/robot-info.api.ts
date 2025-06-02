@@ -1,5 +1,15 @@
 import { $http } from '@seed/http'
 
-export const apiGetRobotInfo = (params?: { robotId?: number }) => {
-  return $http.request('robot/RobotInfo', 'POST', params)
+interface RobotInfo {
+  id: number
+  name: string
+  status: string
+}
+
+interface GetRobotInfoParams {
+  robotId?: number
+}
+
+export const apiGetRobotInfo = (params?: GetRobotInfoParams): Promise<RobotInfo> => {
+  return $http.get<RobotInfo>('/robot/robot-info', params)
 }

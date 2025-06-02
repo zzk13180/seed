@@ -2,7 +2,6 @@ import js from '@eslint/js'
 
 import tsEslintPlugin from '@typescript-eslint/eslint-plugin'
 import tsEslintParser from '@typescript-eslint/parser'
-import { defineConfig } from 'eslint/config'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
 import eslintCommentsPlugin from 'eslint-plugin-eslint-comments'
 import regexpPlugin from 'eslint-plugin-regexp'
@@ -17,17 +16,23 @@ import vueParser from 'vue-eslint-parser'
 import svelteEslintParser from 'svelte-eslint-parser'
 import eslintPluginSvelte from 'eslint-plugin-svelte'
 
-export default defineConfig([
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+
+export default defineConfigWithVueTs([
   {
     ignores: [
       '**/dist/',
       '**/node_modules/',
       '**/.svelte-kit/',
+      '**/public/',
       'apps/docs/',
       'packages/element-plus/',
     ],
   },
   js.configs.recommended,
+  vuePlugin.configs['flat/essential'],
+  vueTsConfigs.recommended,
   {
     plugins: {
       regexp: regexpPlugin,
@@ -238,7 +243,8 @@ export default defineConfig([
       'vue/require-valid-default-prop': 'off',
       'vue/no-unused-vars': 'off',
       'vue/no-v-html': 'off',
-      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
       // 'no-unused-vars': [
       //   'warn',
       //   {
@@ -329,6 +335,7 @@ export default defineConfig([
     },
   },
   eslintConfigPrettier,
+  skipFormatting,
 ])
 
 function vueGlobals() {

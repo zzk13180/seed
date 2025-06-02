@@ -1,4 +1,3 @@
-/* eslint-disable */
 // @ts-nocheck
 import { computed, inject, ref } from 'vue'
 import { addClass } from '@element-plus/utils'

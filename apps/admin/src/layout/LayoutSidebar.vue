@@ -50,6 +50,10 @@
     left: 0;
     z-index: 99;
     overflow: hidden;
+    box-shadow:
+      0 2px 4px -1px rgb(0 0 0 / 20%),
+      0 4px 5px 0 rgb(0 0 0 / 14%),
+      0 1px 10px 0 rgb(0 0 0 / 12%);
 
     :deep(.el-menu--vertical) {
       width: 100%; // 覆盖 .el-menu--collapse

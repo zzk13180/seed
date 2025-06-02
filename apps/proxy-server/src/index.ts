@@ -1,6 +1,5 @@
 /* eslint-disable complexity */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { z } from 'zod'

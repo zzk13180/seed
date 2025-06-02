@@ -6,33 +6,13 @@ export interface RobotInfo {
   robotId?: string
 }
 
-export interface LogEntry {
-  time: string
-  message: string
-  type: 'info' | 'success' | 'error' | 'warning'
-}
-
 export interface State {
   robotInfo: RobotInfo
-  logs: LogEntry[]
-  connectionStatus: string
-  pkgName: string
-  nodeCmd: string
-  nodeNameInfo: string
-  serviceResponse: string
-  tfConsolidatedData: string
 }
 
 export const usePanelStore = defineStore('panel', () => {
   const state: State = reactive({
     robotInfo: {},
-    logs: [],
-    connectionStatus: '正在连接到ROS服务器...',
-    pkgName: 'turtlesim',
-    nodeCmd: 'rosrun turtlesim turtlesim_node',
-    nodeNameInfo: '/turtlesim',
-    serviceResponse: '等待操作...',
-    tfConsolidatedData: '等待数据...',
   })
 
   const controller = markRaw(new PanelController(state))
@@ -49,4 +29,18 @@ export const usePanelStore = defineStore('panel', () => {
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(usePanelStore, import.meta.hot))
+  // import.meta.hot.accept('./panel.controller', newPanelControllerModule => {
+  //   if (newPanelControllerModule && newPanelControllerModule.PanelController) {
+  //     const store = usePanelStore()
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //     const newController = new newPanelControllerModule.PanelController(store.state)
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //     store.controller = newController
+  //     console.log('PanelController instance has been updated via HMR.')
+  //   } else {
+  //     console.error(
+  //       'HMR update for PanelController failed: New module or PanelController class not found.',
+  //     )
+  //   }
+  // })
 }

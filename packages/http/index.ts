@@ -17,25 +17,45 @@ class HttpClient {
     }
   }
 
+  private buildUrl(endpoint: string, params?: Record<string, any>): string {
+    const url = new URL(`${this.basePath}${endpoint}`)
+    if (params) {
+      Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+          url.searchParams.append(key, String(params[key]))
+        }
+      })
+    }
+    return url.toString()
+  }
+
   async request<T>(
     endpoint: string,
     method: string,
-    params: any,
+    params?: any,
     headers: Record<string, string> = {},
   ): Promise<T> {
-    const url = `${this.basePath}${endpoint}`
     const requestHeaders = {
       ...this.headers,
       ...headers,
     }
 
+    const isGetMethod = method.toUpperCase() === 'GET'
+    const url = isGetMethod ? this.buildUrl(endpoint, params) : `${this.basePath}${endpoint}`
+
+    const requestOptions: RequestInit = {
+      method,
+      headers: requestHeaders,
+      mode: 'cors',
+    }
+
+    // GET 请求不应该有 body
+    if (!isGetMethod && params) {
+      requestOptions.body = JSON.stringify(params)
+    }
+
     try {
-      const response = await fetch(url, {
-        method,
-        headers: requestHeaders,
-        body: JSON.stringify(params),
-        mode: 'cors',
-      })
+      const response = await fetch(url, requestOptions)
 
       const data: unknown = await response.json()
 
@@ -48,6 +68,26 @@ class HttpClient {
       console.error('API请求失败:', error)
       throw error
     }
+  }
+
+  async get<T>(
+    endpoint: string,
+    params?: Record<string, any>,
+    headers?: Record<string, string>,
+  ): Promise<T> {
+    return this.request<T>(endpoint, 'GET', params, headers)
+  }
+
+  async post<T>(endpoint: string, params?: any, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>(endpoint, 'POST', params, headers)
+  }
+
+  async put<T>(endpoint: string, params?: any, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>(endpoint, 'PUT', params, headers)
+  }
+
+  async delete<T>(endpoint: string, params?: any, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>(endpoint, 'DELETE', params, headers)
   }
 }
 

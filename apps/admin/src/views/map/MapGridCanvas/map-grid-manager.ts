@@ -1,68 +1,53 @@
 import type { MapState } from '../map.store'
-import { ViewManager, type ViewState } from '@/managers/view-manager'
+import type { ViewManager } from '@/managers/view.manager'
+import type { Subscription } from 'rxjs'
 
 export interface MapGridEvents {
   onResize?: () => void
 }
 
 export class MapGridManager {
-  private state: MapState
+  private mapState: MapState
   private gridCanvas: HTMLCanvasElement | null = null
   private gridCtx: CanvasRenderingContext2D | null = null
-  private container: HTMLElement | null = null
   private events: MapGridEvents
   private resizeObserver: ResizeObserver | null = null
 
-  // 使用ViewManager替换原有的事件处理
   private viewManager: ViewManager | null = null
 
+  private subscriptions: Subscription[] = []
+
   constructor(
-    state: MapState,
+    mapState: MapState,
     canvas: HTMLCanvasElement,
-    container: HTMLElement,
+    viewManager: ViewManager,
     events: MapGridEvents = {},
   ) {
-    this.state = state
+    this.mapState = mapState
     this.gridCanvas = canvas
-    this.container = container
+    this.viewManager = viewManager
     this.events = events
   }
 
   /**
    * 初始化网格
    */
-  public initialize(): void {
-    if (!this.gridCanvas || !this.container) return
+  initialize(): void {
+    if (!this.gridCanvas) return
 
     this.gridCtx = this.gridCanvas.getContext('2d', { colorSpace: 'srgb' })
 
-    // 创建视图状态
-    const viewState: ViewState = {
-      center: this.state.viewCenter,
-      scale: this.state.viewScale,
-      inputMovement: this.state.inputMovement,
-    }
-
-    // 初始化ViewManager
-    this.viewManager = new ViewManager(this.container, viewState, {
-      onViewChange: () => {
+    this.subscriptions.push(
+      this.viewManager.viewChange$.subscribe(() => {
         // 同步视图状态到MapState
         if (this.viewManager) {
-          this.state.viewCenter = this.viewManager.getState().center
-          this.state.viewScale = this.viewManager.getState().scale
-          this.state.inputMovement = this.viewManager.getState().inputMovement
-
-          // 更新网格绘制
-          this.draw()
+          this.mapState.viewState.viewCenter = this.viewManager.getState().viewCenter
+          this.mapState.viewState.viewScale = this.viewManager.getState().viewScale
+          this.mapState.viewState.inputMovement = this.viewManager.getState().inputMovement
+          this.resize()
         }
-      },
-      shouldPreventDrag: target => {
-        // 可以根据需要决定是否阻止某些元素的拖动
-        return false
-      },
-    })
-
-    this.viewManager.initialize()
+      }),
+    )
 
     // 设置resize观察器
     this.setupResizeObserver()
@@ -73,6 +58,25 @@ export class MapGridManager {
 
     // 初始绘制
     this.resize()
+  }
+
+  /**
+   * 销毁网格管理器
+   */
+  destroy(): void {
+    window.removeEventListener('resize', this.resize)
+    window.removeEventListener('orientationchange', this.resize)
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+      this.resizeObserver = null
+    }
+
+    this.gridCanvas = null
+    this.gridCtx = null
+
+    this.subscriptions.forEach(sub => sub.unsubscribe())
+    this.subscriptions = []
   }
 
   /**
@@ -91,11 +95,11 @@ export class MapGridManager {
   /**
    * 调整网格画布大小
    */
-  public resize = (): void => {
-    if (!this.gridCanvas || !this.container) return
+  private resize = (): void => {
+    if (!this.gridCanvas) return
 
-    this.gridCanvas.width = this.container.clientWidth
-    this.gridCanvas.height = this.container.clientHeight
+    this.gridCanvas.width = this.viewManager.getContainerWidth
+    this.gridCanvas.height = this.viewManager.getContainerHeight
 
     this.draw()
 
@@ -106,31 +110,9 @@ export class MapGridManager {
   }
 
   /**
-   * 销毁网格管理器
-   */
-  public destroy(): void {
-    if (this.viewManager) {
-      this.viewManager.destroy()
-      this.viewManager = null
-    }
-
-    window.removeEventListener('resize', this.resize)
-    window.removeEventListener('orientationchange', this.resize)
-
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect()
-      this.resizeObserver = null
-    }
-
-    this.gridCanvas = null
-    this.gridCtx = null
-    this.container = null
-  }
-
-  /**
    * 将地图坐标转换为屏幕坐标
    */
-  public fixedToScreen(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+  private fixedToScreen(coords: { x: number; y: number }): { x: number; y: number; z: number } {
     if (this.viewManager) {
       const result = this.viewManager.fixedToScreen(coords)
       return { ...result, z: 0 }
@@ -143,7 +125,7 @@ export class MapGridManager {
   /**
    * 将屏幕坐标转换为地图坐标
    */
-  public screenToFixed(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+  private screenToFixed(coords: { x: number; y: number }): { x: number; y: number; z: number } {
     if (this.viewManager) {
       const result = this.viewManager.screenToFixed(coords)
       return { ...result, z: 0 }
@@ -156,7 +138,7 @@ export class MapGridManager {
   /**
    * 获取屏幕像素长度在地图单位中的长度
    */
-  public getPixelsInMapUnits(length: number): number {
+  private getPixelsInMapUnits(length: number): number {
     if (this.viewManager) {
       return this.viewManager.getPixelsInMapUnits(length)
     }
@@ -166,7 +148,7 @@ export class MapGridManager {
   /**
    * 获取地图单位长度在屏幕上的像素长度
    */
-  public getMapUnitsInPixels(length: number): number {
+  private getMapUnitsInPixels(length: number): number {
     if (this.viewManager) {
       return this.viewManager.getMapUnitsInPixels(length)
     }
@@ -176,42 +158,42 @@ export class MapGridManager {
   /**
    * 设置是否允许输入移动
    */
-  public setInputMovementEnabled(value: boolean): void {
+  private setInputMovementEnabled(value: boolean): void {
     if (this.viewManager) {
       this.viewManager.setInputMovementEnabled(value)
-      this.state.inputMovement = value
+      this.mapState.viewState.inputMovement = value
     }
   }
 
   /**
    * 重置视图到初始状态
    */
-  public resetView(): void {
+  private resetView(): void {
     if (this.viewManager) {
       this.viewManager.resetView({ x: 0, y: 0 }, 50.0)
 
       // 同步状态
-      this.state.viewCenter = { x: 0, y: 0 }
-      this.state.viewScale = 50.0
+      this.mapState.viewState.viewCenter = { x: 0, y: 0 }
+      this.mapState.viewState.viewScale = 50.0
     }
   }
 
   /**
    * 设置视图中心和缩放级别
    */
-  public setView(center?: { x: number; y: number }, scale?: number): void {
+  private setView(center?: { x: number; y: number }, scale?: number): void {
     if (!this.viewManager) return
 
     const currentState = this.viewManager.getState()
 
     if (center) {
-      currentState.center = { ...center }
-      this.state.viewCenter = { ...center }
+      currentState.viewCenter = { ...center }
+      this.mapState.viewState.viewCenter = { ...center }
     }
 
     if (scale !== undefined) {
-      currentState.scale = scale
-      this.state.viewScale = scale
+      currentState.viewScale = scale
+      this.mapState.viewState.viewScale = scale
     }
 
     this.viewManager.setState(currentState)
@@ -220,18 +202,18 @@ export class MapGridManager {
   /**
    * 获取当前视图状态
    */
-  public getView(): { center: { x: number; y: number }; scale: number } {
+  private getView(): { center: { x: number; y: number }; scale: number } {
     if (this.viewManager) {
-      const state = this.viewManager.getState()
+      const mapState = this.viewManager.getState()
       return {
-        center: { ...state.center },
-        scale: state.scale,
+        center: { ...mapState.viewCenter },
+        scale: mapState.viewScale,
       }
     }
 
     return {
-      center: { ...this.state.viewCenter },
-      scale: this.state.viewScale,
+      center: { ...this.mapState.viewState.viewCenter },
+      scale: this.mapState.viewState.viewScale,
     }
   }
 
@@ -331,8 +313,8 @@ export class MapGridManager {
 
     // 绘制子网格线
     this.gridCtx.beginPath()
-    this.gridCtx.globalAlpha = 0.65
-    this.gridCtx.strokeStyle = this.state.gridConfig.colour_sub
+    this.gridCtx.globalAlpha = this.mapState.gridConfig.subGridOpacity
+    this.gridCtx.strokeStyle = this.mapState.gridConfig.colour_sub
     this.gridCtx.lineWidth = 1
 
     // 垂直子网格线
@@ -364,8 +346,8 @@ export class MapGridManager {
     // 绘制主网格线
     this.gridCtx.beginPath()
     this.gridCtx.globalAlpha = 1.0
-    this.gridCtx.strokeStyle = this.state.gridConfig.colour
-    this.gridCtx.lineWidth = this.state.gridConfig.thickness
+    this.gridCtx.strokeStyle = this.mapState.gridConfig.colour
+    this.gridCtx.lineWidth = this.mapState.gridConfig.thickness
 
     // 垂直主线
     for (let x = minX; x <= maxX; x += gridSize) {
@@ -412,7 +394,7 @@ export class MapGridManager {
       parseInt((height - yoffset).toString(), 10),
       parseInt((width - xoffset).toString(), 10),
       parseInt((height - yoffset).toString(), 10),
-      this.state.gridConfig.colour,
+      this.mapState.gridConfig.colour,
       2,
     )
 
@@ -421,7 +403,7 @@ export class MapGridManager {
       parseInt((height - yoffset - 5).toString(), 10),
       xScaleStart,
       parseInt((height - yoffset + 5).toString(), 10),
-      this.state.gridConfig.colour,
+      this.mapState.gridConfig.colour,
       2,
     )
 
@@ -430,7 +412,7 @@ export class MapGridManager {
       parseInt((height - yoffset - 5).toString(), 10),
       parseInt((width - xoffset).toString(), 10),
       parseInt((height - yoffset + 5).toString(), 10),
-      this.state.gridConfig.colour,
+      this.mapState.gridConfig.colour,
       2,
     )
 
@@ -440,9 +422,8 @@ export class MapGridManager {
     if (gridSize >= 1000) scaleText = `${gridSize / 1000} km`
     else if (gridSize < 1) scaleText = `${gridSize * 100} cm`
 
-    this.gridCtx.font = '16px Monospace'
     this.gridCtx.textAlign = 'center'
-    this.gridCtx.fillStyle = this.state.gridConfig.colour
+    this.gridCtx.fillStyle = this.mapState.gridConfig.colour
     this.gridCtx.fillText(
       scaleText,
       parseInt((xScaleStart + lineLength / 2).toString(), 10),
@@ -453,14 +434,14 @@ export class MapGridManager {
   /**
    * 绘制网格
    */
-  public draw(): void {
+  private draw(): void {
     if (!this.gridCanvas || !this.gridCtx) return
 
     const width = this.gridCanvas.width
     const height = this.gridCanvas.height
 
-    this.gridCtx.strokeStyle = this.state.gridConfig.colour
-    this.gridCtx.lineWidth = this.state.gridConfig.thickness
+    this.gridCtx.strokeStyle = this.mapState.gridConfig.colour
+    this.gridCtx.lineWidth = this.mapState.gridConfig.thickness
 
     const topLeft = this.screenToFixed({ x: 0, y: 0 })
     const bottomRight = this.screenToFixed({ x: width, y: height })
@@ -468,15 +449,15 @@ export class MapGridManager {
     const widthMeters = Math.abs(bottomRight.x - topLeft.x)
     const heightMeters = Math.abs(bottomRight.y - topLeft.y)
 
-    let gridSize = this.state.gridConfig.size
+    let gridSize = this.mapState.gridConfig.size
 
-    if (this.state.gridConfig.autoscale === 'Very Fine')
+    if (this.mapState.gridConfig.autoscale === 'Very Fine')
       gridSize = this.calculateScale(Math.min(widthMeters, heightMeters) / 21)
-    else if (this.state.gridConfig.autoscale === 'Fine')
+    else if (this.mapState.gridConfig.autoscale === 'Fine')
       gridSize = this.calculateScale(Math.min(widthMeters, heightMeters) / 14)
-    else if (this.state.gridConfig.autoscale === 'Coarse')
+    else if (this.mapState.gridConfig.autoscale === 'Coarse')
       gridSize = this.calculateScale(Math.min(widthMeters, heightMeters) / 7)
-    else if (this.state.gridConfig.autoscale === 'Rough')
+    else if (this.mapState.gridConfig.autoscale === 'Rough')
       gridSize = this.calculateScale(Math.min(widthMeters, heightMeters) / 3)
 
     const minX = topLeft.x - (topLeft.x % gridSize) - gridSize
@@ -487,19 +468,26 @@ export class MapGridManager {
 
     this.gridCtx.clearRect(0, 0, width, height)
 
-    let tempSubdivisions = this.state.gridConfig.subdivisions
+    let tempSubdivisions = this.mapState.gridConfig.subdivisions
 
-    if (this.state.gridConfig.autoscale === 'Off') {
+    if (this.mapState.gridConfig.autoscale === 'Off') {
       let linesX = (maxX - minX) / (gridSize / (tempSubdivisions + 1))
       let linesY = (maxY - minY) / (gridSize / (tempSubdivisions + 1))
 
-      while ((linesX > 300 || linesY > 300) && tempSubdivisions > 0) {
+      while (
+        (linesX > this.mapState.gridConfig.maxGridLines ||
+          linesY > this.mapState.gridConfig.maxGridLines) &&
+        tempSubdivisions > 0
+      ) {
         tempSubdivisions--
         linesX = (maxX - minX) / (gridSize / (tempSubdivisions + 1))
         linesY = (maxY - minY) / (gridSize / (tempSubdivisions + 1))
       }
 
-      if (linesX > 300 || linesY > 300) {
+      if (
+        linesX > this.mapState.gridConfig.maxGridLines ||
+        linesY > this.mapState.gridConfig.maxGridLines
+      ) {
         this.gridCtx.clearRect(0, 0, width, height)
         console.warn('Too many lines to render, increase step size')
         return
@@ -508,7 +496,7 @@ export class MapGridManager {
 
     this.drawGridLines(minX, minY, maxX, maxY, gridSize, tempSubdivisions)
 
-    if (this.state.gridConfig.autoscale !== 'Off') {
+    if (this.mapState.gridConfig.autoscale !== 'Off') {
       this.drawGridScale(gridSize, width, height)
     }
   }

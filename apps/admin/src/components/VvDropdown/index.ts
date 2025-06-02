@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { withInstall, withNoopInstall } from '@element-plus/utils'
 
 import Dropdown from './src/Dropdown.vue'

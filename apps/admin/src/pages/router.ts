@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { AccessTokenUtil } from '@/utils/token.util'
@@ -91,7 +90,6 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 export const router = createRouter({
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   history: createWebHistory(import.meta.env.BASE_PATH),
   routes,
   scrollBehavior(to, from, savedPosition) {

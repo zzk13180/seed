@@ -21,12 +21,12 @@
       <!-- 功能按钮组 -->
       <div class="nav-actions">
         <div class="avatar-container">
-          <vv-dropdown trigger="click" @command="handleCommand">
+          <vv-dropdown @command="handleCommand">
             <div class="avatar-wrapper">
               <img :src="profile" draggable="false" />
             </div>
             <template #dropdown>
-              <vv-dropdown-menu class="tt-dropdown-menu">
+              <vv-dropdown-menu class="vv-dropdown-menu">
                 <div>
                   <router-link to="/user/profile">
                     <vv-dropdown-item>个人中心</vv-dropdown-item>

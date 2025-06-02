@@ -1,5 +1,5 @@
 <template>
-  <div v-if="menuItem.meta && !menuItem.meta.hideMenu" class="menu-item">
+  <div v-if="menuItem.meta && !menuItem.meta.hideMenu" class="layout-menu-item">
     <!-- 单个子菜单项的情况 -->
     <template
       v-if="
@@ -100,6 +100,7 @@
    * @param routePath 路由路径
    * @param routeQuery 路由查询参数（JSON字符串）
    */
+
   const getFullPath = (routePath: string, routeQuery?: string): string | Record<string, any> => {
     // 拼接路径，避免多余的斜杠
     let path = props.basePath
@@ -132,7 +133,7 @@
 </script>
 
 <style lang="scss">
-  .menu-item {
+  .layout-menu-item {
     margin-bottom: 2px;
     padding-right: 8px;
 

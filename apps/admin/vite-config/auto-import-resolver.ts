@@ -85,7 +85,7 @@ function resolveComponent(name: string, options: ElementPlusResolverOptionsResol
   return {
     name,
     from: '@element-plus/components',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     sideEffects: getSideEffects(partialName, options),
   }
 }
@@ -110,7 +110,7 @@ function resolveDirective(name: string, options: ElementPlusResolverOptionsResol
   return {
     name: directive.importName,
     from: '@element-plus/components',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     sideEffects: getSideEffects(directive.styleName, options),
   }
 }
@@ -154,10 +154,8 @@ export function CustomElementPlusResolver(options: ElementPlusResolverOptions = 
         const options = resolveOptions()
 
         if ([...options.noStylesComponents, ...noStylesComponents].includes(name)) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return resolveComponent(name, { ...options, importStyle: false })
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return resolveComponent(name, options)
         }
       },
@@ -165,7 +163,6 @@ export function CustomElementPlusResolver(options: ElementPlusResolverOptions = 
     {
       type: 'directive',
       resolve: (name: string) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return resolveDirective(name, resolveOptions())
       },
     },
