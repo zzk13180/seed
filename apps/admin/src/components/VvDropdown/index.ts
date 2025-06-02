@@ -2,9 +2,9 @@
 
 import { withInstall, withNoopInstall } from '@element-plus/utils'
 
-import Dropdown from './src/Dropdown.vue'
-import DropdownItem from './src/DropdownItem.vue'
-import DropdownMenu from './src/DropdownMenu.vue'
+import Dropdown from './src/VvDropdown.vue'
+import DropdownItem from './src/VvDropdownItem.vue'
+import DropdownMenu from './src/VvDropdownMenu.vue'
 import type { SFCWithInstall } from '@element-plus/utils'
 
 export const TheDropdown: SFCWithInstall<typeof Dropdown> & {
