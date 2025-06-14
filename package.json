@@ -7,6 +7,7 @@
   "author": "zhangzhankui <zzk13180@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build:admin": "nx build @seed/admin",
     "dev": "nx dev @seed/admin",
     "nx": "nx",
     "lerna": "lerna",

@@ -166,10 +166,11 @@ body {
     }
   }
 
-  .el-dialog {
-    // 小(宽480px)、中(宽640px)、大(宽960px)、三类弹窗
-    // 弹窗最大高度为屏幕高度的80%。
+  .el-dialog:not(.is-fullscreen) {
     max-height: 80vh;
+  }
+
+  .el-dialog {
     display: flex;
     flex-direction: column;
 
