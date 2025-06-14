@@ -6,7 +6,7 @@ export interface SidebarRouteItem extends Omit<RouteRecordRaw, 'children' | 'met
   meta?: {
     title?: string
     icon?: string
-    activeMenu?: string // 根据 activeMenu 的使用添加
+    activeMenu?: string
     [key: string]: any
   }
   children?: SidebarRouteItem[]

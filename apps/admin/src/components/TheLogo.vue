@@ -19,7 +19,6 @@
     const svgText = await response.text()
     svgContent.value = svgText
     const symbol = document.createElementNS('http://www.w3.org/2000/svg', 'symbol')
-    // 确保 ID vv-logo-svg-symbol 是唯一的
     symbol.setAttribute('id', 'vv-logo-svg-symbol')
     symbol.innerHTML = svgText
     document.body.appendChild(symbol)
@@ -37,7 +36,7 @@
     .the-logo-svg {
       width: 24px;
       height: 24px;
-      color: #fff; // 动态修改颜色
+      color: #fff;
     }
 
     h1 {

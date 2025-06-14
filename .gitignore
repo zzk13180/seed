@@ -19,3 +19,5 @@
 # git rm --cached ./auto-import-components.d.ts
 apps/admin/auto-import-components.d.ts
 apps/admin/auto-import-vue.d.ts
+
+target

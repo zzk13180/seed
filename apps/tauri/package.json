@@ -3,7 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "tauri": "tauri",
     "dev": "cd ./crates/seed && cargo tauri dev",
     "build": "cd ./crates/seed && cargo tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
   }
 }
