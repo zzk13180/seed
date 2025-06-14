@@ -45,3 +45,8 @@ pnpm tauri ios build
 
 
 
+```sh
+# https://crates.io/crates/tauri-cli
+# cargo install tauri-cli
+xcodebuild -importPlatform ./iOS_18.2_Simulator_Runtime.dmg 
+```
