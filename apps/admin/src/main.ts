@@ -4,10 +4,9 @@ import 'virtual:svg-icons-register'
 import { createApp, type Component } from 'vue'
 import { createPinia } from 'pinia'
 
+import SvgIcon from '@/components/SvgIcon.vue'
 import App from './App.vue'
 import { router } from './pages/router'
-
-import SvgIcon from '@/components/SvgIcon.vue'
 
 const app = createApp(App as Component)
 const store = createPinia()
@@ -27,6 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (link instanceof HTMLLinkElement) {
     link.type = 'image/svg+xml'
     link.href = '/favicon/default.svg'
-    document.getElementsByTagName('head')[0].appendChild(link)
+    document.querySelectorAll('head')[0].append(link)
   }
 })

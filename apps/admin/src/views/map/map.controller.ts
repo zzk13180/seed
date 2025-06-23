@@ -1,31 +1,16 @@
+import { ViewManager } from '@/managers/view.manager'
 import { MapGridManager } from './MapGridCanvas/map-grid-manager'
 import type { MapState } from './map.store'
 import type { Subscription } from 'rxjs'
-import { ViewManager } from '@/managers/view.manager'
 
 export class MapController {
-  private state: MapState
   private viewManager: ViewManager | null = null
-
   private gridManager: MapGridManager | null = null
-
   private subscriptions: Subscription[] = []
+  private readonly state: MapState
 
   constructor(state: MapState) {
     this.state = state
-  }
-
-  private initializeViewManager(container: HTMLElement) {
-    if (this.viewManager) {
-      return
-    }
-    this.viewManager = new ViewManager(this.state.viewState, container)
-    this.subscriptions.push(
-      this.viewManager.viewChange$.subscribe(() => {
-        console.log('MapController viewChange')
-      }),
-    )
-    console.log('MapController initializeViewManager', performance.now())
   }
 
   initialize(container: HTMLElement) {
@@ -34,7 +19,7 @@ export class MapController {
 
   destroy() {
     this.viewManager.destroy()
-    this.subscriptions.forEach(sub => sub.unsubscribe())
+    for (const sub of this.subscriptions) sub.unsubscribe()
     this.subscriptions = []
   }
 
@@ -55,5 +40,18 @@ export class MapController {
       this.gridManager.destroy()
       this.gridManager = null
     }
+  }
+
+  private initializeViewManager(container: HTMLElement) {
+    if (this.viewManager) {
+      return
+    }
+    this.viewManager = new ViewManager(this.state.viewState, container)
+    this.subscriptions.push(
+      this.viewManager.viewChange$.subscribe(() => {
+        console.log('MapController viewChange')
+      }),
+    )
+    console.log('MapController initializeViewManager', performance.now())
   }
 }

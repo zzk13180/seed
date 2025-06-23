@@ -12,17 +12,13 @@ const loadFont = async (font) => {
     if (!document.fonts.has(fontFace)) {
       document.fonts.add(fontFace);
     }
-  } catch (err) {
-    console.error("Failed to load font", font, err);
+  } catch (error) {
+    console.error("Failed to load font", font, error);
   }
 };
 
-const loadFonts = async () => {
-  try {
-    await Promise.all(fonts.map(loadFont));
-  } catch (err) {
-    console.error("Critical font loading error", err);
-  }
-};
-
-loadFonts();
+try {
+  await Promise.all(fonts.map((font) => loadFont(font)));
+} catch (error) {
+  console.error("Critical font loading error", error);
+}

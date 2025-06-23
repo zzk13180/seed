@@ -115,8 +115,8 @@
       try {
         const query = JSON.parse(routeQuery)
         return { path, query }
-      } catch (err) {
-        console.error('无效的路由查询参数格式:', routeQuery, err)
+      } catch (error) {
+        console.error('无效的路由查询参数格式:', routeQuery, error)
       }
     }
 

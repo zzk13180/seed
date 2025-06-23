@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 interface ElementPlusResolverOptions {
   /**
    * import style css or sass with components
@@ -45,7 +46,7 @@ type ElementPlusResolverOptionsResolved = Required<Omit<ElementPlusResolverOptio
   Pick<ElementPlusResolverOptions, 'exclude'>
 
 function kebabCase(key: string) {
-  const result = key.replace(/([A-Z])/g, ' $1').trim()
+  const result = key.replaceAll(/([A-Z])/g, ' $1').trim()
   return result.split(' ').join('-').toLowerCase()
 }
 

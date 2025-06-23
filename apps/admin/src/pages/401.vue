@@ -20,12 +20,12 @@
 </template>
 
 <script setup lang="ts">
-  import type { ComponentInternalInstance } from 'vue'
   import errImage from '@/assets/images/401.gif'
+  import type { ComponentInternalInstance } from 'vue'
 
   const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
-  const errGif = ref(`${errImage}?${+new Date()}`)
+  const errGif = ref(`${errImage}?${Date.now()}`)
 
   function back() {
     if (proxy?.$route.query.noGoBack) {

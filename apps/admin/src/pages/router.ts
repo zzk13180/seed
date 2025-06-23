@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteRecordRaw } from 'vue-router'
 import { AccessTokenUtil } from '@/utils/token.util'
 import TheLayout from '@/layout/TheLayout.vue'
+import type { RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {

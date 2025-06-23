@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { z } from 'zod'
@@ -46,9 +44,9 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
       ) {
         requestBody = await c.req.arrayBuffer()
       }
-    } catch (e: any) {
+    } catch (error: any) {
       console.warn(
-        `[Proxy Warning] Could not read request body for ${method} ${originalPath}: ${e.message}`,
+        `[Proxy Warning] Could not read request body for ${method} ${originalPath}: ${error.message}`,
       )
     }
   }
@@ -69,7 +67,7 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
   // 4. 发起转发
   try {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 60000) // 60s 超时
+    const timeout = setTimeout(() => controller.abort(), 60_000) // 60s 超时
 
     const targetResponse = await fetch(proxiedUrl, {
       method,
@@ -82,7 +80,7 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
 
     // 5. 处理响应头
     const responseHeaders = new Headers()
-    targetResponse.headers.forEach((value, key) => {
+    for (const [key, value] of targetResponse.headers.entries()) {
       // 处理 set-cookie 多值
       if (key.toLowerCase() === 'set-cookie') {
         // Hono/Fetch Headers 只支持 append
@@ -90,7 +88,7 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
       } else {
         responseHeaders.set(key, value)
       }
-    })
+    }
 
     // 处理重定向 Location
     if (responseHeaders.has('location')) {
@@ -106,7 +104,7 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
     }
 
     // 处理 HTTP/1.0 Transfer-Encoding
-    if ((c.req.raw as any)?.raw?.httpVersion === '1.0') {
+    if (c.req.raw?.raw?.httpVersion === '1.0') {
       responseHeaders.delete('transfer-encoding')
       responseHeaders.set('connection', c.req.header('connection') || 'close')
     }

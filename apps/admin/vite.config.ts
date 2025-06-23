@@ -13,8 +13,8 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       target: 'http://127.0.0.1:3000',
       changeOrigin: true,
       ws: true,
+      // eslint-disable-next-line security/detect-non-literal-regexp
       rewrite: (path: string) => path.replace(new RegExp(`^${env.VITE_API_BASE_PATH}`), ''),
-      // configure: (proxy: HttpProxy.Server)
     },
   }
   return {

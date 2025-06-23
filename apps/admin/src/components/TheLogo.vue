@@ -21,7 +21,7 @@
     const symbol = document.createElementNS('http://www.w3.org/2000/svg', 'symbol')
     symbol.setAttribute('id', 'vv-logo-svg-symbol')
     symbol.innerHTML = svgText
-    document.body.appendChild(symbol)
+    document.body.append(symbol)
   })
 </script>
 

@@ -1,5 +1,5 @@
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-import type * as Path from 'path'
+import type * as Path from 'node:path'
 
 export const vitePluginSvgIcons = (path: typeof Path, isBuild: boolean) => {
   const iconDir: string = path.resolve(

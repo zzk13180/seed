@@ -23,11 +23,11 @@ export const useMapStore = defineStore('map', () => {
     rosBridgeServerUrl: 'ws://10.211.55.5:5001',
     viewState: {
       viewCenter: { x: 0, y: 0 },
-      viewScale: 50.0,
+      viewScale: 50,
       inputMovement: true,
     },
     gridConfig: {
-      size: 1.0,
+      size: 1,
       thickness: 1,
       colour: '#3e556a',
       colour_sub: '#294056',

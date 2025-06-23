@@ -15,67 +15,70 @@ export interface ViewManagerOptions {
 }
 
 export class ViewManager {
-  private readonly MAX_SCALE = 5000 // 最大允许的缩放级别
-  private readonly MIN_SCALE = 0.001 // 最小允许的缩放级别
-  private readonly ZOOM_FACTOR = 1.05 // 每次缩放的倍率因子
-
-  private state: ViewState // 视图状态
-  container: HTMLElement // 容器元素，用于监听事件和获取尺寸
-  private options: ViewManagerOptions // 视图管理器配置选项
-
+  // 视图状态
+  container: HTMLElement
+  // 添加一个 Subject 用于发出视图变化事件
+  readonly #viewChangeSubject = new Subject<ViewState>()
+  // 每次缩放的倍率因子
+  private state: ViewState
   // 拖拽开始时的状态记录
   private drag_start?: { x: number; y: number; ref_center_x: number; ref_center_y: number }
-
   // 多点触控的第一个触摸点
   private touch1: { clientX: number; clientY: number } | null = null
   // 多点触控的第二个触摸点
   private touch2: { clientX: number; clientY: number } | null = null
   // 初始触摸点之间的距离，用于计算缩放
   private initialTouchDistance: number = 0
-
   // 事件处理时间戳，用于事件节流
   private event_timestamp: number = performance.now()
   // 事件节流的超时ID
-  private event_timeout: number | undefined = undefined
+  private event_timeout: ReturnType<typeof setTimeout> | undefined = undefined
+  // 视图管理器配置选项
+  private containerWidth: number = 0
+  // 容器宽度的缓存
+  private containerHeight: number = 0
+  // 容器高度的缓存
+  private resizeObserver: ResizeObserver | null = null
+  private readonly MAX_SCALE = 5000 // 最大允许的缩放级别
+  private readonly MIN_SCALE = 0.001 // 最小允许的缩放级别
+  private readonly ZOOM_FACTOR = 1.05
 
-  private containerWidth: number = 0 // 容器宽度的缓存
-  private containerHeight: number = 0 // 容器高度的缓存
-  private resizeObserver: ResizeObserver | null = null // 用于监听容器尺寸变化的 ResizeObserver
+  // 容器元素，用于监听事件和获取尺寸
+  private readonly options: ViewManagerOptions
 
   // 绑定的事件处理函数
-  private _boundHandlers: {
-    dragStart: (event: MouseEvent | TouchEvent) => void
-    dragMove: (event: MouseEvent | TouchEvent) => void
-    dragEnd: () => void
-    zoom: (event: WheelEvent | TouchEvent) => void
-    touchStart: (event: TouchEvent) => void
-    touchMove: (event: TouchEvent) => void
-    touchEnd: (event: TouchEvent) => void
-    handleResize: () => void
+  private readonly _boundHandlers = {
+    dragStart: this.handleDragStart.bind(this),
+    dragMove: this.handleDragMove.bind(this),
+    dragEnd: this.handleDragEnd.bind(this),
+    zoom: this.handleZoom.bind(this),
+    touchStart: this._handleTouchStart.bind(this),
+    touchMove: this._handleTouchMove.bind(this),
+    touchEnd: this._handleTouchEnd.bind(this),
+    handleResize: this._handleResize.bind(this),
   }
-
-  // 添加一个 Subject 用于发出视图变化事件
-  #viewChangeSubject = new Subject<ViewState>()
 
   constructor(state: ViewState, container: HTMLElement, options: ViewManagerOptions = {}) {
     this.container = container
     this.state = state
     this.options = options
 
-    this._boundHandlers = {
-      dragStart: this.handleDragStart.bind(this),
-      dragMove: this.handleDragMove.bind(this),
-      dragEnd: this.handleDragEnd.bind(this),
-      zoom: this.handleZoom.bind(this),
-      touchStart: this._handleTouchStart.bind(this),
-      touchMove: this._handleTouchMove.bind(this),
-      touchEnd: this._handleTouchEnd.bind(this),
-      handleResize: this._handleResize.bind(this),
-    }
-
     this.addListeners()
     this.setupResizeObserver()
     this.updateContainerDimensions()
+  }
+
+  // 暴露一个 Observable 供外部订阅
+  get viewChange$(): Observable<ViewState> {
+    return this.#viewChangeSubject.asObservable()
+  }
+
+  get getContainerWidth(): number {
+    return this.containerWidth
+  }
+
+  get getContainerHeight(): number {
+    return this.containerHeight
   }
 
   initialize(): void {
@@ -90,19 +93,6 @@ export class ViewManager {
       this.resizeObserver = null
     }
     this.#viewChangeSubject.complete() // 完成 Subject，释放资源
-  }
-
-  // 暴露一个 Observable 供外部订阅
-  get viewChange$(): Observable<ViewState> {
-    return this.#viewChangeSubject.asObservable()
-  }
-
-  get getContainerWidth(): number {
-    return this.containerWidth
-  }
-
-  get getContainerHeight(): number {
-    return this.containerHeight
   }
 
   /**
@@ -177,7 +167,7 @@ export class ViewManager {
    * @param defaultCenter 可选的默认中心点
    * @param defaultScale 可选的默认缩放级别
    */
-  resetView(defaultCenter = { x: 0, y: 0 }, defaultScale = 50.0): void {
+  resetView(defaultCenter = { x: 0, y: 0 }, defaultScale = 50): void {
     this.state.viewCenter = { ...defaultCenter }
     this.state.viewScale = defaultScale
     this.drag_start = undefined
@@ -240,12 +230,12 @@ export class ViewManager {
 
   // 设置 ResizeObserver 监听容器尺寸变化
   private setupResizeObserver(): void {
-    if (typeof ResizeObserver !== 'undefined') {
-      this.resizeObserver = new ResizeObserver(this._boundHandlers.handleResize)
-      this.resizeObserver.observe(this.container)
-    } else {
+    if (typeof ResizeObserver === 'undefined') {
       // ResizeObserver 不支持时的后备方案
       window.addEventListener('resize', this._boundHandlers.handleResize)
+    } else {
+      this.resizeObserver = new ResizeObserver(this._boundHandlers.handleResize)
+      this.resizeObserver.observe(this.container)
     }
   }
 
@@ -260,7 +250,7 @@ export class ViewManager {
       this.#viewChangeSubject.next(this.getState())
       this.event_timestamp = performance.now()
     } else {
-      this.event_timeout = window.setTimeout(() => {
+      this.event_timeout = globalThis.setTimeout(() => {
         this.#viewChangeSubject.next(this.getState())
         this.event_timeout = undefined
       }, 12 - delta)
@@ -274,10 +264,8 @@ export class ViewManager {
       return
     }
 
-    if ('touches' in event) {
-      if (event.touches.length === 1) {
-        event.preventDefault()
-      }
+    if ('touches' in event && event.touches.length === 1) {
+      event.preventDefault()
     }
 
     const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX
@@ -351,7 +339,7 @@ export class ViewManager {
 
       const dx = touch1.clientX - touch2.clientX
       const dy = touch1.clientY - touch2.clientY
-      const currentDistance = Math.sqrt(dx * dx + dy * dy)
+      const currentDistance = Math.hypot(dx, dy)
 
       if (this.initialTouchDistance === 0) {
         this.initialTouchDistance = currentDistance
@@ -420,7 +408,7 @@ export class ViewManager {
       this.touch2 = { clientX: event.touches[1].clientX, clientY: event.touches[1].clientY }
       const dx = this.touch1.clientX - this.touch2.clientX
       const dy = this.touch1.clientY - this.touch2.clientY
-      this.initialTouchDistance = Math.sqrt(dx * dx + dy * dy)
+      this.initialTouchDistance = Math.hypot(dx, dy)
     } else if (event.touches.length === 1) {
       this.touch1 = { clientX: event.touches[0].clientX, clientY: event.touches[0].clientY }
       this.touch2 = null
@@ -446,7 +434,7 @@ export class ViewManager {
       this.touch2 = null
       this.initialTouchDistance = 0
     }
-    if (event.touches.length < 1) {
+    if (event.touches.length === 0) {
       this.handleDragEnd()
     }
   }
