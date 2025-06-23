@@ -21,6 +21,6 @@
     "strictNullChecks": false, // 关闭严格的null和undefined检查
     "strictFunctionTypes": false, // 关闭函数参数的双向协变检查
     "noUnusedLocals": false, // 允许未使用的局部变量
-    "noImplicitAny": false, // 允许隐式any类型
+    "noImplicitAny": false // 允许隐式any类型
   }
 }
