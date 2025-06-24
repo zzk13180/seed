@@ -504,6 +504,16 @@ export default defineConfig([
       ...eslintPluginSvelte.configs.recommended.rules, // 使用 Svelte 推荐规则
     },
   },
+  {
+    files: ['apps/api-server/**/*.ts'],
+    rules: {
+      '@typescript-eslint/parameter-properties': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      'unicorn/prefer-top-level-await': 'off',
+      'unicorn/no-process-exit': 'off',
+      'unicorn/prefer-module': 'off',
+    },
+  },
   eslintConfigPrettier, // 使用 Prettier 配置覆盖部分格式化规则
 ])
 

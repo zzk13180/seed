@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter } from '@nestjs/platform-fastify'
 import { WsAdapter } from '@nestjs/platform-ws'

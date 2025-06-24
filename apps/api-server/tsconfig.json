@@ -1,6 +1,7 @@
 {
   "extends": "@seed/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "noEmit": false,
     "moduleResolution": "node",
     "module": "commonjs",
     "declaration": true,

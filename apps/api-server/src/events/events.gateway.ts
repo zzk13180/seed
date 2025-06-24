@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-base-to-string */
 import { Logger } from '@nestjs/common'
 import { WebSocketGateway, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets'
 import { WebSocket } from 'ws'
@@ -17,8 +13,8 @@ import type {
 
 @WebSocketGateway({ path: '/ws/robot' })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  private readonly clients = new Set<WebSocket>()
   private readonly logger = new Logger(EventsGateway.name)
-  private clients = new Set<WebSocket>()
 
   constructor(private readonly dialogueService: DialogueService) {}
 
@@ -32,6 +28,70 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleDisconnect(client: WebSocket) {
     this.clients.delete(client)
     this.logger.log('[WS] 客户端断开连接')
+  }
+
+  @OnEvent('dialogue.user_input')
+  onUserInput(payload: { text: string }) {
+    const msg: RobotStateUpdateMessage = {
+      type: MessageType.ROBOT_STATE_UPDATE,
+      data: { state: 'listening', expression: 'h0015', text: payload.text },
+    }
+    this.broadcast(msg)
+  }
+
+  @OnEvent('dialogue.text_update')
+  onTextUpdate(payload: { text: string }) {
+    const msg: RobotStateUpdateMessage = {
+      type: MessageType.ROBOT_STATE_UPDATE,
+      data: { state: 'responding', expression: 'h0006', text: payload.text },
+    }
+    this.broadcast(msg)
+  }
+
+  @OnEvent('dialogue.status_update')
+  onStatusUpdate(payload: { status: string }) {
+    this.logger.log(`[WS] 收到状态更新: ${payload.status}`)
+    let msg: RobotStateUpdateMessage | null = null
+
+    switch (payload.status) {
+      case '待命': {
+        msg = {
+          type: MessageType.ROBOT_STATE_UPDATE,
+          data: { state: 'idle', expression: 'h0063' },
+        }
+        break
+      }
+
+      case '聆听中...': {
+        msg = {
+          type: MessageType.ROBOT_STATE_UPDATE,
+          data: { state: 'listening', expression: 'h0015' },
+        }
+        break
+      }
+
+      case '思考中...': {
+        msg = {
+          type: MessageType.ROBOT_STATE_UPDATE,
+          data: { state: 'thinking', expression: 'h0242' },
+        }
+        break
+      }
+
+      case '说话中...': {
+        msg = {
+          type: MessageType.ROBOT_STATE_UPDATE,
+          data: { state: 'responding', expression: 'h0006' },
+        }
+        break
+      }
+
+      default: {
+        return
+      }
+    }
+
+    this.broadcast(msg)
   }
 
   private sendInit(client: WebSocket) {
@@ -63,67 +123,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private broadcast(msg: OutgoingMessage) {
-    this.clients.forEach(c => this.send(c, msg))
-  }
-
-  // === 真正的 AI 回调转发 ===
-
-  @OnEvent('dialogue.user_input')
-  onUserInput(payload: { text: string }) {
-    const msg: RobotStateUpdateMessage = {
-      type: MessageType.ROBOT_STATE_UPDATE,
-      data: { state: 'listening', expression: 'h0015', text: payload.text },
-    }
-    this.broadcast(msg)
-  }
-
-  @OnEvent('dialogue.text_update')
-  onTextUpdate(payload: { text: string }) {
-    const msg: RobotStateUpdateMessage = {
-      type: MessageType.ROBOT_STATE_UPDATE,
-      data: { state: 'responding', expression: 'h0006', text: payload.text },
-    }
-    this.broadcast(msg)
-  }
-
-  @OnEvent('dialogue.status_update')
-  onStatusUpdate(payload: { status: string }) {
-    this.logger.log(`[WS] 收到状态更新: ${payload.status}`)
-    let msg: RobotStateUpdateMessage | null = null
-
-    switch (payload.status) {
-      case '待命':
-        msg = {
-          type: MessageType.ROBOT_STATE_UPDATE,
-          data: { state: 'idle', expression: 'h0063' },
-        }
-        break
-
-      case '聆听中...':
-        msg = {
-          type: MessageType.ROBOT_STATE_UPDATE,
-          data: { state: 'listening', expression: 'h0015' },
-        }
-        break
-
-      case '思考中...':
-        msg = {
-          type: MessageType.ROBOT_STATE_UPDATE,
-          data: { state: 'thinking', expression: 'h0242' },
-        }
-        break
-
-      case '说话中...':
-        msg = {
-          type: MessageType.ROBOT_STATE_UPDATE,
-          data: { state: 'responding', expression: 'h0006' },
-        }
-        break
-
-      default:
-        return
-    }
-
-    this.broadcast(msg)
+    for (const c of this.clients) this.send(c, msg)
   }
 }

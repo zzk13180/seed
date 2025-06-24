@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-base-to-string */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import WebSocket from 'ws'
@@ -13,14 +11,17 @@ interface DialogueMessage {
 
 @Injectable()
 export class DialogueService implements OnModuleInit {
-  private readonly logger = new Logger(DialogueService.name)
   private ws: WebSocket | null = null
-  private readonly wsUrl = 'ws://10.0.1.42:8010/ws' // 对话服务地址
+  // 对话服务地址
   private reconnectAttempts = 0
+  private readonly logger = new Logger(DialogueService.name)
+
+  private readonly wsUrl = 'ws://127.0.0.1:8080/ws'
+
   private readonly maxReconnectAttempts = 10 // 最大重连次数
   private readonly reconnectInterval = 5000 // 重连间隔
 
-  constructor(private eventEmitter: EventEmitter2) {}
+  constructor(private readonly eventEmitter: EventEmitter2) {}
 
   onModuleInit() {
     this.connect()
