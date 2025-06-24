@@ -1,5 +1,5 @@
 import type { MapState } from '../map.store'
-import type { ViewManager } from '@/managers/view.manager'
+import type { ViewManager } from '../managers/view.manager'
 import type { Subscription } from 'rxjs'
 
 export interface MapGridEvents {
@@ -40,13 +40,11 @@ export class MapGridManager {
     this.gridCtx = this.gridCanvas.getContext('2d', { colorSpace: 'srgb' })
 
     this.subscriptions.push(
-      this.viewManager.viewChange$.subscribe(() => {
+      this.viewManager.viewStateChange$.subscribe(() => {
         // 同步视图状态到MapState
         if (this.viewManager) {
-          this.mapState.viewState.viewCenter = this.viewManager.getState().viewCenter
-          this.mapState.viewState.viewScale = this.viewManager.getState().viewScale
-          this.mapState.viewState.inputMovement = this.viewManager.getState().inputMovement
-          this.resize()
+          // 更新网格绘制
+          this.draw()
         }
       }),
     )
@@ -138,88 +136,6 @@ export class MapGridManager {
   }
 
   /**
-   * 获取屏幕像素长度在地图单位中的长度
-   */
-  private getPixelsInMapUnits(length: number): number {
-    if (this.viewManager) {
-      return this.viewManager.getPixelsInMapUnits(length)
-    }
-    return 0
-  }
-
-  /**
-   * 获取地图单位长度在屏幕上的像素长度
-   */
-  private getMapUnitsInPixels(length: number): number {
-    if (this.viewManager) {
-      return this.viewManager.getMapUnitsInPixels(length)
-    }
-    return 0
-  }
-
-  /**
-   * 设置是否允许输入移动
-   */
-  private setInputMovementEnabled(value: boolean): void {
-    if (this.viewManager) {
-      this.viewManager.setInputMovementEnabled(value)
-      this.mapState.viewState.inputMovement = value
-    }
-  }
-
-  /**
-   * 重置视图到初始状态
-   */
-  private resetView(): void {
-    if (this.viewManager) {
-      this.viewManager.resetView({ x: 0, y: 0 }, 50)
-
-      // 同步状态
-      this.mapState.viewState.viewCenter = { x: 0, y: 0 }
-      this.mapState.viewState.viewScale = 50
-    }
-  }
-
-  /**
-   * 设置视图中心和缩放级别
-   */
-  private setView(center?: { x: number; y: number }, scale?: number): void {
-    if (!this.viewManager) return
-
-    const currentState = this.viewManager.getState()
-
-    if (center) {
-      currentState.viewCenter = { ...center }
-      this.mapState.viewState.viewCenter = { ...center }
-    }
-
-    if (scale !== undefined) {
-      currentState.viewScale = scale
-      this.mapState.viewState.viewScale = scale
-    }
-
-    this.viewManager.setState(currentState)
-  }
-
-  /**
-   * 获取当前视图状态
-   */
-  private getView(): { center: { x: number; y: number }; scale: number } {
-    if (this.viewManager) {
-      const mapState = this.viewManager.getState()
-      return {
-        center: { ...mapState.viewCenter },
-        scale: mapState.viewScale,
-      }
-    }
-
-    return {
-      center: { ...this.mapState.viewState.viewCenter },
-      scale: this.mapState.viewState.viewScale,
-    }
-  }
-
-  /**
    * 计算缩放级别
    */
   private calculateScale(value: number): number {
@@ -257,8 +173,11 @@ export class MapGridManager {
     this.gridCtx.strokeStyle = color
     this.gridCtx.lineWidth = lineWidth
 
-    this.gridCtx.moveTo(parseInt(startX.toString(), 10), parseInt(startY.toString(), 10))
-    this.gridCtx.lineTo(parseInt(endX.toString(), 10), parseInt(endY.toString(), 10))
+    this.gridCtx.moveTo(
+      Number.parseInt(startX.toString(), 10),
+      Number.parseInt(startY.toString(), 10),
+    )
+    this.gridCtx.lineTo(Number.parseInt(endX.toString(), 10), Number.parseInt(endY.toString(), 10))
 
     this.gridCtx.stroke()
   }
@@ -286,29 +205,29 @@ export class MapGridManager {
     // 计算主网格位置
     for (let x = minX; x <= maxX; x += gridSize) {
       const screenPos = this.fixedToScreen({ x, y: 0 }).x
-      xPositions.set(x, parseInt(screenPos.toString(), 10))
+      xPositions.set(x, Number.parseInt(screenPos.toString(), 10))
     }
 
     for (let y = minY; y <= maxY; y += gridSize) {
       const screenPos = this.fixedToScreen({ x: 0, y }).y
-      yPositions.set(y, parseInt(screenPos.toString(), 10))
+      yPositions.set(y, Number.parseInt(screenPos.toString(), 10))
     }
 
     if (subdivisions > 1) {
       // 计算子网格位置
       for (let x = minX; x <= maxX; x += gridSize) {
         for (let subX = 1; subX < subdivisions; subX++) {
-          const curSubX = x + subX * subdivisionSize
-          const screenPos = this.fixedToScreen({ x: curSubX, y: 0 }).x
-          xPositions.set(curSubX, parseInt(screenPos.toString(), 10))
+          const currentSubX = x + subX * subdivisionSize
+          const screenPos = this.fixedToScreen({ x: currentSubX, y: 0 }).x
+          xPositions.set(currentSubX, Number.parseInt(screenPos.toString(), 10))
         }
       }
 
       for (let y = minY; y <= maxY; y += gridSize) {
         for (let subY = 1; subY < subdivisions; subY++) {
-          const curSubY = y + subY * subdivisionSize
-          const screenPos = this.fixedToScreen({ x: 0, y: curSubY }).y
-          yPositions.set(curSubY, parseInt(screenPos.toString(), 10))
+          const currentSubY = y + subY * subdivisionSize
+          const screenPos = this.fixedToScreen({ x: 0, y: currentSubY }).y
+          yPositions.set(currentSubY, Number.parseInt(screenPos.toString(), 10))
         }
       }
     }
@@ -322,8 +241,8 @@ export class MapGridManager {
     // 垂直子网格线
     for (let x = minX; x <= maxX; x += gridSize) {
       for (let subX = 1; subX < subdivisions; subX++) {
-        const curSubX = x + subX * subdivisionSize
-        const screenX = xPositions.get(curSubX)
+        const currentSubX = x + subX * subdivisionSize
+        const screenX = xPositions.get(currentSubX)
         if (screenX !== undefined) {
           this.gridCtx.moveTo(screenX, 0)
           this.gridCtx.lineTo(screenX, this.gridCanvas.height)
@@ -334,8 +253,8 @@ export class MapGridManager {
     // 水平子网格线
     for (let y = minY; y <= maxY; y += gridSize) {
       for (let subY = 1; subY < subdivisions; subY++) {
-        const curSubY = y + subY * subdivisionSize
-        const screenY = yPositions.get(curSubY)
+        const currentSubY = y + subY * subdivisionSize
+        const screenY = yPositions.get(currentSubY)
         if (screenY !== undefined) {
           this.gridCtx.moveTo(0, screenY)
           this.gridCtx.lineTo(this.gridCanvas.width, screenY)
@@ -393,32 +312,32 @@ export class MapGridManager {
 
     this.drawScreenLine(
       xScaleStart,
-      parseInt((height - yoffset).toString(), 10),
-      parseInt((width - xoffset).toString(), 10),
-      parseInt((height - yoffset).toString(), 10),
+      Number.parseInt((height - yoffset).toString(), 10),
+      Number.parseInt((width - xoffset).toString(), 10),
+      Number.parseInt((height - yoffset).toString(), 10),
       this.mapState.gridConfig.colour,
       2,
     )
 
     this.drawScreenLine(
       xScaleStart,
-      parseInt((height - yoffset - 5).toString(), 10),
+      Number.parseInt((height - yoffset - 5).toString(), 10),
       xScaleStart,
-      parseInt((height - yoffset + 5).toString(), 10),
+      Number.parseInt((height - yoffset + 5).toString(), 10),
       this.mapState.gridConfig.colour,
       2,
     )
 
     this.drawScreenLine(
-      parseInt((width - xoffset).toString(), 10),
-      parseInt((height - yoffset - 5).toString(), 10),
-      parseInt((width - xoffset).toString(), 10),
-      parseInt((height - yoffset + 5).toString(), 10),
+      Number.parseInt((width - xoffset).toString(), 10),
+      Number.parseInt((height - yoffset - 5).toString(), 10),
+      Number.parseInt((width - xoffset).toString(), 10),
+      Number.parseInt((height - yoffset + 5).toString(), 10),
       this.mapState.gridConfig.colour,
       2,
     )
 
-    const lineLength = parseInt((width - xoffset).toString(), 10) - xScaleStart
+    const lineLength = Number.parseInt((width - xoffset).toString(), 10) - xScaleStart
 
     let scaleText = `${gridSize} m`
     if (gridSize >= 1000) scaleText = `${gridSize / 1000} km`
@@ -428,8 +347,8 @@ export class MapGridManager {
     this.gridCtx.fillStyle = this.mapState.gridConfig.colour
     this.gridCtx.fillText(
       scaleText,
-      parseInt((xScaleStart + lineLength / 2).toString(), 10),
-      parseInt((height - 23).toString(), 10),
+      Number.parseInt((xScaleStart + lineLength / 2).toString(), 10),
+      Number.parseInt((height - 23).toString(), 10),
     )
   }
 
@@ -483,20 +402,20 @@ export class MapGridManager {
 
     this.gridCtx.clearRect(0, 0, width, height)
 
-    let tempSubdivisions = this.mapState.gridConfig.subdivisions
+    let temporarySubdivisions = this.mapState.gridConfig.subdivisions
 
     if (this.mapState.gridConfig.autoscale === 'Off') {
-      let linesX = (maxX - minX) / (gridSize / (tempSubdivisions + 1))
-      let linesY = (maxY - minY) / (gridSize / (tempSubdivisions + 1))
+      let linesX = (maxX - minX) / (gridSize / (temporarySubdivisions + 1))
+      let linesY = (maxY - minY) / (gridSize / (temporarySubdivisions + 1))
 
       while (
         (linesX > this.mapState.gridConfig.maxGridLines ||
           linesY > this.mapState.gridConfig.maxGridLines) &&
-        tempSubdivisions > 0
+        temporarySubdivisions > 0
       ) {
-        tempSubdivisions--
-        linesX = (maxX - minX) / (gridSize / (tempSubdivisions + 1))
-        linesY = (maxY - minY) / (gridSize / (tempSubdivisions + 1))
+        temporarySubdivisions--
+        linesX = (maxX - minX) / (gridSize / (temporarySubdivisions + 1))
+        linesY = (maxY - minY) / (gridSize / (temporarySubdivisions + 1))
       }
 
       if (
@@ -509,7 +428,7 @@ export class MapGridManager {
       }
     }
 
-    this.drawGridLines(minX, minY, maxX, maxY, gridSize, tempSubdivisions)
+    this.drawGridLines(minX, minY, maxX, maxY, gridSize, temporarySubdivisions)
 
     if (this.mapState.gridConfig.autoscale !== 'Off') {
       this.drawGridScale(gridSize, width, height)

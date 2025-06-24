@@ -1,4 +1,4 @@
-import { ViewManager } from '@/managers/view.manager'
+import { ViewManager } from './managers/view.manager'
 import { MapGridManager } from './MapGridCanvas/map-grid-manager'
 import type { MapState } from './map.store'
 import type { Subscription } from 'rxjs'
@@ -46,9 +46,9 @@ export class MapController {
     if (this.viewManager) {
       return
     }
-    this.viewManager = new ViewManager(this.state.viewState, container)
+    this.viewManager = new ViewManager(container)
     this.subscriptions.push(
-      this.viewManager.viewChange$.subscribe(() => {
+      this.viewManager.viewStateChange$.subscribe(() => {
         console.log('MapController viewChange')
       }),
     )

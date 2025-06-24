@@ -1,11 +1,9 @@
 import { reactive, markRaw, computed } from 'vue'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { MapController } from './map.controller'
-import type { ViewState } from '@/managers/view.manager'
 
 export interface MapState {
   rosBridgeServerUrl: string // ROS Bridge 服务器的 WebSocket URL
-  viewState: ViewState
   gridConfig: {
     size: number // 主网格线的间距（地图单位，米）
     thickness: number // 主网格线的线宽（像素）
@@ -21,11 +19,6 @@ export interface MapState {
 export const useMapStore = defineStore('map', () => {
   const state = reactive<MapState>({
     rosBridgeServerUrl: 'ws://10.211.55.5:5001',
-    viewState: {
-      viewCenter: { x: 0, y: 0 },
-      viewScale: 50,
-      inputMovement: true,
-    },
     gridConfig: {
       size: 1,
       thickness: 1,
