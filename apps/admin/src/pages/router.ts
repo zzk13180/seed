@@ -36,12 +36,11 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           requiresAuth: true,
           title: '控制面板',
-          icon: 'camera-control',
+          icon: 'panel-control',
         },
       },
     ],
   },
-
   {
     path: '/user',
     component: TheLayout,
