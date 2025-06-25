@@ -1,5 +1,32 @@
 import { Subject } from 'rxjs'
 
+/**
+   地图坐标系 (无限延伸):
+                Y+ (向上)
+                |
+                |
+    (-2,2)  (-1,2)  (0,2)  (1,2)  (2,2)
+                |
+    (-2,1)  (-1,1)  (0,1)  (1,1)  (2,1)
+                |
+    (-2,0)──(-1,0)──(0,0)──(1,0)──(2,0)──── X+ (向右)
+                |
+    (-2,-1) (-1,-1) (0,-1) (1,-1) (2,-1)
+                |
+    (-2,-2) (-1,-2) (0,-2) (1,-2) (2,-2)
+                |
+
+   屏幕坐标系 (容器范围内):
+   (0,0) ────────────────────── X+ (向右)
+     |
+     |    容器可视区域
+     |    (containerWidth × containerHeight)
+     |
+     |
+     |
+     Y+ (向下)
+*/
+
 export interface ViewState {
   viewCenter: { x: number; y: number } // 视图中心点坐标（地图坐标系）
   viewScale: number // 视图缩放级别（数值越大，显示越大）
@@ -92,8 +119,6 @@ export class ViewManager {
   private readonly ZOOM_FACTOR = 1.05 // 每次滚轮缩放的倍率（5%增减）
 
   private readonly options: ViewManagerOptions
-  private readonly _tempPoint = { x: 0, y: 0, z: 0 }
-  private readonly _tempDelta = { x: 0, y: 0 }
 
   /*
    * 预绑定的事件处理函数
@@ -269,12 +294,20 @@ export class ViewManager {
    * 注意：Y轴翻转（地图Y轴向上为正，屏幕Y轴向下为正）
    */
   fixedToScreen(coords: { x: number; y: number }): { x: number; y: number; z: number } {
-    this._tempPoint.x =
-      (coords.x - this.state.viewCenter.x) * this.state.viewScale + this.containerWidth / 2
-    this._tempPoint.y =
-      (-coords.y - this.state.viewCenter.y) * this.state.viewScale + this.containerHeight / 2
-    this._tempPoint.z = 0
-    return this._tempPoint
+    const { x: mapX, y: mapY } = coords
+    const { x: centerX, y: centerY } = this.state.viewCenter
+    const scale = this.state.viewScale
+    const width = this.containerWidth
+    const height = this.containerHeight
+
+    const x = (mapX - centerX) * scale + width / 2
+    const y = (-mapY - centerY) * scale + height / 2
+
+    return {
+      x,
+      y,
+      z: 0,
+    }
   }
 
   /**
@@ -285,35 +318,40 @@ export class ViewManager {
    * mapY = -((screenY - containerHeight/2) / scale) - centerY
    */
   screenToFixed(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+    const { x: mapX, y: mapY } = coords
+    const { x: centerX, y: centerY } = this.state.viewCenter
+    const scale = this.state.viewScale
+    const width = this.containerWidth
+    const height = this.containerHeight
+
+    const x = (mapX - width / 2) / scale + centerX
+    const y = -((mapY - height / 2) / scale) - centerY
+
     return {
-      x: (coords.x - this.containerWidth / 2) / this.state.viewScale + this.state.viewCenter.x,
-      y: -((coords.y - this.containerHeight / 2) / this.state.viewScale) - this.state.viewCenter.y,
+      x,
+      y,
       z: 0,
     }
   }
 
   /**
    * 获取指定屏幕像素长度在地图单位中的对应长度
-   *
+   * 像素 → 地图单位
    * 使用场景：根据当前缩放级别计算地图上的距离
    * 例如：在当前缩放下，10像素代表多少米？
    */
   getPixelsInMapUnits(length: number): number {
-    const p1 = this.screenToFixed({ x: 0, y: 0 })
-    const p2 = this.screenToFixed({ x: length, y: 0 })
-    return Math.abs(p1.x - p2.x)
+    return length / this.state.viewScale
   }
 
   /**
    * 获取指定地图单位长度在屏幕上的对应像素长度
-   *
+   * 地图单位 → 像素
    * 使用场景：根据地图距离计算屏幕显示大小
    * 例如：地图上1米的距离在屏幕上显示多少像素？
    */
   getMapUnitsInPixels(length: number): number {
-    const p1 = this.fixedToScreen({ x: 0, y: 0 })
-    const p2 = this.fixedToScreen({ x: length, y: 0 })
-    return Math.abs(p1.x - p2.x)
+    return length * this.state.viewScale
   }
 
   /**

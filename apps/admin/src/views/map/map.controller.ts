@@ -24,18 +24,15 @@ export class MapController {
   }
 
   initializeGrid(canvas: HTMLCanvasElement): void {
-    console.log('initializeGrid', performance.now())
     if (this.gridManager) {
       this.destroyGrid()
     }
 
     this.gridManager = new MapGridManager(this.state, canvas, this.viewManager)
     this.gridManager.initialize()
-    console.log('MapGridManager initialized', performance.now())
   }
 
   destroyGrid(): void {
-    console.log('destroyGrid', performance.now())
     if (this.gridManager) {
       this.gridManager.destroy()
       this.gridManager = null
@@ -47,11 +44,10 @@ export class MapController {
       return
     }
     this.viewManager = new ViewManager(container)
-    this.subscriptions.push(
-      this.viewManager.viewStateChange$.subscribe(() => {
-        console.log('MapController viewChange')
-      }),
-    )
-    console.log('MapController initializeViewManager', performance.now())
+    // this.subscriptions.push(
+    //   this.viewManager.viewStateChange$.subscribe(() => {
+    //     console.log('MapController viewChange')
+    //   }),
+    // )
   }
 }
