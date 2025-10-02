@@ -1,4 +1,4 @@
-import { NOOP } from '@element-plus/utils'
+import { NOOP } from '@seed/element-plus-utils'
 
 export const useSameTarget = (handleClick?: (e: MouseEvent) => void) => {
   if (!handleClick) {

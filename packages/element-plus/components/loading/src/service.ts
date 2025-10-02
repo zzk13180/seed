@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { nextTick } from 'vue'
-import { addClass, getStyle, isClient, isString, removeClass } from '@element-plus/utils'
+import { addClass, getStyle, isClient, isString, removeClass } from '@seed/element-plus-utils'
 import { createLoadingComponent } from './loading'
 
-import type { UseNamespaceReturn, UseZIndexReturn } from '@element-plus/hooks'
+import type { UseNamespaceReturn, UseZIndexReturn } from '@seed/element-plus-hooks'
 import type { LoadingInstance } from './loading'
 import type { LoadingOptionsResolved } from '..'
 import type { LoadingOptions } from './types'

@@ -1,3 +1,6 @@
 {
-  "name": "@seed/http"
+  "name": "@seed/http",
+  "scripts": {
+    "test": "vitest run tests"
+  }
 }

@@ -9,11 +9,11 @@
       :is-auto-width="labelStyle.width === 'auto'"
       :update-all="formContext?.labelWidth === 'auto'"
     >
+      <!-- :for="labelFor" -->
       <component
         :is="labelFor ? 'label' : 'div'"
         v-if="hasLabel"
         :id="labelId"
-        :for="labelFor"
         :class="ns.e('label')"
         :style="labelStyle"
       >
@@ -61,8 +61,8 @@
     isBoolean,
     isFunction,
     isString,
-  } from '@element-plus/utils'
-  import { useId, useNamespace } from '@element-plus/hooks'
+  } from '@seed/element-plus-utils'
+  import { useId, useNamespace } from '@seed/element-plus-hooks'
   import { useFormSize } from './hooks'
   import { formItemProps } from './form-item'
   import FormLabelWrap from './form-label-wrap'
@@ -70,7 +70,7 @@
 
   import type { CSSProperties } from 'vue'
   import type { RuleItem } from 'async-validator'
-  import type { Arrayable } from '@element-plus/utils'
+  import type { Arrayable } from '@seed/element-plus-utils'
   import type { FormItemContext, FormItemRule, FormValidateFailure } from './types'
   import type { FormItemValidateState } from './form-item'
 

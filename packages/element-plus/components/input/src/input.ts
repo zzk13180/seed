@@ -1,6 +1,12 @@
-import { buildProps, definePropType, iconPropType, isString, mutable } from '@element-plus/utils'
-import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { useAriaProps, useSizeProp } from '@element-plus/hooks'
+import {
+  buildProps,
+  definePropType,
+  iconPropType,
+  isString,
+  mutable,
+} from '@seed/element-plus-utils'
+import { UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+import { useAriaProps, useSizeProp } from '@seed/element-plus-hooks'
 import type { ExtractPropTypes, StyleValue } from 'vue'
 
 export type InputAutoSize = { minRows?: number; maxRows?: number } | boolean

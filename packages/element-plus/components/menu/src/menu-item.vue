@@ -38,9 +38,9 @@
     reactive,
     toRef,
   } from 'vue'
-  import ElTooltip from '@element-plus/components/tooltip'
-  import { throwError } from '@element-plus/utils'
-  import { useNamespace } from '@element-plus/hooks'
+  import ElTooltip from '@seed/element-plus-components/tooltip'
+  import { throwError } from '@seed/element-plus-utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import useMenu from './use-menu'
   import { menuItemEmits, menuItemProps } from './menu-item'
 

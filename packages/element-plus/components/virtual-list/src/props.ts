@@ -1,4 +1,4 @@
-import { buildProp, buildProps, definePropType, mutable } from '@element-plus/utils'
+import { buildProp, buildProps, definePropType, mutable } from '@seed/element-plus-utils'
 import { VERTICAL } from './defaults'
 
 import type { ExtractPropTypes, StyleValue } from 'vue'

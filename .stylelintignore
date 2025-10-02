@@ -4,3 +4,4 @@
 **/.svelte-kit/
 apps/docs/
 packages/element-plus/
+*.css

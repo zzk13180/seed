@@ -5,8 +5,8 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, provide, ref, unref, watch } from 'vue'
   import { useTimeoutFn } from '@vueuse/core'
-  import { useId, useNamespace } from '@element-plus/hooks'
-  import { isNumber, isPropAbsent } from '@element-plus/utils'
+  import { useId, useNamespace } from '@seed/element-plus-hooks'
+  import { isNumber, isPropAbsent } from '@seed/element-plus-utils'
   import { TOOLTIP_V2_OPEN, tooltipV2RootKey } from './constants'
   import { tooltipV2RootProps } from './root'
 

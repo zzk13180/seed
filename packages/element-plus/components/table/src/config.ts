@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { h } from 'vue'
-import ElCheckbox from '@element-plus/components/checkbox'
-import { ElIcon } from '@element-plus/components/icon'
+import ElCheckbox from '@seed/element-plus-components/checkbox'
+import { ElIcon } from '@seed/element-plus-components/icon'
 import { Loading } from '@element-plus/icons-vue'
-import { CaretRight } from '@element-plus/icons'
-import { getProp, isBoolean, isFunction, isNumber } from '@element-plus/utils'
+import { CaretRight } from '@seed/element-plus-icons'
+import { getProp, isBoolean, isFunction, isNumber } from '@seed/element-plus-utils'
 
 import type { VNode } from 'vue'
 import type { TableColumnCtx } from './table-column/defaults'

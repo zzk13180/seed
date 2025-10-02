@@ -1,7 +1,18 @@
-import { buildProps, definePropType, isArray, isString, isUndefined } from '@element-plus/utils'
-import { useSizeProp } from '@element-plus/hooks'
-import { CHANGE_EVENT, EVENT_CODE, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { tagProps } from '@element-plus/components/tag/src/tag'
+import {
+  buildProps,
+  definePropType,
+  isArray,
+  isString,
+  isUndefined,
+} from '@seed/element-plus-utils'
+import { useSizeProp } from '@seed/element-plus-hooks'
+import {
+  CHANGE_EVENT,
+  EVENT_CODE,
+  INPUT_EVENT,
+  UPDATE_MODEL_EVENT,
+} from '@seed/element-plus-constants'
+import { tagProps } from '@seed/element-plus-components/tag/src/tag'
 
 import type { ExtractPropTypes } from 'vue'
 

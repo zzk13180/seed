@@ -1,5 +1,5 @@
 import { computed, getCurrentInstance, inject, ref } from 'vue'
-import { buildProps, debugWarn, isFunction } from '@element-plus/utils'
+import { buildProps, debugWarn, isFunction } from '@seed/element-plus-utils'
 
 import type { ExtractPropTypes, InjectionKey, Ref } from 'vue'
 

@@ -2,7 +2,7 @@ import { HeaderRow } from '../components'
 import { tryCall } from '../utils'
 
 import type { FunctionalComponent } from 'vue'
-import type { UseNamespaceReturn } from '@element-plus/hooks'
+import type { UseNamespaceReturn } from '@seed/element-plus-hooks'
 import type { TableV2HeaderRendererParams } from '../components'
 import type { TableV2Props } from '../table'
 

@@ -6,10 +6,10 @@ import {
   isNumber,
   isString,
   isValidComponentSize,
-} from '@element-plus/utils'
-import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { useAriaProps } from '@element-plus/hooks'
-import type { ComponentSize } from '@element-plus/constants'
+} from '@seed/element-plus-utils'
+import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+import { useAriaProps } from '@seed/element-plus-hooks'
+import type { ComponentSize } from '@seed/element-plus-constants'
 import type Switch from './switch.vue'
 import type { ExtractPropTypes, PropType } from 'vue'
 

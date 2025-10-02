@@ -38,7 +38,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import { useAttrs, useFocusController, useNamespace } from '@element-plus/hooks'
+  import { useAttrs, useFocusController, useNamespace } from '@seed/element-plus-hooks'
   import { timePickerRangeTriggerProps } from './props'
   import type { CSSProperties } from 'vue'
 

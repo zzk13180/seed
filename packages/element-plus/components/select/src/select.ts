@@ -1,11 +1,11 @@
 import { placements } from '@popperjs/core'
-import { useAriaProps, useEmptyValuesProps, useSizeProp } from '@element-plus/hooks'
-import { buildProps, definePropType, iconPropType } from '@element-plus/utils'
-import { useTooltipContentProps } from '@element-plus/components/tooltip'
+import { useAriaProps, useEmptyValuesProps, useSizeProp } from '@seed/element-plus-hooks'
+import { buildProps, definePropType, iconPropType } from '@seed/element-plus-utils'
+import { useTooltipContentProps } from '@seed/element-plus-components/tooltip'
 import { CircleClose } from '@element-plus/icons-vue'
-import { ArrowDown } from '@element-plus/icons'
-import { tagProps } from '@element-plus/components/tag'
-import type { Options, Placement, PopperEffect } from '@element-plus/components/popper'
+import { ArrowDown } from '@seed/element-plus-icons'
+import { tagProps } from '@seed/element-plus-components/tag'
+import type { Options, Placement, PopperEffect } from '@seed/element-plus-components/popper'
 
 export const SelectProps = buildProps({
   /**

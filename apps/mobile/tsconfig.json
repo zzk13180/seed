@@ -1,0 +1,11 @@
+{
+  "extends": "@seed/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["."],
+  "exclude": ["ecosystem.config.cjs", "dist", "public", "build", "node_modules", "tmp"]
+}

@@ -1,5 +1,5 @@
-import { buildProps } from '@element-plus/utils'
-import { useAriaProps, useSizeProp } from '@element-plus/hooks'
+import { buildProps } from '@seed/element-plus-utils'
+import { useAriaProps, useSizeProp } from '@seed/element-plus-hooks'
 import { radioEmits } from './radio'
 import type { ExtractPropTypes } from '@vue/runtime-core'
 import type RadioGroup from './radio-group.vue'

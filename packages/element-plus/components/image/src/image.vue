@@ -58,8 +58,8 @@
   import { computed, nextTick, onMounted, ref, useAttrs as useRawAttrs, watch } from 'vue'
   import { useEventListener, useThrottleFn } from '@vueuse/core'
   import { fromPairs } from 'lodash-unified'
-  import { useAttrs, useLocale, useNamespace } from '@element-plus/hooks'
-  import ImageViewer from '@element-plus/components/image-viewer'
+  import { useAttrs, useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import ImageViewer from '@seed/element-plus-components/image-viewer'
   import {
     getScrollContainer,
     isArray,
@@ -67,7 +67,7 @@
     isElement,
     isInContainer,
     isString,
-  } from '@element-plus/utils'
+  } from '@seed/element-plus-utils'
   import { imageEmits, imageProps } from './image'
 
   import type { CSSProperties } from 'vue'

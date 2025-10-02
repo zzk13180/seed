@@ -13,8 +13,8 @@ import {
 } from 'vue'
 import { throttle } from 'lodash-unified'
 import { useResizeObserver } from '@vueuse/core'
-import { debugWarn, flattedChildren, isString } from '@element-plus/utils'
-import { useOrderedChildren } from '@element-plus/hooks'
+import { debugWarn, flattedChildren, isString } from '@seed/element-plus-utils'
+import { useOrderedChildren } from '@seed/element-plus-hooks'
 import { CAROUSEL_ITEM_NAME, carouselContextKey } from './constants'
 
 import type { SetupContext } from 'vue'

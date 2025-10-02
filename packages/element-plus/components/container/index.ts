@@ -1,11 +1,11 @@
-import { withInstall, withNoopInstall } from '@element-plus/utils'
+import { withInstall, withNoopInstall } from '@seed/element-plus-utils'
 
 import Container from './src/container.vue'
 import Aside from './src/aside.vue'
 import Footer from './src/footer.vue'
 import Header from './src/header.vue'
 import Main from './src/main.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElContainer: SFCWithInstall<typeof Container> & {
   Aside: typeof Aside

@@ -1,7 +1,7 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 
 import Scrollbar from './src/scrollbar.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElScrollbar: SFCWithInstall<typeof Scrollbar> = withInstall(Scrollbar)
 export default ElScrollbar

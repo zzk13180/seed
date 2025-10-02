@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-call */
 import { inject } from 'vue'
-import { useNamespace } from '@element-plus/hooks'
-import { isFunction, isString } from '@element-plus/utils'
+import { useNamespace } from '@seed/element-plus-hooks'
+import { isFunction, isString } from '@seed/element-plus-utils'
 
 import { ensurePosition, getFixedColumnOffset, getFixedColumnsClass } from '../util'
 import { TABLE_INJECTION_KEY } from '../tokens'

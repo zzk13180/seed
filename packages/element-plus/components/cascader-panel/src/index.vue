@@ -36,9 +36,9 @@
     isEmpty,
     scrollIntoView,
     unique,
-  } from '@element-plus/utils'
-  import { CHANGE_EVENT, EVENT_CODE, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-  import { useNamespace } from '@element-plus/hooks'
+  } from '@seed/element-plus-utils'
+  import { CHANGE_EVENT, EVENT_CODE, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+  import { useNamespace } from '@seed/element-plus-hooks'
 
   import ElCascaderMenu from './menu.vue'
   import Store from './store'
@@ -48,7 +48,7 @@
   import { CASCADER_PANEL_INJECTION_KEY } from './types'
 
   import type { PropType } from 'vue'
-  import type { Nullable } from '@element-plus/utils'
+  import type { Nullable } from '@seed/element-plus-utils'
   import type {
     default as CascaderNode,
     CascaderNodeValue,

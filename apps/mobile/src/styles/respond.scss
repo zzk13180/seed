@@ -1,0 +1,23 @@
+// 1920 1440 1280 1024 800 640 响应式断点
+$the-breakpoints: (
+  'xxl': 1920px,
+  'xl': 1440px,
+  'lg': 1280px,
+  'md': 1024px,
+  'sm': 800px,
+  'xs': 640px,
+);
+
+@mixin respond($size) {
+  $breakpoint: map-get($the-breakpoints, $size);
+
+  @if $breakpoint {
+    @media (max-width: $breakpoint) {
+      @content;
+    }
+  }
+
+ @else {
+    @warn "断点 #{$size} 未定义，请检查 breakpoints 变量";
+  }
+}

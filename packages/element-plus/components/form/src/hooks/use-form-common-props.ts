@@ -1,8 +1,8 @@
 import { computed, inject, ref, unref } from 'vue'
-import { useGlobalSize, useProp } from '@element-plus/hooks'
+import { useGlobalSize, useProp } from '@seed/element-plus-hooks'
 import { formContextKey, formItemContextKey } from '../constants'
 
-import type { ComponentSize } from '@element-plus/constants'
+import type { ComponentSize } from '@seed/element-plus-constants'
 import type { MaybeRef } from '@vueuse/core'
 
 export const useFormSize = (

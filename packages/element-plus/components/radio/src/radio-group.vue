@@ -13,10 +13,10 @@
 
 <script lang="ts" setup>
   import { computed, nextTick, onMounted, provide, reactive, ref, toRefs, watch } from 'vue'
-  import { useFormItem, useFormItemInputId } from '@element-plus/components/form'
-  import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
-  import { useId, useNamespace } from '@element-plus/hooks'
-  import { debugWarn } from '@element-plus/utils'
+  import { useFormItem, useFormItemInputId } from '@seed/element-plus-components/form'
+  import { UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+  import { useId, useNamespace } from '@seed/element-plus-hooks'
+  import { debugWarn } from '@seed/element-plus-utils'
   import { radioGroupEmits, radioGroupProps } from './radio-group'
   import { radioGroupKey } from './constants'
 

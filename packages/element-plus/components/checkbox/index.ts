@@ -1,9 +1,9 @@
-import { withInstall, withNoopInstall } from '@element-plus/utils'
+import { withInstall, withNoopInstall } from '@seed/element-plus-utils'
 
 import Checkbox from './src/checkbox.vue'
 import CheckboxButton from './src/checkbox-button.vue'
 import CheckboxGroup from './src/checkbox-group.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElCheckbox: SFCWithInstall<typeof Checkbox> & {
   CheckboxButton: typeof CheckboxButton

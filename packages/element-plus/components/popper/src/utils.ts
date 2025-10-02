@@ -1,5 +1,5 @@
 import { unrefElement } from '@vueuse/core'
-import { isClient } from '@element-plus/utils'
+import { isClient } from '@seed/element-plus-utils'
 
 import type { ComponentPublicInstance } from 'vue'
 import type { MaybeRef } from '@vueuse/core'

@@ -1,7 +1,7 @@
-import { buildProps, definePropType } from '@element-plus/utils'
+import { buildProps, definePropType } from '@seed/element-plus-utils'
 import type Skeleton from './skeleton.vue'
 import type { ExtractPropTypes } from 'vue'
-import type { ThrottleType } from '@element-plus/hooks'
+import type { ThrottleType } from '@seed/element-plus-hooks'
 
 export const skeletonProps = buildProps({
   /**

@@ -1,4 +1,4 @@
-import { isNumber } from '@element-plus/utils'
+import { isNumber } from '@seed/element-plus-utils'
 
 import type { Dayjs } from 'dayjs'
 

@@ -118,6 +118,7 @@ ignoreFiles:
   - '**/*.tsx'
   - '**/*.ts'
   - '**/dist/'
+  - '**/*.css'
 
 # 针对特定文件的覆盖配置
 overrides:

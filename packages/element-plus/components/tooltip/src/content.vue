@@ -45,14 +45,14 @@
 <script lang="ts" setup>
   import { computed, inject, onBeforeUnmount, ref, unref, watch } from 'vue'
   import { onClickOutside } from '@vueuse/core'
-  import { useNamespace, usePopperContainerId } from '@element-plus/hooks'
-  import { composeEventHandlers } from '@element-plus/utils'
-  import { ElPopperContent } from '@element-plus/components/popper'
-  import ElTeleport from '@element-plus/components/teleport'
-  import { tryFocus } from '@element-plus/components/focus-trap'
+  import { useNamespace, usePopperContainerId } from '@seed/element-plus-hooks'
+  import { composeEventHandlers } from '@seed/element-plus-utils'
+  import { ElPopperContent } from '@seed/element-plus-components/popper'
+  import ElTeleport from '@seed/element-plus-components/teleport'
+  import { tryFocus } from '@seed/element-plus-components/focus-trap'
   import { TOOLTIP_INJECTION_KEY } from './constants'
   import { useTooltipContentProps } from './content'
-  import type { PopperContentInstance } from '@element-plus/components/popper'
+  import type { PopperContentInstance } from '@seed/element-plus-components/popper'
 
   defineOptions({
     name: 'ElTooltipContent',

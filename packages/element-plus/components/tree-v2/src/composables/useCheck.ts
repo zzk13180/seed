@@ -1,6 +1,6 @@
 import { getCurrentInstance, nextTick, ref, watch } from 'vue'
 import { NODE_CHECK, NODE_CHECK_CHANGE, SetOperationEnum } from '../virtual-tree'
-import type { CheckboxValueType } from '@element-plus/components/checkbox'
+import type { CheckboxValueType } from '@seed/element-plus-components/checkbox'
 import type { Ref } from 'vue'
 import type { Tree, TreeKey, TreeNode, TreeNodeData, TreeProps } from '../types'
 

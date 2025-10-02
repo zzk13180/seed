@@ -1,7 +1,7 @@
 import { Text, computed, inject, ref, useSlots } from 'vue'
-import { useFormDisabled, useFormItem, useFormSize } from '@element-plus/components/form'
-import { useGlobalConfig } from '@element-plus/components/config-provider'
-import { useDeprecated } from '@element-plus/hooks'
+import { useFormDisabled, useFormItem, useFormSize } from '@seed/element-plus-components/form'
+import { useGlobalConfig } from '@seed/element-plus-components/config-provider'
+import { useDeprecated } from '@seed/element-plus-hooks'
 import { buttonGroupContextKey } from './constants'
 
 import type { SetupContext } from 'vue'

@@ -1,4 +1,4 @@
-import { buildProps, definePropType } from '@element-plus/utils'
+import { buildProps, definePropType } from '@seed/element-plus-utils'
 import { column } from './common'
 
 import type { ExtractPropTypes, StyleValue } from 'vue'

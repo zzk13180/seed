@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue'
-import { useNamespace } from '@element-plus/hooks'
+import { useNamespace } from '@seed/element-plus-hooks'
 import { autoResizerProps } from '../auto-resizer'
 import { useAutoResize } from '../composables'
 

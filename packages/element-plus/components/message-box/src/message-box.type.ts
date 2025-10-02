@@ -1,5 +1,5 @@
 import type { AppContext, CSSProperties, Component, VNode } from 'vue'
-import type { ComponentSize } from '@element-plus/constants'
+import type { ComponentSize } from '@seed/element-plus-constants'
 
 type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
 

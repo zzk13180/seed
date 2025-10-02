@@ -20,4 +20,8 @@
 apps/admin/auto-import-components.d.ts
 apps/admin/auto-import-vue.d.ts
 
-target
+gen/
+target/
+
+z-tmp.md
+z-test.sh

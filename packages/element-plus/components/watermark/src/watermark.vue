@@ -7,7 +7,7 @@
 <script lang="ts" setup>
   import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
   import { useMutationObserver } from '@vueuse/core'
-  import { isArray } from '@element-plus/utils'
+  import { isArray } from '@seed/element-plus-utils'
   import { watermarkProps } from './watermark'
   import { getPixelRatio, getStyleStr, reRendering } from './utils'
   import useClips, { FontGap } from './useClips'

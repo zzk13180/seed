@@ -1,4 +1,4 @@
-import { buildProps, definePropType } from '@element-plus/utils'
+import { buildProps, definePropType } from '@seed/element-plus-utils'
 import { transferCheckedChangeFn, transferProps } from './transfer'
 
 import type { ExtractPropTypes, VNode } from 'vue'

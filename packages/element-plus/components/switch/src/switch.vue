@@ -63,17 +63,17 @@
 
 <script lang="ts" setup>
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
-  import { addUnit, debugWarn, isBoolean, isPromise, throwError } from '@element-plus/utils'
-  import ElIcon from '@element-plus/components/icon'
+  import { addUnit, debugWarn, isBoolean, isPromise, throwError } from '@seed/element-plus-utils'
+  import ElIcon from '@seed/element-plus-components/icon'
   import {
     useFormDisabled,
     useFormItem,
     useFormItemInputId,
     useFormSize,
-  } from '@element-plus/components/form'
+  } from '@seed/element-plus-components/form'
   import { Loading } from '@element-plus/icons-vue'
-  import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-  import { useNamespace } from '@element-plus/hooks'
+  import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { switchEmits, switchProps } from './switch'
   import type { CSSProperties } from 'vue'
 

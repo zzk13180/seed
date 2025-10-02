@@ -20,8 +20,8 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import ElInput from '@element-plus/components/input'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import ElInput from '@seed/element-plus-components/input'
   import { usePagination } from '../usePagination'
   import { paginationJumperProps } from './jumper'
 

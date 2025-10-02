@@ -2,7 +2,7 @@ import { Row } from '../components'
 import { tryCall } from '../utils'
 
 import type { ComponentInternalInstance, FunctionalComponent, UnwrapNestedRefs } from 'vue'
-import type { UseNamespaceReturn } from '@element-plus/hooks'
+import type { UseNamespaceReturn } from '@seed/element-plus-hooks'
 import type { UseTableReturn } from '../use-table'
 import type { TableV2Props } from '../table'
 import type { TableGridRowSlotParams } from '../table-grid'

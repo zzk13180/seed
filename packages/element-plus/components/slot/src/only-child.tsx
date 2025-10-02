@@ -1,10 +1,10 @@
 import { Comment, Fragment, Text, cloneVNode, defineComponent, inject, withDirectives } from 'vue'
-import { NOOP, debugWarn, isObject } from '@element-plus/utils'
+import { NOOP, debugWarn, isObject } from '@seed/element-plus-utils'
 import {
   FORWARD_REF_INJECTION_KEY,
   useForwardRefDirective,
   useNamespace,
-} from '@element-plus/hooks'
+} from '@seed/element-plus-hooks'
 
 import type { Ref, VNode } from 'vue'
 

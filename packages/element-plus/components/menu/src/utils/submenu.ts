@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { triggerEvent } from '@element-plus/utils'
-import { EVENT_CODE } from '@element-plus/constants'
+import { triggerEvent } from '@seed/element-plus-utils'
+import { EVENT_CODE } from '@seed/element-plus-constants'
 import type MenuItem from './menu-item'
 
 class SubMenu {

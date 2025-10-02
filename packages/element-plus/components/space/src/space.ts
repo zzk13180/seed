@@ -8,13 +8,13 @@ import {
   isNumber,
   isString,
   isValidElementNode,
-} from '@element-plus/utils'
-import { componentSizes } from '@element-plus/constants'
+} from '@seed/element-plus-utils'
+import { componentSizes } from '@seed/element-plus-constants'
 import Item from './item'
 import { useSpace } from './use-space'
 
 import type { ExtractPropTypes, StyleValue, VNode, VNodeArrayChildren, VNodeChild } from 'vue'
-import type { Arrayable } from '@element-plus/utils'
+import type { Arrayable } from '@seed/element-plus-utils'
 import type { AlignItemsProperty } from 'csstype'
 
 export const spaceProps = buildProps({

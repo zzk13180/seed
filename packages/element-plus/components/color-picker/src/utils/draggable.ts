@@ -1,4 +1,4 @@
-import { isClient } from '@element-plus/utils'
+import { isClient } from '@seed/element-plus-utils'
 
 let isDragging = false
 

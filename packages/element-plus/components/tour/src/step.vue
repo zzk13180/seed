@@ -67,10 +67,10 @@
 <script lang="ts" setup>
   import { computed, inject, watch } from 'vue'
   import { omit } from 'lodash-unified'
-  import { ElButton } from '@element-plus/components/button'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { CloseComponents } from '@element-plus/utils'
-  import { useLocale } from '@element-plus/hooks'
+  import { ElButton } from '@seed/element-plus-components/button'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { CloseComponents } from '@seed/element-plus-utils'
+  import { useLocale } from '@seed/element-plus-hooks'
   import { tourStepEmits, tourStepProps } from './step'
   import { tourKey } from './helper'
 

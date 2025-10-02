@@ -49,16 +49,16 @@
 
 <script lang="ts" setup>
   import { computed, onDeactivated, provide, readonly, ref, toRef, unref, watch } from 'vue'
-  import { ElPopper, ElPopperArrow } from '@element-plus/components/popper'
+  import { ElPopper, ElPopperArrow } from '@seed/element-plus-components/popper'
 
-  import { isBoolean } from '@element-plus/utils'
-  import { useDelayedToggle, useId, usePopperContainer } from '@element-plus/hooks'
+  import { isBoolean } from '@seed/element-plus-utils'
+  import { useDelayedToggle, useId, usePopperContainer } from '@seed/element-plus-hooks'
   import { TOOLTIP_INJECTION_KEY } from './constants'
   import { tooltipEmits, useTooltipModelToggle, useTooltipProps } from './tooltip'
   import ElTooltipTrigger from './trigger.vue'
   import ElTooltipContent from './content.vue'
   import type { TooltipContentInstance } from './content'
-  import type { PopperInstance } from '@element-plus/components/popper'
+  import type { PopperInstance } from '@seed/element-plus-components/popper'
   import type { Ref } from 'vue'
 
   defineOptions({

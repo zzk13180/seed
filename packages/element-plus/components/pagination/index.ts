@@ -1,7 +1,7 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 
 import Pagination from './src/pagination'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElPagination: SFCWithInstall<typeof Pagination> = withInstall(Pagination)
 export default ElPagination

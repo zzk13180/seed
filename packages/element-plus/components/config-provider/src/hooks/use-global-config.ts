@@ -1,5 +1,5 @@
 import { computed, getCurrentInstance, inject, provide, ref, unref } from 'vue'
-import { debugWarn, keysOf } from '@element-plus/utils'
+import { debugWarn, keysOf } from '@seed/element-plus-utils'
 import {
   SIZE_INJECTION_KEY,
   defaultInitialZIndex,
@@ -11,7 +11,7 @@ import {
   useNamespace,
   useZIndex,
   zIndexContextKey,
-} from '@element-plus/hooks'
+} from '@seed/element-plus-hooks'
 import { configProviderContextKey } from '../constants'
 
 import type { MaybeRef } from '@vueuse/core'

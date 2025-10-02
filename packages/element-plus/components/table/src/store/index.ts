@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { getCurrentInstance, nextTick, unref } from 'vue'
 import { isNull } from 'lodash-unified'
-import { useNamespace } from '@element-plus/hooks'
+import { useNamespace } from '@seed/element-plus-hooks'
 import useWatcher from './watcher'
 
 import type { Ref } from 'vue'

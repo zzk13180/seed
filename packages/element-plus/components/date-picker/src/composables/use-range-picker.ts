@@ -1,6 +1,6 @@
 import { getCurrentInstance, inject, ref, unref, watch } from 'vue'
-import { isArray } from '@element-plus/utils'
-import { useLocale, useNamespace } from '@element-plus/hooks'
+import { isArray } from '@seed/element-plus-utils'
+import { useLocale, useNamespace } from '@seed/element-plus-hooks'
 import { getDefaultValue, isValidRange } from '../utils'
 import { ROOT_PICKER_INJECTION_KEY } from '../constants'
 import { useShortcut } from './use-shortcut'

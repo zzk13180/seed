@@ -83,11 +83,11 @@
 </template>
 <script lang="ts" setup>
   import { computed, ref } from 'vue'
-  import { ElIcon } from '@element-plus/components/icon'
+  import { ElIcon } from '@seed/element-plus-components/icon'
   import { Check, CircleCheck, Close, Delete, Document, ZoomIn } from '@element-plus/icons-vue'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import ElProgress from '@element-plus/components/progress'
-  import { useFormDisabled } from '@element-plus/components/form'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import ElProgress from '@seed/element-plus-components/progress'
+  import { useFormDisabled } from '@seed/element-plus-components/form'
 
   import { uploadListEmits, uploadListProps } from './upload-list'
   import type { UploadFile } from './upload'

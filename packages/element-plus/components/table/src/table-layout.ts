@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { isRef, nextTick, ref } from 'vue'
 import { isNull } from 'lodash-unified'
-import { hasOwn, isClient, isNumber, isString } from '@element-plus/utils'
+import { hasOwn, isClient, isNumber, isString } from '@seed/element-plus-utils'
 import { parseHeight } from './util'
 
 import type { Ref } from 'vue'

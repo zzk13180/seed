@@ -1,4 +1,4 @@
-import { withInstallFunction } from '@element-plus/utils'
+import { withInstallFunction } from '@seed/element-plus-utils'
 
 import Notify from './src/notify'
 

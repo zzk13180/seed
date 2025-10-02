@@ -10,9 +10,9 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { ElIcon } from '@element-plus/components/icon'
+  import { ElIcon } from '@seed/element-plus-components/icon'
   import { CaretTop } from '@element-plus/icons-vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { backtopEmits, backtopProps } from './backtop'
   import { useBackTop } from './use-backtop'
 

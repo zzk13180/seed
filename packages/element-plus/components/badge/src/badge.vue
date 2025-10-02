@@ -24,8 +24,8 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
-  import { addUnit, isNumber } from '@element-plus/utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { addUnit, isNumber } from '@seed/element-plus-utils'
   import { badgeProps } from './badge'
   import type { StyleValue } from 'vue'
 

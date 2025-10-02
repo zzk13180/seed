@@ -1,3 +1,3 @@
-import '@element-plus/components/base/style/css'
-import '@element-plus/theme-chalk/el-image.css'
-import '@element-plus/components/image-viewer/style/css'
+import '@seed/element-plus-components/base/style/css'
+import '@seed/element-plus-theme-chalk/el-image.css'
+import '@seed/element-plus-components/image-viewer/style/css'

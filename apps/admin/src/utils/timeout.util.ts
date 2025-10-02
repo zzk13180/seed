@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-array-for-each */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 interface Execution {

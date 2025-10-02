@@ -1,7 +1,7 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 
 import ConfigProvider from './src/config-provider'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElConfigProvider: SFCWithInstall<typeof ConfigProvider> = withInstall(ConfigProvider)
 export default ElConfigProvider

@@ -26,7 +26,7 @@
 </template>
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { IconComponentMap, IconMap, resultProps } from './result'
 
   defineOptions({

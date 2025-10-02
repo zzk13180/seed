@@ -73,10 +73,10 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { ElIcon } from '@element-plus/components/icon'
+  import { ElIcon } from '@seed/element-plus-components/icon'
   import { Check, CircleCheck, CircleClose, Close, WarningFilled } from '@element-plus/icons-vue'
-  import { useNamespace } from '@element-plus/hooks'
-  import { isFunction, isString } from '@element-plus/utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { isFunction, isString } from '@seed/element-plus-utils'
   import { progressProps } from './progress'
   import type { CSSProperties } from 'vue'
   import type { ProgressColor } from './progress'

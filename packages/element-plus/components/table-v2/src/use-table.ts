@@ -1,6 +1,6 @@
 import { computed, getCurrentInstance, ref, shallowRef, toRef, unref, watch } from 'vue'
-import { isArray, isNumber } from '@element-plus/utils'
-import { useNamespace } from '@element-plus/hooks'
+import { isArray, isNumber } from '@seed/element-plus-utils'
+import { useNamespace } from '@seed/element-plus-hooks'
 import { useColumns, useData, useRow, useScrollbar, useStyles } from './composables'
 
 import type { TableV2Props } from './table'

@@ -1,10 +1,16 @@
 import { computed, defineComponent, inject, nextTick, onMounted, onUpdated, ref, watch } from 'vue'
 import { useDocumentVisibility, useResizeObserver, useWindowFocus } from '@vueuse/core'
-import { buildProps, capitalize, definePropType, mutable, throwError } from '@element-plus/utils'
-import { EVENT_CODE } from '@element-plus/constants'
-import { ElIcon } from '@element-plus/components/icon'
+import {
+  buildProps,
+  capitalize,
+  definePropType,
+  mutable,
+  throwError,
+} from '@seed/element-plus-utils'
+import { EVENT_CODE } from '@seed/element-plus-constants'
+import { ElIcon } from '@seed/element-plus-components/icon'
 import { ArrowLeft, ArrowRight, Close } from '@element-plus/icons-vue'
-import { useNamespace } from '@element-plus/hooks'
+import { useNamespace } from '@seed/element-plus-hooks'
 import TabBar from './tab-bar.vue'
 import { tabsRootContextKey } from './constants'
 

@@ -1,4 +1,4 @@
-import { buildProps, definePropType, isNumber, mutable } from '@element-plus/utils'
+import { buildProps, definePropType, isNumber, mutable } from '@seed/element-plus-utils'
 
 import type { Component, ExtractPropTypes } from 'vue'
 import type ImageViewer from './image-viewer.vue'

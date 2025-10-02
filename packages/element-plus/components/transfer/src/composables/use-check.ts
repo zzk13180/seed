@@ -1,10 +1,10 @@
 import { computed, watch } from 'vue'
-import { isFunction } from '@element-plus/utils'
+import { isFunction } from '@seed/element-plus-utils'
 import { CHECKED_CHANGE_EVENT } from '../transfer-panel'
 import { usePropsAlias } from './use-props-alias'
 
 import type { SetupContext } from 'vue'
-import type { CheckboxValueType } from '@element-plus/components/checkbox'
+import type { CheckboxValueType } from '@seed/element-plus-components/checkbox'
 import type { TransferKey } from '../transfer'
 import type { TransferPanelEmits, TransferPanelProps, TransferPanelState } from '../transfer-panel'
 

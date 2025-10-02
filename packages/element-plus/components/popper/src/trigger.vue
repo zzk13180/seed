@@ -15,9 +15,9 @@
   import { computed, inject, onBeforeUnmount, onMounted, watch } from 'vue'
   import { isNil } from 'lodash-unified'
   import { unrefElement } from '@vueuse/core'
-  import { ElOnlyChild } from '@element-plus/components/slot'
-  import { useForwardRef } from '@element-plus/hooks'
-  import { isElement, isFocusable } from '@element-plus/utils'
+  import { ElOnlyChild } from '@seed/element-plus-components/slot'
+  import { useForwardRef } from '@seed/element-plus-hooks'
+  import { isElement, isFocusable } from '@seed/element-plus-utils'
   import { POPPER_INJECTION_KEY } from './constants'
   import { popperTriggerProps } from './trigger'
 

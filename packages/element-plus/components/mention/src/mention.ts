@@ -1,12 +1,12 @@
-import { buildProps, definePropType, isFunction, isString } from '@element-plus/utils'
-import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { inputProps } from '@element-plus/components/input'
+import { buildProps, definePropType, isFunction, isString } from '@seed/element-plus-utils'
+import { UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+import { inputProps } from '@seed/element-plus-components/input'
 import { filterOption } from './helper'
 
 import type { ExtractPropTypes } from 'vue'
 import type Mention from './mention.vue'
 import type { MentionOption } from './types'
-import type { Options } from '@element-plus/components/popper'
+import type { Options } from '@seed/element-plus-components/popper'
 
 export const mentionProps = buildProps({
   ...inputProps,

@@ -37,7 +37,7 @@
   // @ts-nocheck
   import { reactive, toRefs } from 'vue'
   import { pick } from 'lodash-unified'
-  import ElTeleport from '@element-plus/components/teleport'
+  import ElTeleport from '@seed/element-plus-components/teleport'
   import { tooltipV2ArrowProps } from './arrow'
   import { tooltipV2ContentProps } from './content'
   import { tooltipV2RootProps } from './root'

@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { menuItemGroupProps } from './menu-item-group'
 
   const COMPONENT_NAME = 'ElMenuItemGroup'

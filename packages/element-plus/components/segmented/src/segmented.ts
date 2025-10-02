@@ -1,6 +1,6 @@
-import { buildProps, definePropType, isBoolean, isNumber, isString } from '@element-plus/utils'
-import { useAriaProps, useSizeProp } from '@element-plus/hooks'
-import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import { buildProps, definePropType, isBoolean, isNumber, isString } from '@seed/element-plus-utils'
+import { useAriaProps, useSizeProp } from '@seed/element-plus-hooks'
+import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
 
 import type { Option } from './types'
 import type { ExtractPropTypes } from 'vue'

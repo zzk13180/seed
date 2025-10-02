@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { computed, getCurrentInstance, ref, unref, watch } from 'vue'
-import { isArray, isUndefined } from '@element-plus/utils'
+import { isArray, isUndefined } from '@seed/element-plus-utils'
 import { getRowIdentity, walkTreeNode } from '../util'
 
 import type { WatcherPropsData } from '.'

@@ -20,9 +20,9 @@
 <script lang="ts" setup>
   import { computed, ref, watch } from 'vue'
   import { isEqual } from 'lodash-unified'
-  import { ElOption, ElSelect } from '@element-plus/components/select'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import { isArray } from '@element-plus/utils'
+  import { ElOption, ElSelect } from '@seed/element-plus-components/select'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { isArray } from '@seed/element-plus-utils'
   import { usePagination } from '../usePagination'
   import { paginationSizesProps } from './sizes'
 

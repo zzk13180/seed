@@ -45,8 +45,8 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { ElButton, ElButtonGroup } from '@element-plus/components/button'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
+  import { ElButton, ElButtonGroup } from '@seed/element-plus-components/button'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
 
   import DateTable from './date-table.vue'
   import { useCalendar } from './use-calendar'

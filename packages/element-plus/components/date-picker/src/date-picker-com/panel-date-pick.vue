@@ -188,20 +188,20 @@
 <script lang="ts" setup>
   import { computed, inject, nextTick, ref, toRef, useAttrs, useSlots, watch } from 'vue'
   import dayjs from 'dayjs'
-  import ElButton from '@element-plus/components/button'
-  import { ClickOutside as vClickOutside } from '@element-plus/directives'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import ElInput from '@element-plus/components/input'
+  import ElButton from '@seed/element-plus-components/button'
+  import { ClickOutside as vClickOutside } from '@seed/element-plus-directives'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import ElInput from '@seed/element-plus-components/input'
   import {
     TimePickPanel,
     extractDateFormat,
     extractTimeFormat,
-  } from '@element-plus/components/time-picker'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { isArray, isFunction } from '@element-plus/utils'
-  import { EVENT_CODE } from '@element-plus/constants'
+  } from '@seed/element-plus-components/time-picker'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { isArray, isFunction } from '@seed/element-plus-utils'
+  import { EVENT_CODE } from '@seed/element-plus-constants'
   import { ArrowLeft, ArrowRight, DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
-  import { TOOLTIP_INJECTION_KEY } from '@element-plus/components/tooltip'
+  import { TOOLTIP_INJECTION_KEY } from '@seed/element-plus-components/tooltip'
   import { panelDatePickProps } from '../props/panel-date-pick'
   import { getValidDateOfMonth, getValidDateOfYear } from '../utils'
   import DateTable from './basic-date-table.vue'

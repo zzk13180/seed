@@ -49,14 +49,14 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue'
-  import ElButton from '@element-plus/components/button'
-  import ElIcon from '@element-plus/components/icon'
-  import ElTooltip from '@element-plus/components/tooltip'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import { addUnit } from '@element-plus/utils'
+  import ElButton from '@seed/element-plus-components/button'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import ElTooltip from '@seed/element-plus-components/tooltip'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { addUnit } from '@seed/element-plus-utils'
   import { popconfirmEmits, popconfirmProps } from './popconfirm'
 
-  import type { TooltipInstance } from '@element-plus/components/tooltip'
+  import type { TooltipInstance } from '@seed/element-plus-components/tooltip'
 
   defineOptions({
     name: 'ElPopconfirm',

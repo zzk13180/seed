@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { hasOwn, isObject, isPropAbsent } from '@element-plus/utils'
+import { hasOwn, isObject, isPropAbsent } from '@seed/element-plus-utils'
 import Node from './node'
 import { getNodeKey } from './util'
 

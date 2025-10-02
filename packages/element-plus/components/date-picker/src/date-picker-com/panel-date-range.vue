@@ -256,17 +256,17 @@
 <script lang="ts" setup>
   import { computed, inject, ref, toRef, unref, watch } from 'vue'
   import dayjs from 'dayjs'
-  import { ClickOutside as vClickoutside } from '@element-plus/directives'
-  import { isArray } from '@element-plus/utils'
-  import { useLocale } from '@element-plus/hooks'
-  import ElButton from '@element-plus/components/button'
-  import ElInput from '@element-plus/components/input'
+  import { ClickOutside as vClickoutside } from '@seed/element-plus-directives'
+  import { isArray } from '@seed/element-plus-utils'
+  import { useLocale } from '@seed/element-plus-hooks'
+  import ElButton from '@seed/element-plus-components/button'
+  import ElInput from '@seed/element-plus-components/input'
   import {
     TimePickPanel,
     extractDateFormat,
     extractTimeFormat,
-  } from '@element-plus/components/time-picker'
-  import ElIcon from '@element-plus/components/icon'
+  } from '@seed/element-plus-components/time-picker'
+  import ElIcon from '@seed/element-plus-components/icon'
   import { ArrowLeft, ArrowRight, DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
   import { panelDateRangeProps } from '../props/panel-date-range'
   import { useRangePicker } from '../composables/use-range-picker'

@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
   import { toRef } from 'vue'
-  import { useNamespace, useThrottleRender } from '@element-plus/hooks'
+  import { useNamespace, useThrottleRender } from '@seed/element-plus-hooks'
   import { skeletonProps } from './skeleton'
   import ElSkeletonItem from './skeleton-item.vue'
 

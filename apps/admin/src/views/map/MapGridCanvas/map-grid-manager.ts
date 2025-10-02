@@ -112,7 +112,11 @@ export class MapGridManager {
   /**
    * 将地图坐标转换为屏幕坐标
    */
-  private fixedToScreen(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+  private fixedToScreen(coords: { x: number; y: number }): {
+    x: number
+    y: number
+    z: number
+  } {
     if (this.viewManager) {
       const result = this.viewManager.fixedToScreen(coords)
       return { ...result, z: 0 }
@@ -125,7 +129,11 @@ export class MapGridManager {
   /**
    * 将屏幕坐标转换为地图坐标
    */
-  private screenToFixed(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+  private screenToFixed(coords: { x: number; y: number }): {
+    x: number
+    y: number
+    z: number
+  } {
     if (this.viewManager) {
       const result = this.viewManager.screenToFixed(coords)
       return { ...result, z: 0 }

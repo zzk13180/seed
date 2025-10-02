@@ -1,6 +1,6 @@
 import { defineComponent, inject } from 'vue'
 import { isEqual } from 'lodash-unified'
-import { isArray, isFunction, isString } from '@element-plus/utils'
+import { isArray, isFunction, isString } from '@seed/element-plus-utils'
 import { selectKey } from './token'
 import type { Component, VNode, VNodeNormalizedChildren } from 'vue'
 

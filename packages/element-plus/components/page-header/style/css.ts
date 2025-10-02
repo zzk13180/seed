@@ -1,3 +1,3 @@
-import '@element-plus/components/base/style/css'
-import '@element-plus/components/divider/style/css'
-import '@element-plus/theme-chalk/el-page-header.css'
+import '@seed/element-plus-components/base/style/css'
+import '@seed/element-plus-components/divider/style/css'
+import '@seed/element-plus-theme-chalk/el-page-header.css'

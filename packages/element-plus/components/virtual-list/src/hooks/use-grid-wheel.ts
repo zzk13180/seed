@@ -1,4 +1,4 @@
-import { cAF, rAF } from '@element-plus/utils'
+import { cAF, rAF } from '@seed/element-plus-utils'
 
 import type { ComputedRef } from 'vue'
 

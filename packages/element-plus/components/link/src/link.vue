@@ -16,8 +16,8 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { useNamespace } from '@element-plus/hooks'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { linkEmits, linkProps } from './link'
 
   defineOptions({

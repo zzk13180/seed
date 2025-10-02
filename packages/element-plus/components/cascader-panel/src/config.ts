@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { NOOP, buildProps, definePropType } from '@element-plus/utils'
+import { NOOP, buildProps, definePropType } from '@seed/element-plus-utils'
 import type { CascaderConfig, CascaderOption, CascaderProps, CascaderValue } from './node'
 
 export const CommonProps = buildProps({

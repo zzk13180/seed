@@ -106,9 +106,9 @@
 <script lang="ts" setup>
   import { computed, inject, ref, toRef, unref } from 'vue'
   import dayjs from 'dayjs'
-  import ElIcon from '@element-plus/components/icon'
-  import { isArray } from '@element-plus/utils'
-  import { useLocale } from '@element-plus/hooks'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import { isArray } from '@seed/element-plus-utils'
+  import { useLocale } from '@seed/element-plus-hooks'
   import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
   import { getDefaultValue, isValidRange } from '../utils'
   import { panelMonthRangeEmits, panelMonthRangeProps } from '../props/panel-month-range'

@@ -8,10 +8,10 @@ import {
   offset as offsetMiddelware,
   shift,
 } from '@floating-ui/dom'
-import { isArray, isClient, isFunction, isString, keysOf } from '@element-plus/utils'
+import { isArray, isClient, isFunction, isString, keysOf } from '@seed/element-plus-utils'
 
 import type { CSSProperties, Component, InjectionKey, Ref, SetupContext } from 'vue'
-import type { UseNamespaceReturn } from '@element-plus/hooks'
+import type { UseNamespaceReturn } from '@seed/element-plus-hooks'
 import type { PosInfo, TourGap, TourMask } from './types'
 import type {
   ComputePositionReturn,

@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { computed, h, inject } from 'vue'
 import { merge } from 'lodash-unified'
-import { useNamespace } from '@element-plus/hooks'
-import { isBoolean, isPropAbsent } from '@element-plus/utils'
+import { useNamespace } from '@seed/element-plus-hooks'
+import { isBoolean, isPropAbsent } from '@seed/element-plus-utils'
 import { getRowIdentity } from '../util'
 import { TABLE_INJECTION_KEY } from '../tokens'
 import useEvents from './events-helper'

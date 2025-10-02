@@ -2,7 +2,7 @@
   // @ts-nocheck
   import { defineComponent, h, inject, renderSlot } from 'vue'
 
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import type { ComponentInternalInstance } from 'vue'
   import type { RootTreeType } from './tree.type'
 

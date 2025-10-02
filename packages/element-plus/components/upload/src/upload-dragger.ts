@@ -1,4 +1,4 @@
-import { buildProps, isArray } from '@element-plus/utils'
+import { buildProps, isArray } from '@seed/element-plus-utils'
 
 import type { ExtractPropTypes } from 'vue'
 import type UploadDragger from './upload-dragger.vue'

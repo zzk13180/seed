@@ -1,8 +1,8 @@
-import { withInstall, withNoopInstall } from '@element-plus/utils'
+import { withInstall, withNoopInstall } from '@seed/element-plus-utils'
 
 import Collapse from './src/collapse.vue'
 import CollapseItem from './src/collapse-item.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElCollapse: SFCWithInstall<typeof Collapse> & {
   CollapseItem: typeof CollapseItem

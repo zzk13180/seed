@@ -13,8 +13,10 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       target: 'http://127.0.0.1:3000',
       changeOrigin: true,
       ws: true,
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      rewrite: (path: string) => path.replace(new RegExp(`^${env.VITE_API_BASE_PATH}`), ''),
+
+      rewrite: (path: string) =>
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        path.replace(new RegExp(`^${env.VITE_API_BASE_PATH}`), ''),
     },
   }
   return {
@@ -30,6 +32,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       //   'Cross-Origin-Opener-Policy': 'same-origin',
       //   'Cross-Origin-Embedder-Policy': 'require-corp'
       // },
+      // allowedHosts: ['zzk13180.local'],
       host: '0.0.0.0',
     },
     preview: {

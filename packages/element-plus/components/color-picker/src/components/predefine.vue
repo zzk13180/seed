@@ -19,7 +19,7 @@
 
 <script lang="ts">
   import { defineComponent, inject, ref, watch, watchEffect } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { colorPickerContextKey } from '../color-picker'
   import Color from '../utils/color'
 

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { computed, nextTick, onMounted, ref, unref, watch, watchEffect } from 'vue'
 import { useEventListener, useResizeObserver } from '@vueuse/core'
-import { useFormSize } from '@element-plus/components/form'
+import { useFormSize } from '@seed/element-plus-components/form'
 
 import type { Table, TableProps } from './defaults'
 import type { Store } from '../store'

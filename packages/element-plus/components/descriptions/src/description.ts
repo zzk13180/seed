@@ -1,5 +1,5 @@
-import { buildProps } from '@element-plus/utils'
-import { useSizeProp } from '@element-plus/hooks'
+import { buildProps } from '@seed/element-plus-utils'
+import { useSizeProp } from '@seed/element-plus-hooks'
 
 import type { ExtractPropTypes } from 'vue'
 import type Description from './description.vue'

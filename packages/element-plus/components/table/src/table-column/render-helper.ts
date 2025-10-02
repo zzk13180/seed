@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Comment, computed, getCurrentInstance, h, ref, renderSlot, unref, watchEffect } from 'vue'
-import { debugWarn, isArray, isUndefined } from '@element-plus/utils'
-import { useNamespace } from '@element-plus/hooks'
+import { debugWarn, isArray, isUndefined } from '@seed/element-plus-utils'
+import { useNamespace } from '@seed/element-plus-hooks'
 import { cellForced, defaultRenderCell, getDefaultClassName, treeCellPrefix } from '../config'
 import { parseMinWidth, parseWidth } from '../util'
 import type { ComputedRef } from 'vue'

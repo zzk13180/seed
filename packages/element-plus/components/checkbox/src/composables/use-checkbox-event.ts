@@ -1,9 +1,9 @@
 import { computed, getCurrentInstance, inject, nextTick, watch } from 'vue'
-import { useFormItem } from '@element-plus/components/form'
-import { debugWarn } from '@element-plus/utils'
+import { useFormItem } from '@seed/element-plus-components/form'
+import { debugWarn } from '@seed/element-plus-utils'
 import { checkboxGroupContextKey } from '../constants'
 
-import type { useFormItemInputId } from '@element-plus/components/form'
+import type { useFormItemInputId } from '@seed/element-plus-components/form'
 import type { CheckboxProps } from '../checkbox'
 import type { CheckboxDisabled, CheckboxModel, CheckboxStatus } from '../composables'
 

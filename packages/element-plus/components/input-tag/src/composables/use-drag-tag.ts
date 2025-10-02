@@ -1,6 +1,6 @@
 import { type ShallowRef, ref, shallowRef } from 'vue'
-import { useNamespace } from '@element-plus/hooks'
-import { getStyle, isUndefined, setStyle } from '@element-plus/utils'
+import { useNamespace } from '@seed/element-plus-hooks'
+import { getStyle, isUndefined, setStyle } from '@seed/element-plus-utils'
 
 type DropType = 'before' | 'after'
 

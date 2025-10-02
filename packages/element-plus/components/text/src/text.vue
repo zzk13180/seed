@@ -6,9 +6,9 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, onUpdated, ref, useAttrs } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
-  import { useFormSize } from '@element-plus/components/form'
-  import { isUndefined } from '@element-plus/utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { useFormSize } from '@seed/element-plus-components/form'
+  import { isUndefined } from '@seed/element-plus-utils'
   import { textProps } from './text'
 
   defineOptions({

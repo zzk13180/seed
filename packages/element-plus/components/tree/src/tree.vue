@@ -38,10 +38,10 @@
 <script lang="ts">
   // @ts-nocheck
   import { computed, defineComponent, getCurrentInstance, inject, provide, ref, watch } from 'vue'
-  import { iconPropType } from '@element-plus/utils'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import { formItemContextKey } from '@element-plus/components/form'
-  import { selectKey } from '@element-plus/components/select/src/token'
+  import { iconPropType } from '@seed/element-plus-utils'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { formItemContextKey } from '@seed/element-plus-components/form'
+  import { selectKey } from '@seed/element-plus-components/select/src/token'
   import TreeStore from './model/tree-store'
   import { getNodeKey as getNodeKeyUtil, handleCurrentChange } from './model/util'
   import ElTreeNode from './tree-node.vue'
@@ -51,7 +51,7 @@
   import type Node from './model/node'
 
   import type { ComponentInternalInstance, PropType } from 'vue'
-  import type { Nullable } from '@element-plus/utils'
+  import type { Nullable } from '@seed/element-plus-utils'
   import type { TreeComponentProps, TreeData, TreeKey, TreeNodeData } from './tree.type'
 
   export default defineComponent({

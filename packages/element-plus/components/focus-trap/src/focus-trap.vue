@@ -13,9 +13,9 @@
     watch,
   } from 'vue'
   import { isNil } from 'lodash-unified'
-  import { EVENT_CODE } from '@element-plus/constants'
-  import { useEscapeKeydown } from '@element-plus/hooks'
-  import { isString } from '@element-plus/utils'
+  import { EVENT_CODE } from '@seed/element-plus-constants'
+  import { useEscapeKeydown } from '@seed/element-plus-hooks'
+  import { isString } from '@seed/element-plus-utils'
   import {
     createFocusOutPreventedEvent,
     focusFirstDescendant,

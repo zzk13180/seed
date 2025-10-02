@@ -1,10 +1,10 @@
-import { buildProps, definePropType } from '@element-plus/utils'
-import { useEmptyValuesProps, useSizeProp } from '@element-plus/hooks'
+import { buildProps, definePropType } from '@seed/element-plus-utils'
+import { useEmptyValuesProps, useSizeProp } from '@seed/element-plus-hooks'
 
 import type { ExtractPropTypes } from 'vue'
-import type { Language } from '@element-plus/locale'
-import type { ButtonConfigContext } from '@element-plus/components/button'
-import type { MessageConfigContext } from '@element-plus/components/message'
+import type { Language } from '@seed/element-plus-locale'
+import type { ButtonConfigContext } from '@seed/element-plus-components/button'
+import type { MessageConfigContext } from '@seed/element-plus-components/message'
 
 export type ExperimentalFeatures = {
   // TO BE Defined

@@ -1,12 +1,12 @@
-import { NOOP, buildProps, definePropType, isObject, isString } from '@element-plus/utils'
-import { useTooltipContentProps } from '@element-plus/components/tooltip'
-import { useAriaProps } from '@element-plus/hooks'
-import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import { NOOP, buildProps, definePropType, isObject, isString } from '@seed/element-plus-utils'
+import { useTooltipContentProps } from '@seed/element-plus-components/tooltip'
+import { useAriaProps } from '@seed/element-plus-hooks'
+import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
 
 import type { ExtractPropTypes } from 'vue'
 import type Autocomplete from './autocomplete.vue'
-import type { Placement } from '@element-plus/components/popper'
-import type { Awaitable } from '@element-plus/utils'
+import type { Placement } from '@seed/element-plus-components/popper'
+import type { Awaitable } from '@seed/element-plus-utils'
 
 export type AutocompleteData = Record<string, any>[]
 export type AutocompleteFetchSuggestionsCallback = (data: AutocompleteData) => void

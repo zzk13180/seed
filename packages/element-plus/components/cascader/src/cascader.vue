@@ -192,31 +192,31 @@
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
   import { cloneDeep, debounce } from 'lodash-unified'
   import { useCssVar, useResizeObserver } from '@vueuse/core'
-  import { debugWarn, focusNode, getSibling, isClient, isPromise } from '@element-plus/utils'
-  import ElCascaderPanel from '@element-plus/components/cascader-panel'
-  import ElInput from '@element-plus/components/input'
-  import ElTooltip from '@element-plus/components/tooltip'
-  import ElScrollbar from '@element-plus/components/scrollbar'
-  import ElTag from '@element-plus/components/tag'
-  import ElIcon from '@element-plus/components/icon'
-  import { useFormItem, useFormSize } from '@element-plus/components/form'
-  import { ClickOutside as vClickoutside } from '@element-plus/directives'
-  import { useComposition, useEmptyValues, useLocale, useNamespace } from '@element-plus/hooks'
-  import { CHANGE_EVENT, EVENT_CODE, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+  import { debugWarn, focusNode, getSibling, isClient, isPromise } from '@seed/element-plus-utils'
+  import ElCascaderPanel from '@seed/element-plus-components/cascader-panel'
+  import ElInput from '@seed/element-plus-components/input'
+  import ElTooltip from '@seed/element-plus-components/tooltip'
+  import ElScrollbar from '@seed/element-plus-components/scrollbar'
+  import ElTag from '@seed/element-plus-components/tag'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import { useFormItem, useFormSize } from '@seed/element-plus-components/form'
+  import { ClickOutside as vClickoutside } from '@seed/element-plus-directives'
+  import { useComposition, useEmptyValues, useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { CHANGE_EVENT, EVENT_CODE, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
   import { ArrowDown, Check, CircleClose } from '@element-plus/icons-vue'
   import { cascaderEmits, cascaderProps } from './cascader'
 
-  import type { Options } from '@element-plus/components/popper'
+  import type { Options } from '@seed/element-plus-components/popper'
   import type { ComputedRef, Ref, StyleValue } from 'vue'
-  import type { TooltipInstance } from '@element-plus/components/tooltip'
-  import type { InputInstance } from '@element-plus/components/input'
-  import type { ScrollbarInstance } from '@element-plus/components/scrollbar'
+  import type { TooltipInstance } from '@seed/element-plus-components/tooltip'
+  import type { InputInstance } from '@seed/element-plus-components/input'
+  import type { ScrollbarInstance } from '@seed/element-plus-components/scrollbar'
   import type {
     CascaderNode,
     CascaderPanelInstance,
     CascaderValue,
     Tag,
-  } from '@element-plus/components/cascader-panel'
+  } from '@seed/element-plus-components/cascader-panel'
 
   const popperOptions: Partial<Options> = {
     modifiers: [

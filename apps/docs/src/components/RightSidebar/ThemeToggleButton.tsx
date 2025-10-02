@@ -1,8 +1,8 @@
-import { useState, useEffect } from "preact/hooks";
-import type { FunctionalComponent } from "preact";
-import "./ThemeToggleButton.css";
+import { useState, useEffect } from 'preact/hooks'
+import type { FunctionalComponent } from 'preact'
+import './ThemeToggleButton.css'
 
-const themes = ["light", "dark"];
+const themes = ['light', 'dark']
 
 const icons = [
   <svg
@@ -27,38 +27,38 @@ const icons = [
   >
     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
   </svg>,
-];
+]
 
 const ThemeToggle: FunctionalComponent = () => {
   const [theme, setTheme] = useState(() => {
     if (import.meta.env.SSR) {
-      return undefined;
+      return undefined
     }
-    if (typeof localStorage !== undefined && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
+    if (typeof localStorage !== undefined && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme')
     }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark'
     }
-    return "light";
-  });
+    return 'light'
+  })
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "light") {
-      root.classList.remove("theme-dark");
+    const root = document.documentElement
+    if (theme === 'light') {
+      root.classList.remove('theme-dark')
     } else {
-      root.classList.add("theme-dark");
+      root.classList.add('theme-dark')
     }
-  }, [theme]);
+  }, [theme])
 
   return (
     <div className="theme-toggle">
       {themes.map((t, i) => {
-        const icon = icons[i];
-        const checked = t === theme;
+        const icon = icons[i]
+        const checked = t === theme
         return (
-          <label className={checked ? "checked" : ""}>
+          <label className={checked ? 'checked' : ''}>
             {icon}
             <input
               type="radio"
@@ -68,15 +68,15 @@ const ThemeToggle: FunctionalComponent = () => {
               title={`Use ${t} theme`}
               aria-label={`Use ${t} theme`}
               onChange={() => {
-                localStorage.setItem("theme", t);
-                setTheme(t);
+                localStorage.setItem('theme', t)
+                setTheme(t)
               }}
             />
           </label>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default ThemeToggle;
+export default ThemeToggle

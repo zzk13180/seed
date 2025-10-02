@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, nextTick, onMounted, ref, unref } from 'vue'
-import { isArray, isFunction, isNumber } from '@element-plus/utils'
+import { isArray, isFunction, isNumber } from '@seed/element-plus-utils'
 import { tableV2RowProps } from '../row'
 import { TableV2InjectionKey } from '../tokens'
 import { placeholderSign } from '../private'

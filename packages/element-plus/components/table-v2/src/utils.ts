@@ -1,5 +1,5 @@
 import { h, isVNode } from 'vue'
-import { addUnit, isArray, isFunction } from '@element-plus/utils'
+import { addUnit, isArray, isFunction } from '@seed/element-plus-utils'
 
 import type { CSSProperties, Component, Slot } from 'vue'
 

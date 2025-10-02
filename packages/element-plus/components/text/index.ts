@@ -1,7 +1,7 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 
 import Text from './src/text.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElText: SFCWithInstall<typeof Text> = withInstall(Text)
 export default ElText

@@ -156,9 +156,9 @@
   // @ts-nocheck
   import { computed, defineComponent, getCurrentInstance, onBeforeUnmount, provide } from 'vue'
   import { debounce } from 'lodash-unified'
-  import { Mousewheel } from '@element-plus/directives'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import ElScrollbar from '@element-plus/components/scrollbar'
+  import { Mousewheel } from '@seed/element-plus-directives'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import ElScrollbar from '@seed/element-plus-components/scrollbar'
   import { createStore } from './store/helper'
   import TableLayout from './table-layout'
   import TableHeader from './table-header'

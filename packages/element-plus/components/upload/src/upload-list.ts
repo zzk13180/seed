@@ -1,4 +1,4 @@
-import { NOOP, buildProps, definePropType, mutable } from '@element-plus/utils'
+import { NOOP, buildProps, definePropType, mutable } from '@seed/element-plus-utils'
 import { uploadListTypes } from './upload'
 import type { ExtractPropTypes } from 'vue'
 import type { UploadFile, UploadFiles, UploadHooks } from './upload'

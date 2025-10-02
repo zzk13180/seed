@@ -1,5 +1,5 @@
 import { computed, getCurrentInstance, inject, ref, unref } from 'vue'
-import { debugWarn, isClient, isNumber } from '@element-plus/utils'
+import { debugWarn, isClient, isNumber } from '@seed/element-plus-utils'
 
 import type { InjectionKey, Ref } from 'vue'
 

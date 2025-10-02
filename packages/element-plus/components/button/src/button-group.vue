@@ -5,7 +5,7 @@
 </template>
 <script lang="ts" setup>
   import { provide, reactive, toRef } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { buttonGroupProps } from './button-group'
   import { buttonGroupContextKey } from './constants'
 

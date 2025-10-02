@@ -1,9 +1,12 @@
-import { buildProps, definePropType, isBoolean } from '@element-plus/utils'
-import { EVENT_CODE } from '@element-plus/constants'
+import { buildProps, definePropType, isBoolean } from '@seed/element-plus-utils'
+import { EVENT_CODE } from '@seed/element-plus-constants'
 
-import { useTooltipContentProps, useTooltipTriggerProps } from '@element-plus/components/tooltip'
-import type { ButtonProps, ButtonType } from '@element-plus/components/button'
-import type { Placement } from '@element-plus/components/popper'
+import {
+  useTooltipContentProps,
+  useTooltipTriggerProps,
+} from '@seed/element-plus-components/tooltip'
+import type { ButtonProps, ButtonType } from '@seed/element-plus-components/button'
+import type { Placement } from '@seed/element-plus-components/popper'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type Popover from './popover.vue'
 import type { Options } from '@popperjs/core'

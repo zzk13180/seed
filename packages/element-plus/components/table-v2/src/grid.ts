@@ -1,11 +1,14 @@
-import { buildProps, definePropType } from '@element-plus/utils'
-import { virtualizedGridProps, virtualizedListProps } from '@element-plus/components/virtual-list'
+import { buildProps, definePropType } from '@seed/element-plus-utils'
+import {
+  virtualizedGridProps,
+  virtualizedListProps,
+} from '@seed/element-plus-components/virtual-list'
 import { classType, columns, dataType, fixedDataType, requiredNumber, styleType } from './common'
 import { tableV2HeaderProps } from './header'
 import { tableV2RowProps } from './row'
 
 import type { ExtractPropTypes } from 'vue'
-import type { ItemSize } from '@element-plus/components/virtual-list'
+import type { ItemSize } from '@seed/element-plus-components/virtual-list'
 
 export type onRowRenderedParams = {
   rowCacheStart: number

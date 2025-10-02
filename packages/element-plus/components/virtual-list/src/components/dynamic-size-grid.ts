@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { isFunction, isNumber, isUndefined, throwError } from '@element-plus/utils'
+import { isFunction, isNumber, isUndefined, throwError } from '@seed/element-plus-utils'
 import createGrid from '../builders/build-grid'
 
 import {

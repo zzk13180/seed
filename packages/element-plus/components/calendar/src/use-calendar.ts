@@ -1,8 +1,8 @@
 import { computed, ref } from 'vue'
 import dayjs from 'dayjs'
-import { useLocale } from '@element-plus/hooks'
-import { debugWarn, isArray, isDate } from '@element-plus/utils'
-import { INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import { useLocale } from '@seed/element-plus-hooks'
+import { debugWarn, isArray, isDate } from '@seed/element-plus-utils'
+import { INPUT_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
 
 import type { ComputedRef, SetupContext } from 'vue'
 import type { Dayjs } from 'dayjs'

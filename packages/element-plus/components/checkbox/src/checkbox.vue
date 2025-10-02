@@ -50,7 +50,7 @@
 
 <script lang="ts" setup>
   import { computed, useSlots } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { checkboxEmits, checkboxProps } from './checkbox'
   import { useCheckbox } from './composables'
 

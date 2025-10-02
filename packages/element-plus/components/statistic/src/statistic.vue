@@ -24,8 +24,8 @@
 </template>
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
-  import { isFunction, isNumber } from '@element-plus/utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { isFunction, isNumber } from '@seed/element-plus-utils'
   import { statisticProps } from './statistic'
 
   defineOptions({

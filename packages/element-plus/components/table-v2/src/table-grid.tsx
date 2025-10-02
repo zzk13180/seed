@@ -1,6 +1,6 @@
 import { computed, defineComponent, inject, provide, ref, unref, watch } from 'vue'
-import { DynamicSizeGrid, FixedSizeGrid } from '@element-plus/components/virtual-list'
-import { isNumber, isObject } from '@element-plus/utils'
+import { DynamicSizeGrid, FixedSizeGrid } from '@seed/element-plus-components/virtual-list'
+import { isNumber, isObject } from '@seed/element-plus-utils'
 import { Header } from './components'
 import { TableV2InjectionKey } from './tokens'
 import { tableV2GridProps } from './grid'
@@ -15,7 +15,7 @@ import type {
   GridScrollOptions,
   ResetAfterIndex,
   Alignment as ScrollStrategy,
-} from '@element-plus/components/virtual-list'
+} from '@seed/element-plus-components/virtual-list'
 import type { TableV2HeaderInstance } from './components'
 import type { TableV2GridProps } from './grid'
 

@@ -11,10 +11,10 @@ import {
   withCtx,
   withDirectives,
 } from 'vue'
-import { removeClass } from '@element-plus/utils'
-import { useGlobalComponentSettings } from '@element-plus/components/config-provider'
+import { removeClass } from '@seed/element-plus-utils'
+import { useGlobalComponentSettings } from '@seed/element-plus-components/config-provider'
 
-import type { UseNamespaceReturn } from '@element-plus/hooks'
+import type { UseNamespaceReturn } from '@seed/element-plus-hooks'
 import type { LoadingOptionsResolved } from './types'
 
 export function createLoadingComponent(options: LoadingOptionsResolved) {

@@ -1,4 +1,4 @@
-import { buildProps, definePropType } from '@element-plus/utils'
+import { buildProps, definePropType } from '@seed/element-plus-utils'
 import type { ExtractPropTypes, SVGAttributes } from 'vue'
 import type Progress from './progress.vue'
 

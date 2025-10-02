@@ -1,7 +1,7 @@
 import { computed, getCurrentInstance, onMounted, ref, shallowRef, watch } from 'vue'
-import { addUnit, getClientXY } from '@element-plus/utils'
-import { useLocale, useNamespace } from '@element-plus/hooks'
-import { EVENT_CODE } from '@element-plus/constants'
+import { addUnit, getClientXY } from '@seed/element-plus-utils'
+import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+import { EVENT_CODE } from '@seed/element-plus-constants'
 import { draggable } from '../utils/draggable'
 
 import type { AlphaSliderProps } from '../props/alpha-slider'

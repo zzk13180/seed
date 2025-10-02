@@ -47,16 +47,16 @@
 </template>
 <script lang="ts" setup>
   import { computed, inject, markRaw, ref, watch } from 'vue'
-  import { EVENT_CODE, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-  import { hasClass, isArray, isObject, isString } from '@element-plus/utils'
+  import { EVENT_CODE, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+  import { hasClass, isArray, isObject, isString } from '@seed/element-plus-utils'
   import {
     formContextKey,
     formItemContextKey,
     useFormItemInputId,
     useFormSize,
-  } from '@element-plus/components/form'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { useNamespace } from '@element-plus/hooks'
+  } from '@seed/element-plus-components/form'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { rateEmits, rateProps } from './rate'
   import type { CSSProperties, Component } from 'vue'
 

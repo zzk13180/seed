@@ -1,5 +1,5 @@
 import { computed, inject, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
-import { useId } from '@element-plus/hooks'
+import { useId } from '@seed/element-plus-hooks'
 import { formContextKey, formItemContextKey } from '../constants'
 
 import type { ComputedRef, Ref, WatchStopHandle } from 'vue'

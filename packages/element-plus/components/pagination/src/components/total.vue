@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { useLocale, useNamespace } from '@element-plus/hooks'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
   import { usePagination } from '../usePagination'
   import { paginationTotalProps } from './total'
 

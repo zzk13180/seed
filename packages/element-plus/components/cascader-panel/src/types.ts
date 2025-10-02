@@ -1,6 +1,6 @@
 // @ts-nocheck
 import type { InjectionKey, VNode } from 'vue'
-import type { Nullable } from '@element-plus/utils'
+import type { Nullable } from '@seed/element-plus-utils'
 import type { default as CascaderNode, CascaderOption, CascaderProps, ExpandTrigger } from './node'
 
 export type { CascaderNode, CascaderOption, CascaderProps, ExpandTrigger }

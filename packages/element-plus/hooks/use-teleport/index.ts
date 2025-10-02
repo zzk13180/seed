@@ -1,5 +1,5 @@
 import { Teleport, h, onUnmounted, ref } from 'vue'
-import { NOOP, createGlobalNode, isClient, removeGlobalNode } from '@element-plus/utils'
+import { NOOP, createGlobalNode, isClient, removeGlobalNode } from '@seed/element-plus-utils'
 
 import type { Ref, VNode } from 'vue'
 

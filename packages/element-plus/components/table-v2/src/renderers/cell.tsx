@@ -1,6 +1,6 @@
 import { renderSlot } from 'vue'
 import { get } from 'lodash-unified'
-import { isFunction, isObject } from '@element-plus/utils'
+import { isFunction, isObject } from '@seed/element-plus-utils'
 import { ExpandIcon, TableCell } from '../components'
 import { Alignment } from '../constants'
 import { placeholderSign } from '../private'
@@ -8,7 +8,7 @@ import { componentToSlot, enforceUnit, tryCall } from '../utils'
 
 import type { FunctionalComponent, UnwrapNestedRefs, VNode } from 'vue'
 import type { TableV2RowCellRenderParam } from '../components'
-import type { UseNamespaceReturn } from '@element-plus/hooks'
+import type { UseNamespaceReturn } from '@seed/element-plus-hooks'
 import type { UseTableReturn } from '../use-table'
 import type { TableV2Props } from '../table'
 

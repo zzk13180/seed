@@ -9,8 +9,8 @@
 <script lang="ts" setup>
   import { computed, onMounted, ref, shallowRef, watch, watchEffect } from 'vue'
   import { useElementBounding, useEventListener, useWindowSize } from '@vueuse/core'
-  import { addUnit, getScrollContainer, throwError } from '@element-plus/utils'
-  import { useNamespace } from '@element-plus/hooks'
+  import { addUnit, getScrollContainer, throwError } from '@seed/element-plus-utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { affixEmits, affixProps } from './affix'
   import type { CSSProperties } from 'vue'
 

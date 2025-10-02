@@ -1,4 +1,4 @@
-import { buildProps, definePropType, isString, isUndefined } from '@element-plus/utils'
+import { buildProps, definePropType, isString, isUndefined } from '@seed/element-plus-utils'
 
 import type { ExtractPropTypes } from 'vue'
 import type Anchor from './anchor.vue'

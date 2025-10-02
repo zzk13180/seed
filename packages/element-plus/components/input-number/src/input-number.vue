@@ -73,11 +73,11 @@
 <script lang="ts" setup>
   import { computed, onMounted, onUpdated, reactive, ref, watch } from 'vue'
   import { isNil } from 'lodash-unified'
-  import { ElInput } from '@element-plus/components/input'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { useFormDisabled, useFormItem, useFormSize } from '@element-plus/components/form'
-  import { vRepeatClick } from '@element-plus/directives'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
+  import { ElInput } from '@seed/element-plus-components/input'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { useFormDisabled, useFormItem, useFormSize } from '@seed/element-plus-components/form'
+  import { vRepeatClick } from '@seed/element-plus-directives'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
   import {
     debugWarn,
     isFirefox,
@@ -85,12 +85,12 @@
     isString,
     isUndefined,
     throwError,
-  } from '@element-plus/utils'
+  } from '@seed/element-plus-utils'
   import { ArrowDown, ArrowUp, Minus, Plus } from '@element-plus/icons-vue'
-  import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+  import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
   import { inputNumberEmits, inputNumberProps } from './input-number'
 
-  import type { InputInstance } from '@element-plus/components/input'
+  import type { InputInstance } from '@seed/element-plus-components/input'
 
   defineOptions({
     name: 'ElInputNumber',

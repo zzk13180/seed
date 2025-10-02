@@ -34,8 +34,8 @@
 <script lang="ts" setup>
   import { computed, nextTick, ref, watch } from 'vue'
   import dayjs from 'dayjs'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import { castArray, hasClass } from '@element-plus/utils'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { castArray, hasClass } from '@seed/element-plus-utils'
   import { basicMonthTableProps } from '../props/basic-month-table'
   import { datesInMonth, getValidDateOfMonth } from '../utils'
   import ElDatePickerCell from './basic-cell-render'

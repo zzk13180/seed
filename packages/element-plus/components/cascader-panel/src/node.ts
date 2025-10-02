@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { capitalize, isArray, isEmpty, isFunction, isUndefined } from '@element-plus/utils'
+import { capitalize, isArray, isEmpty, isFunction, isUndefined } from '@seed/element-plus-utils'
 import type { VNode } from 'vue'
 
 export type CascaderNodeValue = string | number

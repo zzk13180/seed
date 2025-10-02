@@ -1,7 +1,7 @@
 import { watch } from 'vue'
 import { isNil } from 'lodash-unified'
 import { useVModel } from '@vueuse/core'
-import { debugWarn, throwError } from '@element-plus/utils'
+import { debugWarn, throwError } from '@seed/element-plus-utils'
 import { genFileId } from './upload'
 import type { ShallowRef } from 'vue'
 import type { UploadContentInstance, UploadContentProps } from './upload-content'

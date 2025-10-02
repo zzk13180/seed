@@ -1,6 +1,12 @@
-import { buildProps, definePropType, iconPropType, isClient, mutable } from '@element-plus/utils'
+import {
+  buildProps,
+  definePropType,
+  iconPropType,
+  isClient,
+  mutable,
+} from '@seed/element-plus-utils'
 import type { AppContext, ExtractPropTypes, VNode } from 'vue'
-import type { Mutable } from '@element-plus/utils'
+import type { Mutable } from '@seed/element-plus-utils'
 import type MessageConstructor from './message.vue'
 
 export const messageTypes = ['success', 'info', 'warning', 'error'] as const

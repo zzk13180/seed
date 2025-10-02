@@ -1,23 +1,23 @@
 /** @jsxImportSource preact */
-import { useState, useEffect } from "preact/hooks";
-import type { FunctionalComponent } from "preact";
+import { useState, useEffect } from 'preact/hooks'
+import type { FunctionalComponent } from 'preact'
 
 const MenuToggle: FunctionalComponent = () => {
-  const [sidebarShown, setSidebarShown] = useState(false);
+  const [sidebarShown, setSidebarShown] = useState(false)
 
   useEffect(() => {
-    const body = document.querySelector("body")!;
+    const body = document.querySelector('body')!
     if (sidebarShown) {
-      body.classList.add("mobile-sidebar-toggle");
+      body.classList.add('mobile-sidebar-toggle')
     } else {
-      body.classList.remove("mobile-sidebar-toggle");
+      body.classList.remove('mobile-sidebar-toggle')
     }
-  }, [sidebarShown]);
+  }, [sidebarShown])
 
   return (
     <button
       type="button"
-      aria-pressed={sidebarShown ? "true" : "false"}
+      aria-pressed={sidebarShown ? 'true' : 'false'}
       id="menu-toggle"
       onClick={() => setSidebarShown(!sidebarShown)}
     >
@@ -38,7 +38,7 @@ const MenuToggle: FunctionalComponent = () => {
       </svg>
       <span className="sr-only">Toggle sidebar</span>
     </button>
-  );
-};
+  )
+}
 
-export default MenuToggle;
+export default MenuToggle

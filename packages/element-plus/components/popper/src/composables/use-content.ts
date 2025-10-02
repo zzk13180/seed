@@ -1,11 +1,11 @@
 import { computed, inject, onMounted, ref, unref, watch } from 'vue'
 import { isUndefined } from 'lodash-unified'
-import { usePopper } from '@element-plus/hooks'
+import { usePopper } from '@seed/element-plus-hooks'
 import { POPPER_INJECTION_KEY } from '../constants'
 import { buildPopperOptions, unwrapMeasurableEl } from '../utils'
 
 import type { Modifier } from '@popperjs/core'
-import type { PartialOptions } from '@element-plus/hooks'
+import type { PartialOptions } from '@seed/element-plus-hooks'
 import type { PopperContentProps } from '../content'
 
 const DEFAULT_ARROW_OFFSET = 0

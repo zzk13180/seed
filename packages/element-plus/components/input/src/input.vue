@@ -152,24 +152,30 @@
   } from 'vue'
   import { useResizeObserver } from '@vueuse/core'
   import { isNil } from 'lodash-unified'
-  import { ElIcon } from '@element-plus/components/icon'
+  import { ElIcon } from '@seed/element-plus-components/icon'
   import { Hide as IconHide, View as IconView } from '@element-plus/icons-vue'
-  import { CircleClose } from '@element-plus/icons'
+  import { CircleClose } from '@seed/element-plus-icons'
   import {
     useFormDisabled,
     useFormItem,
     useFormItemInputId,
     useFormSize,
-  } from '@element-plus/components/form'
-  import { NOOP, ValidateComponentsMap, debugWarn, isClient, isObject } from '@element-plus/utils'
+  } from '@seed/element-plus-components/form'
+  import {
+    NOOP,
+    ValidateComponentsMap,
+    debugWarn,
+    isClient,
+    isObject,
+  } from '@seed/element-plus-utils'
   import {
     useAttrs,
     useComposition,
     useCursor,
     useFocusController,
     useNamespace,
-  } from '@element-plus/hooks'
-  import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
+  } from '@seed/element-plus-hooks'
+  import { UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
   import { calcTextareaHeight } from './utils'
   import { inputEmits, inputProps } from './input'
   import type { StyleValue } from 'vue'

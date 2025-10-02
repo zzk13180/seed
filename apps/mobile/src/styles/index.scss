@@ -1,0 +1,73 @@
+@use './variables.scss' as *;
+@use './transition.scss' as *;
+@use './element-ui.scss' as *;
+@use './common.scss' as *;
+
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  font-family:
+    SourceHanSansCN, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--el-text-color-primary);
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+html.dark .svg-icon,
+html.dark svg {
+  fill: var(--el-text-color-regular);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+input {
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    box-shadow: 0 0 0 99px #fff inset !important;
+  }
+}

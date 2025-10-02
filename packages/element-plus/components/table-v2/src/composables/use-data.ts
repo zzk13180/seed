@@ -1,5 +1,5 @@
 import { computed, ref, unref, watch } from 'vue'
-import { isArray } from '@element-plus/utils'
+import { isArray } from '@seed/element-plus-utils'
 
 import type { TableV2Props } from '../table'
 import type { KeyType } from '../types'

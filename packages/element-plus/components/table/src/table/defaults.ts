@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { useSizeProp } from '@element-plus/hooks'
+import { useSizeProp } from '@seed/element-plus-hooks'
 import type { CSSProperties, ComponentInternalInstance, PropType, Ref, VNode } from 'vue'
-import type { ComponentSize } from '@element-plus/constants'
-import type { Nullable } from '@element-plus/utils'
+import type { ComponentSize } from '@seed/element-plus-constants'
+import type { Nullable } from '@seed/element-plus-utils'
 import type { Store } from '../store'
 import type { TableColumnCtx } from '../table-column/defaults'
 import type TableLayout from '../table-layout'

@@ -1,4 +1,4 @@
-import ElIcon from '@element-plus/components/icon'
+import ElIcon from '@seed/element-plus-components/icon'
 import { SortDown, SortUp } from '@element-plus/icons-vue'
 import { SortOrder } from '../constants'
 

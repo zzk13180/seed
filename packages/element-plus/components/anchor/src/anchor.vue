@@ -10,7 +10,7 @@
 <script lang="ts" setup>
   import { computed, onMounted, provide, ref, watch } from 'vue'
   import { useEventListener } from '@vueuse/core'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import {
     animateScrollTo,
     getElement,
@@ -20,7 +20,7 @@
     isUndefined,
     isWindow,
     throttleByRaf,
-  } from '@element-plus/utils'
+  } from '@seed/element-plus-utils'
   import { anchorEmits, anchorProps } from './anchor'
   import { anchorKey } from './constants'
 

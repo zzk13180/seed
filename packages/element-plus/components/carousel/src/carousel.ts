@@ -1,4 +1,4 @@
-import { buildProps, isNumber } from '@element-plus/utils'
+import { buildProps, isNumber } from '@seed/element-plus-utils'
 import type { ExtractPropTypes } from 'vue'
 
 export const carouselProps = buildProps({

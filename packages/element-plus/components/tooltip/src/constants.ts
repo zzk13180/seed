@@ -1,4 +1,4 @@
-import type { Arrayable } from '@element-plus/utils'
+import type { Arrayable } from '@seed/element-plus-utils'
 import type { InjectionKey, Ref } from 'vue'
 import type { TooltipTriggerType } from './trigger'
 

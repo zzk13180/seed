@@ -53,10 +53,10 @@
     ref,
     watch,
   } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
-  import { ElIcon } from '@element-plus/components/icon'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { ElIcon } from '@seed/element-plus-components/icon'
   import { Check, Close } from '@element-plus/icons-vue'
-  import { isNumber } from '@element-plus/utils'
+  import { isNumber } from '@seed/element-plus-utils'
   import { stepProps } from './item'
 
   import type { CSSProperties, Ref } from 'vue'

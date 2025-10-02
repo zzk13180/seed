@@ -21,8 +21,8 @@
 
 <script lang="ts">
   import { computed, defineComponent, getCurrentInstance, onMounted, ref, watch } from 'vue'
-  import { getClientXY } from '@element-plus/utils'
-  import { useNamespace } from '@element-plus/hooks'
+  import { getClientXY } from '@seed/element-plus-utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { draggable } from '../utils/draggable'
 
   import type { PropType } from 'vue'

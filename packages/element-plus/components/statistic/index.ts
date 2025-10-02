@@ -1,6 +1,6 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 import Statistic from './src/statistic.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElStatistic: SFCWithInstall<typeof Statistic> = withInstall(Statistic)
 

@@ -30,15 +30,15 @@
 <script lang="ts" setup>
   import { computed, reactive, ref, watch } from 'vue'
   import { useActiveElement, useResizeObserver } from '@vueuse/core'
-  import { useId, useNamespace } from '@element-plus/hooks'
+  import { useId, useNamespace } from '@seed/element-plus-hooks'
   import {
     useFormDisabled,
     useFormItem,
     useFormItemInputId,
     useFormSize,
-  } from '@element-plus/components/form'
-  import { debugWarn, isObject } from '@element-plus/utils'
-  import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+  } from '@seed/element-plus-components/form'
+  import { debugWarn, isObject } from '@seed/element-plus-utils'
+  import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
   import { segmentedEmits, segmentedProps } from './segmented'
   import type { Option } from './types'
 

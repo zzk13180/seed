@@ -14,8 +14,8 @@
 
 <script lang="ts" setup>
   import { getCurrentInstance, inject, ref } from 'vue'
-  import ElIcon from '@element-plus/components/icon'
-  import { useNamespace } from '@element-plus/hooks'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { breadcrumbKey } from './constants'
   import { breadcrumbItemProps } from './breadcrumb-item'
 

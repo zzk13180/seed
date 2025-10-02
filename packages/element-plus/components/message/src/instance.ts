@@ -1,6 +1,6 @@
 import { shallowReactive } from 'vue'
 import type { ComponentInternalInstance, VNode } from 'vue'
-import type { Mutable } from '@element-plus/utils'
+import type { Mutable } from '@seed/element-plus-utils'
 import type { MessageHandler, MessageProps } from './message'
 
 export type MessageContext = {

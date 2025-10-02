@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { computed, getCurrentInstance, ref, toRefs, unref, watch } from 'vue'
-import { hasOwn, isArray, isString } from '@element-plus/utils'
+import { hasOwn, isArray, isString } from '@seed/element-plus-utils'
 import {
   getColumnById,
   getColumnByKey,

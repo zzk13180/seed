@@ -1,9 +1,9 @@
 import { computed, defineComponent, inject, ref, toRaw, unref, watch } from 'vue'
 import { get } from 'lodash-unified'
-import { isObject, isUndefined } from '@element-plus/utils'
-import { DynamicSizeList, FixedSizeList } from '@element-plus/components/virtual-list'
-import { useNamespace } from '@element-plus/hooks'
-import { EVENT_CODE } from '@element-plus/constants'
+import { isObject, isUndefined } from '@seed/element-plus-utils'
+import { DynamicSizeList, FixedSizeList } from '@seed/element-plus-components/virtual-list'
+import { useNamespace } from '@seed/element-plus-hooks'
+import { EVENT_CODE } from '@seed/element-plus-constants'
 import GroupItem from './group-item.vue'
 import OptionItem from './option-item.vue'
 import { useProps } from './useProps'
@@ -14,7 +14,7 @@ import type {
   DynamicSizeListInstance,
   FixedSizeListInstance,
   ItemProps,
-} from '@element-plus/components/virtual-list'
+} from '@seed/element-plus-components/virtual-list'
 import type { Option, OptionItemProps } from './select.types'
 import type { ComponentPublicInstance, ComputedRef, ExtractPropTypes, Ref } from 'vue'
 

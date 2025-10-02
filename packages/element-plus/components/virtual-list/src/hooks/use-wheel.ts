@@ -1,4 +1,4 @@
-import { cAF, isFirefox, rAF } from '@element-plus/utils'
+import { cAF, isFirefox, rAF } from '@seed/element-plus-utils'
 import { HORIZONTAL, VERTICAL } from '../defaults'
 
 import type { ComputedRef } from 'vue'

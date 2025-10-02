@@ -57,11 +57,11 @@
 
 <script lang="ts" setup>
   import { computed, inject } from 'vue'
-  import ElIcon from '@element-plus/components/icon'
+  import ElIcon from '@seed/element-plus-components/icon'
   import { CaretRight } from '@element-plus/icons-vue'
-  import ElCheckbox from '@element-plus/components/checkbox'
-  import { useNamespace } from '@element-plus/hooks'
-  import { isFunction, isString } from '@element-plus/utils'
+  import ElCheckbox from '@seed/element-plus-components/checkbox'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { isFunction, isString } from '@seed/element-plus-utils'
   import ElNodeContent from './tree-node-content'
   import {
     NODE_CONTEXTMENU,
@@ -69,7 +69,7 @@
     treeNodeEmits,
     treeNodeProps,
   } from './virtual-tree'
-  import type { CheckboxValueType } from '@element-plus/components/checkbox'
+  import type { CheckboxValueType } from '@seed/element-plus-components/checkbox'
   import type { TreeNode } from './types'
 
   defineOptions({

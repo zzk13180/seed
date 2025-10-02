@@ -1,5 +1,5 @@
 /* eslint-disable radix */
-import { ensureArray, isFirefox } from '@element-plus/utils'
+import { ensureArray, isFirefox } from '@seed/element-plus-utils'
 
 import type { MentionCtx, MentionOption } from './types'
 

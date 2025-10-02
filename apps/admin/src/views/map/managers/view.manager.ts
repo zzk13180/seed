@@ -85,7 +85,12 @@ export class ViewManager {
    * 拖拽状态管理
    * 记录拖拽开始时的鼠标/触摸位置和视图中心点，用于计算拖拽偏移量
    */
-  private drag_start?: { x: number; y: number; ref_center_x: number; ref_center_y: number }
+  private drag_start?: {
+    x: number
+    y: number
+    ref_center_x: number
+    ref_center_y: number
+  }
 
   /*
    * 触摸事件状态管理
@@ -222,7 +227,9 @@ export class ViewManager {
     this.container.addEventListener('mousemove', this._boundHandlers.dragMove)
     this.container.addEventListener('mouseup', this._boundHandlers.dragEnd)
     this.container.addEventListener('mouseleave', this._boundHandlers.dragEnd) // 鼠标离开容器时停止拖拽
-    this.container.addEventListener('wheel', this._boundHandlers.zoom, { passive: false })
+    this.container.addEventListener('wheel', this._boundHandlers.zoom, {
+      passive: false,
+    })
 
     this.container.addEventListener('touchstart', this._boundHandlers.touchStart, {
       passive: false, // 需要调用 preventDefault()
@@ -293,7 +300,11 @@ export class ViewManager {
    *
    * 注意：Y轴翻转（地图Y轴向上为正，屏幕Y轴向下为正）
    */
-  fixedToScreen(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+  fixedToScreen(coords: { x: number; y: number }): {
+    x: number
+    y: number
+    z: number
+  } {
     const { x: mapX, y: mapY } = coords
     const { x: centerX, y: centerY } = this.state.viewCenter
     const scale = this.state.viewScale
@@ -317,7 +328,11 @@ export class ViewManager {
    * mapX = (screenX - containerWidth/2) / scale + centerX
    * mapY = -((screenY - containerHeight/2) / scale) - centerY
    */
-  screenToFixed(coords: { x: number; y: number }): { x: number; y: number; z: number } {
+  screenToFixed(coords: { x: number; y: number }): {
+    x: number
+    y: number
+    z: number
+  } {
     const { x: mapX, y: mapY } = coords
     const { x: centerX, y: centerY } = this.state.viewCenter
     const scale = this.state.viewScale
@@ -637,14 +652,23 @@ export class ViewManager {
       this.drag_start = undefined
 
       // 记录双指位置和初始距离
-      this.touch1 = { clientX: event.touches[0].clientX, clientY: event.touches[0].clientY }
-      this.touch2 = { clientX: event.touches[1].clientX, clientY: event.touches[1].clientY }
+      this.touch1 = {
+        clientX: event.touches[0].clientX,
+        clientY: event.touches[0].clientY,
+      }
+      this.touch2 = {
+        clientX: event.touches[1].clientX,
+        clientY: event.touches[1].clientY,
+      }
       const dx = this.touch1.clientX - this.touch2.clientX
       const dy = this.touch1.clientY - this.touch2.clientY
       this.initialTouchDistance = Math.hypot(dx, dy)
     } else if (event.touches.length === 1) {
       // 单指触摸：准备拖拽
-      this.touch1 = { clientX: event.touches[0].clientX, clientY: event.touches[0].clientY }
+      this.touch1 = {
+        clientX: event.touches[0].clientX,
+        clientY: event.touches[0].clientY,
+      }
       this.touch2 = null
       this.initialTouchDistance = 0
       this.handleDragStart(event) // 开始拖拽

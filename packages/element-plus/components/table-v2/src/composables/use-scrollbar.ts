@@ -1,7 +1,7 @@
 import { ref, unref, watch } from 'vue'
 
 import type { Ref } from 'vue'
-import type { Alignment as ScrollStrategy } from '@element-plus/components/virtual-list'
+import type { Alignment as ScrollStrategy } from '@seed/element-plus-components/virtual-list'
 import type { TableV2Props } from '../table'
 import type { TableGridInstance } from '../table-grid'
 

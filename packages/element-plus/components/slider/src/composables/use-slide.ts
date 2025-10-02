@@ -1,8 +1,8 @@
 import { computed, nextTick, ref, shallowRef } from 'vue'
-import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { useFormItem } from '@element-plus/components/form'
+import { CHANGE_EVENT, INPUT_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+import { useFormItem } from '@seed/element-plus-components/form'
 import type { CSSProperties, Ref, SetupContext } from 'vue'
-import type { Arrayable } from '@element-plus/utils'
+import type { Arrayable } from '@seed/element-plus-utils'
 import type { SliderEmits, SliderInitData, SliderProps } from '../slider'
 import type { ButtonRefs, SliderButtonInstance } from '../button'
 

@@ -42,7 +42,7 @@
 
 <script lang="ts" setup>
   import { computed, inject, useSlots } from 'vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { checkboxGroupContextKey } from './constants'
   import { useCheckbox } from './composables'
   import { checkboxEmits, checkboxProps } from './checkbox'

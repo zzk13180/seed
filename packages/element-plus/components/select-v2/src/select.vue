@@ -261,12 +261,12 @@
 
 <script lang="ts">
   import { computed, defineComponent, provide, reactive, toRefs } from 'vue'
-  import { isArray } from '@element-plus/utils'
-  import { ClickOutside } from '@element-plus/directives'
-  import ElTooltip from '@element-plus/components/tooltip'
-  import ElTag from '@element-plus/components/tag'
-  import ElIcon from '@element-plus/components/icon'
-  import { useCalcInputWidth } from '@element-plus/hooks'
+  import { isArray } from '@seed/element-plus-utils'
+  import { ClickOutside } from '@seed/element-plus-directives'
+  import ElTooltip from '@seed/element-plus-components/tooltip'
+  import ElTag from '@seed/element-plus-components/tag'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import { useCalcInputWidth } from '@seed/element-plus-hooks'
   import ElSelectMenu from './select-dropdown'
   import useSelect from './useSelect'
   import { SelectProps, selectEmits } from './defaults'

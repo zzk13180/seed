@@ -165,18 +165,23 @@
   } from 'vue'
   import { isEqual } from 'lodash-unified'
   import { onClickOutside, unrefElement } from '@vueuse/core'
-  import { useEmptyValues, useFocusController, useLocale, useNamespace } from '@element-plus/hooks'
-  import { useFormItem, useFormSize } from '@element-plus/components/form'
-  import ElInput from '@element-plus/components/input'
-  import ElIcon from '@element-plus/components/icon'
-  import ElTooltip from '@element-plus/components/tooltip'
-  import { NOOP, debugWarn, isArray } from '@element-plus/utils'
-  import { EVENT_CODE } from '@element-plus/constants'
+  import {
+    useEmptyValues,
+    useFocusController,
+    useLocale,
+    useNamespace,
+  } from '@seed/element-plus-hooks'
+  import { useFormItem, useFormSize } from '@seed/element-plus-components/form'
+  import ElInput from '@seed/element-plus-components/input'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import ElTooltip from '@seed/element-plus-components/tooltip'
+  import { NOOP, debugWarn, isArray } from '@seed/element-plus-utils'
+  import { EVENT_CODE } from '@seed/element-plus-constants'
   import { Calendar, Clock } from '@element-plus/icons-vue'
   import { dayOrDaysToDate, formatter, parseDate, valueEquals } from '../utils'
   import { timePickerDefaultProps } from './props'
   import PickerRangeTrigger from './picker-range-trigger.vue'
-  import type { InputInstance } from '@element-plus/components/input'
+  import type { InputInstance } from '@seed/element-plus-components/input'
 
   import type { Dayjs } from 'dayjs'
   import type { ComponentPublicInstance, Ref } from 'vue'
@@ -189,7 +194,7 @@
     TimePickerDefaultProps,
     UserInput,
   } from './props'
-  import type { TooltipInstance } from '@element-plus/components/tooltip'
+  import type { TooltipInstance } from '@seed/element-plus-components/tooltip'
 
   defineOptions({
     name: 'Picker',

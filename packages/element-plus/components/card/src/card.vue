@@ -15,7 +15,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { cardProps } from './card'
 
   defineOptions({

@@ -1,5 +1,5 @@
-import { componentSizes } from '@element-plus/constants'
-import { buildProps, definePropType, isArray, isBoolean, isString } from '@element-plus/utils'
+import { componentSizes } from '@seed/element-plus-constants'
+import { buildProps, definePropType, isArray, isBoolean, isString } from '@seed/element-plus-utils'
 
 import type { ExtractPropTypes } from 'vue'
 import type { FormItemProp } from './form-item'

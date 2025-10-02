@@ -29,6 +29,7 @@ export default defineConfig([
     ignores: [
       '**/dist/',
       '**/public/',
+      '**/target/',
       '**/.svelte-kit/',
       '**/node_modules/',
       './packages/',
@@ -73,10 +74,13 @@ export default defineConfig([
       'sonarjs/slow-regex': 'off', // 允许慢正则
       'sonarjs/prefer-regexp-exec': 'off', // 允许 String.match
       'sonarjs/unused-import': 'off', // 允许未使用的 import
+      'sonarjs/no-commented-code': 'off', // 允许注释掉的代码
 
       // 关闭安全检测中对对象注入的限制
       'security/detect-object-injection': 'off', // 允许动态属性访问
 
+      // 禁用有兼容性问题的规则
+      'unicorn/expiring-todo-comments': 'off',
       // 关闭 Unicorn 插件的代码风格限制
       'unicorn/no-abusive-eslint-disable': 'off', // 允许不指定规则全局禁用 ESLint
       'unicorn/filename-case': 'off', // 不强制文件名 kebab-case
@@ -99,6 +103,7 @@ export default defineConfig([
       'unicorn/no-object-as-default-parameter': 'off', // 允许对象字面量默认值
       'unicorn/prefer-ternary': 'off', // 允许 if-else
       'unicorn/prefer-regexp-test': 'off', // 允许 String.match
+      'unicorn/no-array-for-each': 'off', // 允许使用 Array.forEach
 
       // 关闭 ESLint 核心规则的部分警告
       'no-lone-blocks': 'off', // 允许多余的嵌套块
@@ -109,20 +114,20 @@ export default defineConfig([
       'no-control-regex': 'off', // 允许正则控制字符
       'no-empty-character-class': 'off', // 允许空字符类
       'no-useless-escape': 'off', // 允许多余转义
-      'complexity': 'off', // 关闭复杂度限制
+      complexity: 'off', // 关闭复杂度限制
       'max-lines': 'off', // 关闭长度限制
 
       'no-use-before-define': ['warn', { functions: false, classes: false }], // 禁止在声明前使用，防止引用错误
-      'eqeqeq': ['warn', 'always', { null: 'ignore' }], // 强制使用全等避免隐式类型转换
+      eqeqeq: ['warn', 'always', { null: 'ignore' }], // 强制使用全等避免隐式类型转换
       'no-var': 'warn', // 不允许使用 var 声明
       'object-shorthand': ['warn', 'always', { avoidQuotes: true }], // 强制对象字面量使用速记语法
       'one-var': ['warn', 'never'], // 禁止使用一条声明多个变量
       'prefer-arrow-callback': 'warn', // 优先使用箭头函数回调
       'prefer-const': ['warn', { destructuring: 'all' }], // 建议使用 const 声明只读变量
       'prefer-spread': 'warn', // 建议使用扩展运算符而非 apply调用
-      'curly': 'warn', // 在条件语句中强制使用大括号
-      'semi': ['warn', 'never'], // 不允许语句末尾有分号
-      'quotes': ['warn', 'single', { avoidEscape: true, allowTemplateLiterals: false }], // 强制使用单引号
+      curly: 'warn', // 在条件语句中强制使用大括号
+      semi: ['warn', 'never'], // 不允许语句末尾有分号
+      quotes: ['warn', 'single', { avoidEscape: true, allowTemplateLiterals: false }], // 强制使用单引号
       'no-restricted-syntax': ['warn', 'LabeledStatement', 'WithStatement'], // 禁止使用部分易混淆语法
       'no-empty': ['warn', { allowEmptyCatch: true }], // 禁止空代码块
       'prefer-template': 'warn', // 建议使用模板字符串
@@ -162,7 +167,7 @@ export default defineConfig([
             'type',
           ],
           pathGroups: [
-            { pattern: '@roboui/**', group: 'internal', position: 'before' },
+            { pattern: '@seed/**', group: 'internal', position: 'before' },
             { pattern: '@/**', group: 'internal', position: 'after' },
           ],
           pathGroupsExcludedImportTypes: ['type'],
@@ -229,14 +234,14 @@ export default defineConfig([
       'no-sequences': 'warn', // 禁止使用逗号运算符
       'no-throw-literal': 'warn', // 强制抛出 Error 对象
       'no-unmodified-loop-condition': 'warn', // 循环条件禁止始终不变
-      'no-unused-expressions': ['warn', { allowShortCircuit: true }], // 禁止无用的表达式
+      'no-unused-expressions': 'off', // 禁止无用的表达式（关闭以避免插件读取未定义的选项时报错）
       'no-useless-call': 'warn', // 禁止不必要的 call 或 apply
       'no-useless-concat': 'warn', // 禁止没必要的字符串拼接
       'no-useless-return': 'warn', // 禁止不必要的 return
-      'radix': 'warn', // parseInt 必须指定进制
+      radix: 'warn', // parseInt 必须指定进制
       'require-await': 'warn', // async 函数内必须有 await
       'wrap-iife': 'warn', // 立即执行函数需要用括号包裹
-      'yoda': 'warn', // 避免在条件判断中使用字面量在左侧的比较
+      yoda: 'warn', // 避免在条件判断中使用字面量在左侧的比较
       'consistent-this': ['warn', 'that'], // this 需被赋值给 that
     },
     settings: {
@@ -251,7 +256,7 @@ export default defineConfig([
     plugins: {
       '@typescript-eslint': tsEslintPlugin,
       'eslint-comments': eslintCommentsPlugin,
-      'regexp': regexpPlugin,
+      regexp: regexpPlugin,
     },
     languageOptions: {
       globals: {
@@ -268,6 +273,7 @@ export default defineConfig([
       ...tsEslintPlugin.configs['recommended-requiring-type-checking'].rules, // 需要类型检查的推荐规则
       ...regexpPlugin.configs.recommended.rules, // 正则相关推荐规则
 
+      '@typescript-eslint/no-unused-expressions': 'off',
       // 根据项目需求关闭部分规则（建议打开，删除即可）
       '@typescript-eslint/no-unsafe-member-access': 'off', // 允许访问不安全的成员
       '@typescript-eslint/no-unsafe-assignment': 'off', // 允许不安全的赋值
@@ -366,52 +372,147 @@ export default defineConfig([
           order: [
             // 1. 公共静态字段/方法
             { type: 'property', static: true, accessibility: 'public' },
-            { type: 'property', static: true, accessibility: 'public', readonly: true },
-            { type: 'method', static: true, accessibility: 'public', kind: 'get' },
-            { type: 'method', static: true, accessibility: 'public', kind: 'set' },
+            {
+              type: 'property',
+              static: true,
+              accessibility: 'public',
+              readonly: true,
+            },
+            {
+              type: 'method',
+              static: true,
+              accessibility: 'public',
+              kind: 'get',
+            },
+            {
+              type: 'method',
+              static: true,
+              accessibility: 'public',
+              kind: 'set',
+            },
             { type: 'method', static: true, accessibility: 'public' },
 
             // 2. 受保护静态字段/方法
             { type: 'property', static: true, accessibility: 'protected' },
-            { type: 'property', static: true, accessibility: 'protected', readonly: true },
-            { type: 'method', static: true, accessibility: 'protected', kind: 'get' },
-            { type: 'method', static: true, accessibility: 'protected', kind: 'set' },
+            {
+              type: 'property',
+              static: true,
+              accessibility: 'protected',
+              readonly: true,
+            },
+            {
+              type: 'method',
+              static: true,
+              accessibility: 'protected',
+              kind: 'get',
+            },
+            {
+              type: 'method',
+              static: true,
+              accessibility: 'protected',
+              kind: 'set',
+            },
             { type: 'method', static: true, accessibility: 'protected' },
 
             // 3. 私有静态字段/方法
             { type: 'property', static: true, accessibility: 'private' },
-            { type: 'property', static: true, accessibility: 'private', readonly: true },
-            { type: 'method', static: true, accessibility: 'private', kind: 'get' },
-            { type: 'method', static: true, accessibility: 'private', kind: 'set' },
+            {
+              type: 'property',
+              static: true,
+              accessibility: 'private',
+              readonly: true,
+            },
+            {
+              type: 'method',
+              static: true,
+              accessibility: 'private',
+              kind: 'get',
+            },
+            {
+              type: 'method',
+              static: true,
+              accessibility: 'private',
+              kind: 'set',
+            },
             { type: 'method', static: true, accessibility: 'private' },
 
             // 4. 公共实例字段
             { type: 'property', static: false, accessibility: 'public' },
-            { type: 'property', static: false, accessibility: 'public', groupByDecorator: true },
-            { type: 'property', static: false, accessibility: 'public', readonly: true },
+            {
+              type: 'property',
+              static: false,
+              accessibility: 'public',
+              groupByDecorator: true,
+            },
+            {
+              type: 'property',
+              static: false,
+              accessibility: 'public',
+              readonly: true,
+            },
 
             // 5. 受保护实例字段
             { type: 'property', static: false, accessibility: 'protected' },
-            { type: 'property', static: false, accessibility: 'protected', readonly: true },
+            {
+              type: 'property',
+              static: false,
+              accessibility: 'protected',
+              readonly: true,
+            },
 
             // 6. 私有实例字段
             { type: 'property', static: false, accessibility: 'private' },
-            { type: 'property', static: false, accessibility: 'private', readonly: true },
+            {
+              type: 'property',
+              static: false,
+              accessibility: 'private',
+              readonly: true,
+            },
 
             // 7. 构造函数
             'constructor',
 
             // 8. 公共存取器
-            { type: 'method', static: false, accessibility: 'public', kind: 'get' },
-            { type: 'method', static: false, accessibility: 'public', kind: 'set' },
+            {
+              type: 'method',
+              static: false,
+              accessibility: 'public',
+              kind: 'get',
+            },
+            {
+              type: 'method',
+              static: false,
+              accessibility: 'public',
+              kind: 'set',
+            },
 
             // 9. 受保护存取器
-            { type: 'method', static: false, accessibility: 'protected', kind: 'get' },
-            { type: 'method', static: false, accessibility: 'protected', kind: 'set' },
+            {
+              type: 'method',
+              static: false,
+              accessibility: 'protected',
+              kind: 'get',
+            },
+            {
+              type: 'method',
+              static: false,
+              accessibility: 'protected',
+              kind: 'set',
+            },
 
             // 10. 私有存取器
-            { type: 'method', static: false, accessibility: 'private', kind: 'get' },
-            { type: 'method', static: false, accessibility: 'private', kind: 'set' },
+            {
+              type: 'method',
+              static: false,
+              accessibility: 'private',
+              kind: 'get',
+            },
+            {
+              type: 'method',
+              static: false,
+              accessibility: 'private',
+              kind: 'set',
+            },
 
             // 11. 公共实例方法
             { type: 'method', static: false, accessibility: 'public' },

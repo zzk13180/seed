@@ -89,11 +89,11 @@
 <script lang="ts" setup>
   import { computed, useSlots } from 'vue'
   import { CircleClose } from '@element-plus/icons-vue'
-  import { useAttrs, useCalcInputWidth } from '@element-plus/hooks'
-  import { NOOP, ValidateComponentsMap } from '@element-plus/utils'
-  import ElIcon from '@element-plus/components/icon'
-  import ElTag from '@element-plus/components/tag'
-  import { useFormItem, useFormItemInputId } from '@element-plus/components/form'
+  import { useAttrs, useCalcInputWidth } from '@seed/element-plus-hooks'
+  import { NOOP, ValidateComponentsMap } from '@seed/element-plus-utils'
+  import ElIcon from '@seed/element-plus-components/icon'
+  import ElTag from '@seed/element-plus-components/tag'
+  import { useFormItem, useFormItemInputId } from '@seed/element-plus-components/form'
   import { inputTagEmits, inputTagProps } from './input-tag'
   import { useDragTag, useHovering, useInputTag, useInputTagDom } from './composables'
 

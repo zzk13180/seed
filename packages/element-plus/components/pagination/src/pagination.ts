@@ -7,14 +7,14 @@ import {
   iconPropType,
   isNumber,
   mutable,
-} from '@element-plus/utils'
+} from '@seed/element-plus-utils'
 import {
   useDeprecated,
   useGlobalSize,
   useLocale,
   useNamespace,
   useSizeProp,
-} from '@element-plus/hooks'
+} from '@seed/element-plus-hooks'
 import { elPaginationKey } from './constants'
 
 import Prev from './components/prev.vue'

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { h, inject, ref } from 'vue'
 import { debounce } from 'lodash-unified'
-import { addClass, hasClass, removeClass } from '@element-plus/utils'
+import { addClass, hasClass, removeClass } from '@seed/element-plus-utils'
 import { createTablePopper, getCell, getColumnByCell, removePopper } from '../util'
 import { TABLE_INJECTION_KEY } from '../tokens'
 import type { TableColumnCtx } from '../table-column/defaults'

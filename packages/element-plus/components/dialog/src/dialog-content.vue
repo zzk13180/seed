@@ -29,10 +29,10 @@
 
 <script lang="ts" setup>
   import { computed, inject } from 'vue'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { FOCUS_TRAP_INJECTION_KEY } from '@element-plus/components/focus-trap'
-  import { useDraggable, useLocale } from '@element-plus/hooks'
-  import { CloseComponents, composeRefs } from '@element-plus/utils'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { FOCUS_TRAP_INJECTION_KEY } from '@seed/element-plus-components/focus-trap'
+  import { useDraggable, useLocale } from '@seed/element-plus-hooks'
+  import { CloseComponents, composeRefs } from '@seed/element-plus-utils'
   import { dialogInjectionKey } from './constants'
   import { dialogContentEmits, dialogContentProps } from './dialog-content'
 

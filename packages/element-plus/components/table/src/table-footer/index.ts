@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { defineComponent, h, inject } from 'vue'
-import { useNamespace } from '@element-plus/hooks'
+import { useNamespace } from '@seed/element-plus-hooks'
 import useLayoutObserver from '../layout-observer'
 import { TABLE_INJECTION_KEY } from '../tokens'
 import useStyle from './style-helper'

@@ -1,5 +1,5 @@
-import { buildProps, definePropType, iconPropType, isNumber } from '@element-plus/utils'
-import { componentSizes } from '@element-plus/constants'
+import { buildProps, definePropType, iconPropType, isNumber } from '@seed/element-plus-utils'
+import { componentSizes } from '@seed/element-plus-constants'
 import type { ExtractPropTypes } from 'vue'
 import type { ObjectFitProperty } from 'csstype'
 

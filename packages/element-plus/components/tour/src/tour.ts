@@ -1,5 +1,11 @@
-import { buildProps, definePropType, iconPropType, isBoolean, isNumber } from '@element-plus/utils'
-import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import {
+  buildProps,
+  definePropType,
+  iconPropType,
+  isBoolean,
+  isNumber,
+} from '@seed/element-plus-utils'
+import { UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
 import { tourContentProps } from './content'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import type Tour from './tour.vue'

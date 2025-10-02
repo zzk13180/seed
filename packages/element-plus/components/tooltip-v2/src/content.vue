@@ -16,8 +16,8 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, provide, ref, unref, watch } from 'vue'
   import { offset } from '@floating-ui/dom'
-  import { arrowMiddleware, useFloating, useNamespace, useZIndex } from '@element-plus/hooks'
-  import ElVisuallyHidden from '@element-plus/components/visual-hidden'
+  import { arrowMiddleware, useFloating, useNamespace, useZIndex } from '@seed/element-plus-hooks'
+  import ElVisuallyHidden from '@seed/element-plus-components/visual-hidden'
   import { tooltipV2ContentKey, tooltipV2RootKey } from './constants'
   import { tooltipV2ContentProps } from './content'
   import { tooltipV2CommonProps } from './common'
@@ -29,7 +29,10 @@
     name: 'ElTooltipV2Content',
   })
 
-  const props = defineProps({ ...tooltipV2ContentProps, ...tooltipV2CommonProps })
+  const props = defineProps({
+    ...tooltipV2ContentProps,
+    ...tooltipV2CommonProps,
+  })
 
   const { triggerRef, contentId } = inject(tooltipV2RootKey)!
 

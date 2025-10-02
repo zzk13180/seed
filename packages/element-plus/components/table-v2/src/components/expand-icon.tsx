@@ -1,4 +1,4 @@
-import ElIcon from '@element-plus/components/icon'
+import ElIcon from '@seed/element-plus-components/icon'
 import { ArrowRight } from '@element-plus/icons-vue'
 
 import type { StyleValue } from 'vue'

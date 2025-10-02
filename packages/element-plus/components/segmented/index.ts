@@ -1,4 +1,4 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 import Segmented from './src/segmented.vue'
 
 export const ElSegmented = withInstall(Segmented)

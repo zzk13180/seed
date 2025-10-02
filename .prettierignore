@@ -3,6 +3,9 @@
 **/node_modules/
 **/*.svg
 **/*.sh
+**/target/
+**/build/
 
 pnpm-lock.yaml
 auto-import-*.d.ts
+*.svelte

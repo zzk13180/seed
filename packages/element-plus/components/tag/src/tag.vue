@@ -31,10 +31,10 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import ElIcon from '@element-plus/components/icon'
+  import ElIcon from '@seed/element-plus-components/icon'
   import { Close } from '@element-plus/icons-vue'
-  import { useNamespace } from '@element-plus/hooks'
-  import { useFormSize } from '@element-plus/components/form'
+  import { useNamespace } from '@seed/element-plus-hooks'
+  import { useFormSize } from '@seed/element-plus-components/form'
 
   import { tagEmits, tagProps } from './tag'
   import type { VNode } from 'vue'

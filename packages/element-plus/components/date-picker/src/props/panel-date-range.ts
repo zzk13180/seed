@@ -1,4 +1,4 @@
-import { buildProps } from '@element-plus/utils'
+import { buildProps } from '@seed/element-plus-utils'
 import { panelRangeSharedProps, panelSharedProps } from './shared'
 
 import type { ExtractPropTypes } from 'vue'

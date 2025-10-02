@@ -1,12 +1,12 @@
 import { placements } from '@popperjs/core'
-import { CommonProps } from '@element-plus/components/cascader-panel'
-import { buildProps, definePropType, isBoolean } from '@element-plus/utils'
-import { useEmptyValuesProps, useSizeProp } from '@element-plus/hooks'
-import { useTooltipContentProps } from '@element-plus/components/tooltip'
-import { tagProps } from '@element-plus/components/tag'
-import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import type { CascaderNode, CascaderValue } from '@element-plus/components/cascader-panel'
-import type { Placement } from '@element-plus/components/popper'
+import { CommonProps } from '@seed/element-plus-components/cascader-panel'
+import { buildProps, definePropType, isBoolean } from '@seed/element-plus-utils'
+import { useEmptyValuesProps, useSizeProp } from '@seed/element-plus-hooks'
+import { useTooltipContentProps } from '@seed/element-plus-components/tooltip'
+import { tagProps } from '@seed/element-plus-components/tag'
+import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+import type { CascaderNode, CascaderValue } from '@seed/element-plus-components/cascader-panel'
+import type { Placement } from '@seed/element-plus-components/popper'
 
 export const cascaderProps = buildProps({
   ...CommonProps,

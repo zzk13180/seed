@@ -32,9 +32,9 @@
 <script lang="ts" setup>
   import { computed, provide, ref, toRef, useSlots, watch } from 'vue'
   import { useVModel } from '@vueuse/core'
-  import { useNamespace, useZIndex } from '@element-plus/hooks'
-  import { isBoolean } from '@element-plus/utils'
-  import ElTeleport from '@element-plus/components/teleport'
+  import { useNamespace, useZIndex } from '@seed/element-plus-hooks'
+  import { isBoolean } from '@seed/element-plus-utils'
+  import ElTeleport from '@seed/element-plus-components/teleport'
   import ElTourMask from './mask.vue'
   import ElTourContent from './content.vue'
   import ElTourSteps from './steps'

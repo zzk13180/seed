@@ -32,9 +32,9 @@
 <script lang="ts" setup>
   import { computed, inject, ref } from 'vue'
   import dayjs from 'dayjs'
-  import { EVENT_CODE } from '@element-plus/constants'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import { isUndefined } from '@element-plus/utils'
+  import { EVENT_CODE } from '@seed/element-plus-constants'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { isUndefined } from '@seed/element-plus-utils'
   import { panelTimePickerProps } from '../props/panel-time-picker'
   import { useTimePanel } from '../composables/use-time-panel'
   import { buildAvailableTimeSlotGetter, useOldValue } from '../composables/use-time-picker'

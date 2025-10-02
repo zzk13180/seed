@@ -1,0 +1,26 @@
+{
+  "name": "@seed/mobile",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite serve --mode development",
+    "production": "vite serve --mode production",
+    "build:dev": "vite build --mode development",
+    "build:prod": "vite build --mode production",
+    "preview": "vite preview",
+    "prettier": "prettier --write .",
+    "pre-commit": "lint-staged"
+  },
+  "dependencies": {
+    "@ionic/core": "^8.7.9",
+    "@ionic/storage": "^4.0.0",
+    "@ionic/vue": "^8.0.0",
+    "@ionic/vue-router": "^8.0.0",
+    "date-fns": "^2.30.0",
+    "ionicons": "^7.0.0",
+    "pinia": "^3.0.2",
+    "quaternion": "^2.0.2",
+    "swiper": "^10.3.0"
+  }
+}

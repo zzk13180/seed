@@ -15,7 +15,7 @@ import {
 
 import { useResizeObserver } from '@vueuse/core'
 import { isNil } from 'lodash-unified'
-import ElIcon from '@element-plus/components/icon'
+import ElIcon from '@seed/element-plus-components/icon'
 import { More } from '@element-plus/icons-vue'
 import {
   buildProps,
@@ -26,14 +26,14 @@ import {
   isObject,
   isString,
   mutable,
-} from '@element-plus/utils'
-import { useNamespace } from '@element-plus/hooks'
-import { ClickOutside as vClickoutside } from '@element-plus/directives'
+} from '@seed/element-plus-utils'
+import { useNamespace } from '@seed/element-plus-hooks'
+import { ClickOutside as vClickoutside } from '@seed/element-plus-directives'
 import Menubar from './utils/menu-bar'
 import ElMenuCollapseTransition from './menu-collapse-transition.vue'
 import ElSubMenu from './sub-menu'
 import { useMenuCssVar } from './use-menu-css-var'
-import type { PopperEffect } from '@element-plus/components/popper'
+import type { PopperEffect } from '@seed/element-plus-components/popper'
 
 import type { MenuItemClicked, MenuProvider, SubMenuProvider } from './types'
 import type { NavigationFailure, Router } from 'vue-router'

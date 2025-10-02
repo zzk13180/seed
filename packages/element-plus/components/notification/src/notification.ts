@@ -1,4 +1,4 @@
-import { buildProps, definePropType, iconPropType } from '@element-plus/utils'
+import { buildProps, definePropType, iconPropType } from '@seed/element-plus-utils'
 
 import type { AppContext, ExtractPropTypes, VNode } from 'vue'
 import type Notification from './notification.vue'

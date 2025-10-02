@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { useId, useNamespace } from '@element-plus/hooks'
+  import { useId, useNamespace } from '@seed/element-plus-hooks'
 
   defineOptions({
     name: 'ImgEmpty',

@@ -1,4 +1,4 @@
-import { buildProps, definePropType, iconPropType } from '@element-plus/utils'
+import { buildProps, definePropType, iconPropType } from '@seed/element-plus-utils'
 import { tourContentProps } from './content'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import type { TourBtnProps, TourMask } from './types'

@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { useNamespace } from '@element-plus/hooks'
+import { useNamespace } from '@seed/element-plus-hooks'
 import useMenuColor from './use-menu-color'
 
 import type { MenuProps } from './menu'

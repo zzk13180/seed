@@ -7,8 +7,8 @@ import {
   isFunction,
   isNumber,
   isString,
-} from '@element-plus/utils'
-import { messageConfig } from '@element-plus/components/config-provider'
+} from '@seed/element-plus-utils'
+import { messageConfig } from '@seed/element-plus-components/config-provider'
 import MessageConstructor from './message.vue'
 import { messageDefaults, messageTypes } from './message'
 import { instances } from './instance'

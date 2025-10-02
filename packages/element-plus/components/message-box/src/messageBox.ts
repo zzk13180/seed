@@ -8,7 +8,7 @@ import {
   isObject,
   isString,
   isUndefined,
-} from '@element-plus/utils'
+} from '@seed/element-plus-utils'
 import MessageBoxConstructor from './index.vue'
 
 import type { AppContext, ComponentPublicInstance, VNode } from 'vue'

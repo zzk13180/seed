@@ -1,4 +1,4 @@
-import { definePropType, mutable } from '@element-plus/utils'
+import { definePropType, mutable } from '@seed/element-plus-utils'
 
 import type { CSSProperties } from 'vue'
 import type { Column, KeyType } from './types'

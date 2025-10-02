@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { h } from 'vue'
-import { isUndefined } from '@element-plus/utils'
+import { isUndefined } from '@seed/element-plus-utils'
 
 export function hColgroup(props) {
   const isAuto = props.tableLayout === 'auto'

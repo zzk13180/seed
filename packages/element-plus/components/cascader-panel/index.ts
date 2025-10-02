@@ -1,6 +1,6 @@
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@seed/element-plus-utils'
 import CascaderPanel from './src/index.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@seed/element-plus-utils'
 
 export const ElCascaderPanel: SFCWithInstall<typeof CascaderPanel> = withInstall(CascaderPanel)
 

@@ -1,4 +1,4 @@
-import { isArray, isClient, isElement } from '@element-plus/utils'
+import { isArray, isClient, isElement } from '@seed/element-plus-utils'
 
 import type { ComponentPublicInstance, DirectiveBinding, ObjectDirective } from 'vue'
 

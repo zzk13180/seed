@@ -99,7 +99,10 @@ function resolveDirective(name: string, options: ElementPlusResolverOptionsResol
   const directives: Record<string, { importName: string; styleName: string }> = {
     Loading: { importName: 'ElLoadingDirective', styleName: 'loading' },
     Popover: { importName: 'ElPopoverDirective', styleName: 'popover' },
-    InfiniteScroll: { importName: 'ElInfiniteScroll', styleName: 'infinite-scroll' },
+    InfiniteScroll: {
+      importName: 'ElInfiniteScroll',
+      styleName: 'infinite-scroll',
+    },
   }
 
   const directive = directives[name]

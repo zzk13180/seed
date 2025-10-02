@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import { isArray } from '@element-plus/utils'
-import { rangeArr } from '@element-plus/components/time-picker'
+import { isArray } from '@seed/element-plus-utils'
+import { rangeArr } from '@seed/element-plus-components/time-picker'
 
 import type { Dayjs } from 'dayjs'
 import type { DateCell } from './date-picker.type'

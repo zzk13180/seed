@@ -1,4 +1,4 @@
-import { buildProps, definePropType, iconPropType } from '@element-plus/utils'
+import { buildProps, definePropType, iconPropType } from '@seed/element-plus-utils'
 import { ArrowRight } from '@element-plus/icons-vue'
 import type { ExtractPropTypes } from 'vue'
 import type { CollapseActiveName } from './collapse'

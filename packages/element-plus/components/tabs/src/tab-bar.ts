@@ -1,4 +1,4 @@
-import { buildProps, definePropType, mutable } from '@element-plus/utils'
+import { buildProps, definePropType, mutable } from '@seed/element-plus-utils'
 import type { ExtractPropTypes } from 'vue'
 import type { TabsPaneContext } from './constants'
 import type TabBar from './tab-bar.vue'

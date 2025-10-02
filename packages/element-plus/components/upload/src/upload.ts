@@ -1,6 +1,6 @@
-import { NOOP, buildProps, definePropType, mutable } from '@element-plus/utils'
+import { NOOP, buildProps, definePropType, mutable } from '@seed/element-plus-utils'
 import { ajaxUpload } from './ajax'
-import type { Awaitable, Mutable } from '@element-plus/utils'
+import type { Awaitable, Mutable } from '@seed/element-plus-utils'
 
 import type { UploadAjaxError } from './ajax'
 import type { ExtractPropTypes } from 'vue'

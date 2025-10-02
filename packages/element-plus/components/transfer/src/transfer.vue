@@ -61,11 +61,11 @@
 
 <script lang="ts" setup>
   import { Comment, computed, h, reactive, ref, useSlots, watch } from 'vue'
-  import { debugWarn, isEmpty, isUndefined } from '@element-plus/utils'
-  import { useLocale, useNamespace } from '@element-plus/hooks'
-  import { ElButton } from '@element-plus/components/button'
-  import { ElIcon } from '@element-plus/components/icon'
-  import { useFormItem } from '@element-plus/components/form'
+  import { debugWarn, isEmpty, isUndefined } from '@seed/element-plus-utils'
+  import { useLocale, useNamespace } from '@seed/element-plus-hooks'
+  import { ElButton } from '@seed/element-plus-components/button'
+  import { ElIcon } from '@seed/element-plus-components/icon'
+  import { useFormItem } from '@seed/element-plus-components/form'
   import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
   import { transferEmits, transferProps } from './transfer'
   import { useCheckedChange, useComputedData, useMove, usePropsAlias } from './composables'

@@ -1,17 +1,23 @@
 import { placements } from '@popperjs/core'
-import { useAriaProps, useEmptyValuesProps, useSizeProp } from '@element-plus/hooks'
-import { buildProps, definePropType, iconPropType, isBoolean, isNumber } from '@element-plus/utils'
-import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { useTooltipContentProps } from '@element-plus/components/tooltip'
+import { useAriaProps, useEmptyValuesProps, useSizeProp } from '@seed/element-plus-hooks'
+import {
+  buildProps,
+  definePropType,
+  iconPropType,
+  isBoolean,
+  isNumber,
+} from '@seed/element-plus-utils'
+import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
+import { useTooltipContentProps } from '@seed/element-plus-components/tooltip'
 import { CircleClose } from '@element-plus/icons-vue'
 import { tagProps } from '../../tag'
 import { defaultProps } from './useProps'
 
 import type { Option, OptionType } from './select.types'
 import type { Props } from './useProps'
-import type { EmitFn } from '@element-plus/utils/vue/typescript'
+import type { EmitFn } from '@seed/element-plus-utils/vue/typescript'
 import type { ExtractPropTypes } from 'vue'
-import type { Options, Placement, PopperEffect } from '@element-plus/components/popper'
+import type { Options, Placement, PopperEffect } from '@seed/element-plus-components/popper'
 
 export const SelectProps = buildProps({
   /**

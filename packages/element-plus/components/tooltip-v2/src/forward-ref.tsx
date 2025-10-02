@@ -1,5 +1,5 @@
 import { Fragment, defineComponent, ref } from 'vue'
-import { buildProps, composeRefs, definePropType, ensureOnlyChild } from '@element-plus/utils'
+import { buildProps, composeRefs, definePropType, ensureOnlyChild } from '@seed/element-plus-utils'
 
 import type { ExtractPropTypes, VNodeArrayChildren } from 'vue'
 

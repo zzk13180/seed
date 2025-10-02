@@ -39,8 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-  import ElCollapseTransition from '@element-plus/components/collapse-transition'
-  import ElIcon from '@element-plus/components/icon'
+  import ElCollapseTransition from '@seed/element-plus-components/collapse-transition'
+  import ElIcon from '@seed/element-plus-components/icon'
   import { collapseItemProps } from './collapse-item'
   import { useCollapseItem, useCollapseItemDOM } from './use-collapse-item'
 

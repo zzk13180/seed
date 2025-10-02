@@ -95,12 +95,12 @@
   import { computed, effectScope, markRaw, nextTick, onMounted, ref, shallowRef, watch } from 'vue'
   import { useEventListener } from '@vueuse/core'
   import { throttle } from 'lodash-unified'
-  import { useLocale, useNamespace, useZIndex } from '@element-plus/hooks'
-  import { EVENT_CODE } from '@element-plus/constants'
-  import { keysOf } from '@element-plus/utils'
-  import ElFocusTrap from '@element-plus/components/focus-trap'
-  import ElTeleport from '@element-plus/components/teleport'
-  import ElIcon from '@element-plus/components/icon'
+  import { useLocale, useNamespace, useZIndex } from '@seed/element-plus-hooks'
+  import { EVENT_CODE } from '@seed/element-plus-constants'
+  import { keysOf } from '@seed/element-plus-utils'
+  import ElFocusTrap from '@seed/element-plus-components/focus-trap'
+  import ElTeleport from '@seed/element-plus-components/teleport'
+  import ElIcon from '@seed/element-plus-components/icon'
   import {
     ArrowLeft,
     ArrowRight,

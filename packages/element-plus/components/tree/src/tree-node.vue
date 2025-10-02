@@ -81,12 +81,12 @@
 <script lang="ts">
   // @ts-nocheck
   import { defineComponent, getCurrentInstance, inject, nextTick, provide, ref, watch } from 'vue'
-  import { debugWarn, isFunction, isString } from '@element-plus/utils'
-  import ElCollapseTransition from '@element-plus/components/collapse-transition'
-  import ElCheckbox from '@element-plus/components/checkbox'
-  import { ElIcon } from '@element-plus/components/icon'
+  import { debugWarn, isFunction, isString } from '@seed/element-plus-utils'
+  import ElCollapseTransition from '@seed/element-plus-components/collapse-transition'
+  import ElCheckbox from '@seed/element-plus-components/checkbox'
+  import { ElIcon } from '@seed/element-plus-components/icon'
   import { CaretRight, Loading } from '@element-plus/icons-vue'
-  import { useNamespace } from '@element-plus/hooks'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import NodeContent from './tree-node-content.vue'
   import { getNodeKey as getNodeKeyUtil, handleCurrentChange } from './model/util'
   import { useNodeExpandEventBroadcast } from './model/useNodeExpandEventBroadcast'
@@ -94,9 +94,9 @@
   import Node from './model/node'
 
   import type { ComponentInternalInstance, PropType } from 'vue'
-  import type { Nullable } from '@element-plus/utils'
+  import type { Nullable } from '@seed/element-plus-utils'
   import type { RootTreeType, TreeNodeData, TreeOptionProps } from './tree.type'
-  import type { CheckboxValueType } from '@element-plus/components/checkbox'
+  import type { CheckboxValueType } from '@seed/element-plus-components/checkbox'
 
   export default defineComponent({
     name: 'ElTreeNode',

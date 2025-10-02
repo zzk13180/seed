@@ -15,8 +15,8 @@ import {
   isPlainObject,
   isUndefined,
   scrollIntoView,
-} from '@element-plus/utils'
-import { CHANGE_EVENT, EVENT_CODE, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+} from '@seed/element-plus-utils'
+import { CHANGE_EVENT, EVENT_CODE, UPDATE_MODEL_EVENT } from '@seed/element-plus-constants'
 import {
   useComposition,
   useEmptyValues,
@@ -24,10 +24,10 @@ import {
   useId,
   useLocale,
   useNamespace,
-} from '@element-plus/hooks'
-import { useFormItem, useFormItemInputId, useFormSize } from '@element-plus/components/form'
+} from '@seed/element-plus-hooks'
+import { useFormItem, useFormItemInputId, useFormSize } from '@seed/element-plus-components/form'
 
-import type ElTooltip from '@element-plus/components/tooltip'
+import type ElTooltip from '@seed/element-plus-components/tooltip'
 import type { ISelectProps, SelectOptionProxy } from './token'
 
 type useSelectType = (

@@ -22,8 +22,8 @@
     toRefs,
   } from 'vue'
   import { useMutationObserver } from '@vueuse/core'
-  import { ensureArray } from '@element-plus/utils'
-  import { useNamespace } from '@element-plus/hooks'
+  import { ensureArray } from '@seed/element-plus-utils'
+  import { useNamespace } from '@seed/element-plus-hooks'
   import { selectGroupKey } from './token'
 
   export default defineComponent({
