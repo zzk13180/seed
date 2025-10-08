@@ -74,7 +74,7 @@ export class PageRequestDto {
   }
 
   /**
-   * 构建 TypeORM 排序对象
+   * 构建排序对象
    * @param allowedFields 允许排序的字段列表
    * @param defaultField 默认排序字段
    */

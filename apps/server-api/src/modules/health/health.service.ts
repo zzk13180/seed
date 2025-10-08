@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Inject } from '@nestjs/common'
 import {
   HealthCheckService,
-  TypeOrmHealthIndicator,
   MemoryHealthIndicator,
   DiskHealthIndicator,
+  HealthIndicatorResult,
 } from '@nestjs/terminus'
+import { sql } from 'drizzle-orm'
+import { DRIZZLE_DB } from '../../common/database/drizzle.constants'
+import type { DrizzleDB } from '../../common/database/drizzle'
 
 /**
  * 健康检查服务
@@ -14,7 +17,8 @@ import {
 export class HealthService {
   constructor(
     private readonly health: HealthCheckService,
-    private readonly db: TypeOrmHealthIndicator,
+    @Inject(DRIZZLE_DB)
+    private readonly db: DrizzleDB,
     private readonly memory: MemoryHealthIndicator,
     private readonly disk: DiskHealthIndicator,
   ) {}
@@ -32,8 +36,8 @@ export class HealthService {
    */
   async check() {
     return this.health.check([
-      // 数据库连接检查
-      () => this.db.pingCheck('database'),
+      // 数据库连接检查（使用 Drizzle 执行简单查询）
+      () => this.checkDatabase(),
       // 堆内存检查 (阈值: 150MB)
       () => this.memory.checkHeap('memory_heap', 150 * 1024 * 1024),
       // RSS 内存检查 (阈值: 300MB)
@@ -45,5 +49,17 @@ export class HealthService {
           path: '/',
         }),
     ])
+  }
+
+  /**
+   * 数据库健康检查
+   */
+  private async checkDatabase(): Promise<HealthIndicatorResult> {
+    try {
+      await this.db.execute(sql`SELECT 1`)
+      return { database: { status: 'up' } }
+    } catch {
+      return { database: { status: 'down' } }
+    }
   }
 }

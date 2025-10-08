@@ -1,18 +1,19 @@
-import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, Brackets } from 'typeorm'
+import { Injectable, Inject } from '@nestjs/common'
+import { eq, and, or, like, inArray, desc, asc, sql } from 'drizzle-orm'
 import * as bcrypt from 'bcrypt'
 import { PageResultDto } from '../../common/dto/page-result.dto'
 import { UserStatus } from '../../common/enums/user.enum'
 import { UserException } from '../../common/exceptions/business.exception'
 import { AuditSubscriber } from '../../common/subscribers/audit.subscriber'
 import { escapeLikeString } from '../../common/utils/sql.utils'
-import { User } from './entities/user.entity'
+import { DRIZZLE_DB } from '../../common/database/drizzle.constants'
+import { users, type User } from '../../common/database/schema'
 import { UserCreateDto } from './dto/user-create.dto'
 import { UserUpdateDto } from './dto/user-update.dto'
 import { UserQueryDto } from './dto/user-query.dto'
 import { UserVo } from './vo/user.vo'
 import { UserMapper } from './user.mapper'
+import type { DrizzleDB } from '../../common/database/drizzle'
 
 /**
  * 用户服务
@@ -20,8 +21,8 @@ import { UserMapper } from './user.mapper'
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @Inject(DRIZZLE_DB)
+    private readonly db: DrizzleDB,
     private readonly userMapper: UserMapper,
   ) {}
 
@@ -29,57 +30,72 @@ export class UserService {
    * 分页查询用户
    */
   async page(query: UserQueryDto): Promise<PageResultDto<UserVo>> {
-    const qb = this.userRepository
-      .createQueryBuilder('user')
-      .where('user.deleted = :deleted', { deleted: false })
+    const conditions = [eq(users.deleted, 0)]
 
     // 关键字搜索（用户名、昵称、邮箱 OR 条件）
     if (query.keyword) {
       const keyword = `%${escapeLikeString(query.keyword)}%`
-      qb.andWhere(
-        new Brackets(sub => {
-          sub
-            .where('user.username LIKE :keyword', { keyword })
-            .orWhere('user.nickname LIKE :keyword', { keyword })
-            .orWhere('user.email LIKE :keyword', { keyword })
-        }),
+      conditions.push(
+        or(
+          like(users.username, keyword),
+          like(users.nickname, keyword),
+          like(users.email, keyword),
+        )!,
       )
     }
 
-    // 精确字段过滤（与关键字搜索独立，用于进一步筛选）
+    // 精确字段过滤
     if (query.username) {
-      qb.andWhere('user.username LIKE :username', {
-        username: `%${escapeLikeString(query.username)}%`,
-      })
+      conditions.push(like(users.username, `%${escapeLikeString(query.username)}%`))
     }
     if (query.nickname) {
-      qb.andWhere('user.nickname LIKE :nickname', {
-        nickname: `%${escapeLikeString(query.nickname)}%`,
-      })
+      conditions.push(like(users.nickname, `%${escapeLikeString(query.nickname)}%`))
     }
     if (query.email) {
-      qb.andWhere('user.email LIKE :email', {
-        email: `%${escapeLikeString(query.email)}%`,
-      })
+      conditions.push(like(users.email, `%${escapeLikeString(query.email)}%`))
     }
     if (query.phone) {
-      qb.andWhere('user.phone LIKE :phone', {
-        phone: `%${escapeLikeString(query.phone)}%`,
-      })
+      conditions.push(like(users.phone, `%${escapeLikeString(query.phone)}%`))
     }
     if (query.status !== undefined) {
-      qb.andWhere('user.status = :status', { status: query.status })
+      conditions.push(eq(users.status, query.status))
     }
 
-    // 排序和分页
+    // 排序
     const orderClause = query.getUserOrderClause()
+    const orderByList: ReturnType<typeof asc>[] = []
+    const columnMap: Record<
+      string,
+      typeof users.id | typeof users.createdAt | typeof users.updatedAt | typeof users.username
+    > = {
+      id: users.id,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+      username: users.username,
+    }
     for (const [field, direction] of Object.entries(orderClause)) {
-      qb.addOrderBy(`user.${field}`, direction)
+      const column = columnMap[field]
+      if (column) {
+        orderByList.push(direction === 'ASC' ? asc(column) : desc(column))
+      }
     }
 
-    qb.skip(query.getSkip()).take(query.getTake())
+    // 查询数据
+    const list = await this.db
+      .select()
+      .from(users)
+      .where(and(...conditions))
+      .orderBy(...orderByList)
+      .offset(query.getSkip())
+      .limit(query.getTake())
 
-    const [list, total] = await qb.getManyAndCount()
+    // 查询总数
+    const countResult = await this.db
+      .select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(and(...conditions))
+
+    const total = Number(countResult[0]?.count ?? 0)
 
     const voList = this.userMapper.toVOList(list)
     return PageResultDto.create(voList, total, query.page, query.pageSize)
@@ -89,11 +105,13 @@ export class UserService {
    * 查询所有用户
    */
   async findAll(): Promise<UserVo[]> {
-    const users = await this.userRepository.find({
-      where: { deleted: false },
-      order: { createdAt: 'DESC' },
-    })
-    return this.userMapper.toVOList(users)
+    const list = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.deleted, 0))
+      .orderBy(desc(users.createdAt))
+
+    return this.userMapper.toVOList(list)
   }
 
   /**
@@ -108,9 +126,13 @@ export class UserService {
    * 根据用户名查询用户
    */
   async findByUsername(username: string): Promise<User | null> {
-    return this.userRepository.findOne({
-      where: { username, deleted: false },
-    })
+    const result = await this.db
+      .select()
+      .from(users)
+      .where(and(eq(users.username, username), eq(users.deleted, 0)))
+      .limit(1)
+
+    return result[0] ?? null
   }
 
   /**
@@ -125,10 +147,13 @@ export class UserService {
 
     // 检查邮箱是否已存在
     if (dto.email) {
-      const existingEmail = await this.userRepository.findOne({
-        where: { email: dto.email, deleted: false },
-      })
-      if (existingEmail) {
+      const existingEmail = await this.db
+        .select()
+        .from(users)
+        .where(and(eq(users.email, dto.email), eq(users.deleted, 0)))
+        .limit(1)
+
+      if (existingEmail[0]) {
         throw UserException.emailExists(dto.email)
       }
     }
@@ -136,13 +161,23 @@ export class UserService {
     // 密码加密
     const hashedPassword = await bcrypt.hash(dto.password, 10)
 
-    const user = this.userRepository.create({
-      ...dto,
+    // 获取当前用户 ID 用于审计
+    const currentUserId = AuditSubscriber.getCurrentUserId() ?? undefined
+
+    const result = await this.db.insert(users).values({
+      username: dto.username,
       password: hashedPassword,
+      nickname: dto.nickname,
+      email: dto.email,
+      phone: dto.phone,
+      avatar: dto.avatar,
       status: UserStatus.ENABLED,
+      createdBy: currentUserId,
+      updatedBy: currentUserId,
     })
 
-    const savedUser = await this.userRepository.save(user)
+    const insertId = Number(result[0].insertId)
+    const savedUser = await this.findUserEntityById(insertId)
     return this.userMapper.toVO(savedUser)!
   }
 
@@ -154,16 +189,33 @@ export class UserService {
 
     // 检查邮箱是否已被其他用户使用
     if (dto.email && dto.email !== user.email) {
-      const existingEmail = await this.userRepository.findOne({
-        where: { email: dto.email, deleted: false },
-      })
-      if (existingEmail && existingEmail.id !== id) {
+      const existingEmail = await this.db
+        .select()
+        .from(users)
+        .where(and(eq(users.email, dto.email), eq(users.deleted, 0)))
+        .limit(1)
+
+      if (existingEmail[0] && existingEmail[0].id !== id) {
         throw UserException.emailExists(dto.email)
       }
     }
 
-    this.userMapper.updateEntity(user, dto)
-    const savedUser = await this.userRepository.save(user)
+    // 获取当前用户 ID 用于审计
+    const currentUserId = AuditSubscriber.getCurrentUserId() ?? undefined
+
+    // 构建更新对象
+    const updateData: Partial<User> = {
+      updatedBy: currentUserId,
+    }
+
+    if (dto.nickname !== undefined) updateData.nickname = dto.nickname
+    if (dto.email !== undefined) updateData.email = dto.email
+    if (dto.phone !== undefined) updateData.phone = dto.phone
+    if (dto.avatar !== undefined) updateData.avatar = dto.avatar
+
+    await this.db.update(users).set(updateData).where(eq(users.id, id))
+
+    const savedUser = await this.findUserEntityById(id)
     return this.userMapper.toVO(savedUser)!
   }
 
@@ -171,9 +223,13 @@ export class UserService {
    * 删除用户（软删除）
    */
   async delete(id: number): Promise<void> {
-    const user = await this.findUserEntityById(id)
-    user.deleted = true
-    await this.userRepository.save(user)
+    await this.findUserEntityById(id) // 确保用户存在
+
+    const currentUserId = AuditSubscriber.getCurrentUserId() ?? undefined
+    await this.db
+      .update(users)
+      .set({ deleted: 1, updatedBy: currentUserId })
+      .where(eq(users.id, id))
   }
 
   /**
@@ -183,34 +239,37 @@ export class UserService {
     if (!ids || ids.length === 0) {
       return
     }
-    // 使用 QueryBuilder 避免类型问题，并手动设置 updatedBy
-    // 因为 TypeORM subscriber 的 beforeUpdate 不会在批量更新时触发
-    const userId = AuditSubscriber.getCurrentUserId()
-    await this.userRepository
-      .createQueryBuilder()
-      .update(User)
-      .set({ deleted: true, updatedBy: userId ?? undefined })
-      .whereInIds(ids)
-      .execute()
+
+    const currentUserId = AuditSubscriber.getCurrentUserId() ?? undefined
+    await this.db
+      .update(users)
+      .set({ deleted: 1, updatedBy: currentUserId })
+      .where(inArray(users.id, ids))
   }
 
   /**
    * 更新用户状态
    */
   async updateStatus(id: number, status: UserStatus): Promise<void> {
-    const user = await this.findUserEntityById(id)
-    user.status = status
-    await this.userRepository.save(user)
+    await this.findUserEntityById(id) // 确保用户存在
+
+    const currentUserId = AuditSubscriber.getCurrentUserId() ?? undefined
+    await this.db.update(users).set({ status, updatedBy: currentUserId }).where(eq(users.id, id))
   }
 
   /**
    * 重置密码
    */
   async resetPassword(id: number, newPassword: string): Promise<void> {
-    const user = await this.findUserEntityById(id)
-    // 密码长度验证已在 ResetPasswordDto 中完成
-    user.password = await bcrypt.hash(newPassword, 10)
-    await this.userRepository.save(user)
+    await this.findUserEntityById(id) // 确保用户存在
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+    const currentUserId = AuditSubscriber.getCurrentUserId() ?? undefined
+
+    await this.db
+      .update(users)
+      .set({ password: hashedPassword, updatedBy: currentUserId })
+      .where(eq(users.id, id))
   }
 
   /**
@@ -232,9 +291,13 @@ export class UserService {
    * 内部方法：根据 ID 查询用户实体
    */
   private async findUserEntityById(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: { id, deleted: false },
-    })
+    const result = await this.db
+      .select()
+      .from(users)
+      .where(and(eq(users.id, id), eq(users.deleted, 0)))
+      .limit(1)
+
+    const user = result[0]
     if (!user) {
       throw UserException.notFound(id)
     }

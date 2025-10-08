@@ -23,6 +23,7 @@ export class AuthService {
   private readonly LOCKOUT_DURATION = 15 * 60 // 15 分钟（秒）
   private readonly LOCKOUT_MINUTES = 15
 
+  // eslint-disable-next-line max-params
   constructor(
     private readonly userService: UserService,
     private readonly userMapper: UserMapper,
@@ -49,7 +50,7 @@ export class AuthService {
     }
 
     // 检查用户状态
-    if (user.status === UserStatus.DISABLED) {
+    if (user.status === (UserStatus.DISABLED as number)) {
       throw BizUnauthorizedException.accountDisabled()
     }
 

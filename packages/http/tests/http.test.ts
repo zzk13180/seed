@@ -137,20 +137,24 @@ describe('HttpClient', () => {
   })
 
   it('throws parsed JSON on error response', async () => {
+    const err = {
+      code: 400,
+      message: 'bad',
+    }
     const mockFetch = vi.fn(async () => {
       return {
         ok: false,
         status: 400,
         headers: new Headers({ 'content-type': 'application/json' }),
-        json: async () => ({ code: 400, message: 'bad' }),
+        json: async () => err,
         text: async () => 'bad',
       } as any
     })
     globalThis.fetch = mockFetch
 
-    await expect(client.get('/err')).rejects.toEqual({
-      code: 400,
-      message: 'bad',
+    await expect(client.get('/err')).rejects.toMatchObject({
+      status: 400,
+      data: err,
     })
   })
 
@@ -166,7 +170,10 @@ describe('HttpClient', () => {
     })
     globalThis.fetch = mockFetch
 
-    await expect(client.get('/err-text')).rejects.toEqual('server error')
+    await expect(client.get('/err-text')).rejects.toMatchObject({
+      status: 500,
+      data: 'server error',
+    })
   })
 
   it('returns undefined for 204 No Content', async () => {

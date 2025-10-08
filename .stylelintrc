@@ -52,20 +52,20 @@ rules:
   at-rule-no-unknown:
     - true # 禁止使用未知的 at 规则
     - ignoreAtRules:
-      - import
-      - tailwind
-      - apply
-      - variants
-      - responsive
-      - screen
-      - function
-      - if
-      - else
-      - warn
-      - each
-      - include
-      - mixin
-      - use
+        - import
+        - tailwind
+        - apply
+        - variants
+        - responsive
+        - screen
+        - function
+        - if
+        - else
+        - warn
+        - each
+        - include
+        - mixin
+        - use
 
   # 指定 scss @import 导入样式文件时使用字符串（"string"）或 URL（"url"）表示法
   import-notation: string

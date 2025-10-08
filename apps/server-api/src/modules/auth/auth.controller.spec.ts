@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
 import { Test } from '@nestjs/testing'
 import { ResponseDto } from '../../common/dto/response.dto'
 import { AuthController } from './auth.controller'
@@ -6,7 +7,7 @@ import type { TestingModule } from '@nestjs/testing'
 
 describe('AuthController', () => {
   let controller: AuthController
-  let service: jest.Mocked<AuthService>
+  let service: Mocked<AuthService>
 
   const mockLoginResponse = {
     accessToken: 'mock-access-token',
@@ -21,10 +22,10 @@ describe('AuthController', () => {
   }
 
   const mockAuthService = {
-    login: jest.fn(),
-    refreshToken: jest.fn(),
-    logout: jest.fn(),
-    getCurrentUser: jest.fn(),
+    login: vi.fn(),
+    refreshToken: vi.fn(),
+    logout: vi.fn(),
+    getCurrentUser: vi.fn(),
   }
 
   beforeEach(async () => {
@@ -41,7 +42,7 @@ describe('AuthController', () => {
     controller = module.get<AuthController>(AuthController)
     service = module.get(AuthService)
 
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should be defined', () => {
@@ -55,9 +56,7 @@ describe('AuthController', () => {
 
       const result = await controller.login(loginDto)
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
-      expect(result.data).toEqual(mockLoginResponse)
+      expect(result).toEqual(mockLoginResponse)
       expect(mockAuthService.login).toHaveBeenCalledWith(loginDto)
     })
   })
@@ -68,9 +67,7 @@ describe('AuthController', () => {
 
       const result = await controller.refresh('refresh-token')
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
-      expect(result.data).toEqual(mockLoginResponse)
+      expect(result).toEqual(mockLoginResponse)
       expect(mockAuthService.refreshToken).toHaveBeenCalledWith('refresh-token')
     })
   })
@@ -93,8 +90,7 @@ describe('AuthController', () => {
 
       const result = await controller.me(currentUser)
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
+      expect(result).toEqual(mockLoginResponse)
       expect(mockAuthService.getCurrentUser).toHaveBeenCalledWith(currentUser)
     })
   })

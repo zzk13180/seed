@@ -10,7 +10,8 @@
     "build:prod": "vite build --mode production",
     "preview": "vite preview",
     "prettier": "prettier --write .",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "type-check": "vue-tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@ionic/core": "^8.7.9",

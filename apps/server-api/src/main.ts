@@ -35,7 +35,8 @@ async function bootstrap() {
     fastifyInstance.addHook('onRequest', traceIdHook)
 
     // 注册 Helmet 安全中间件（设置安全 HTTP 头）
-    await app.register(helmet, {
+    // 使用 as any 解决 Fastify 版本类型不兼容问题
+    await app.register(helmet as any, {
       // 生产环境启用严格 CSP，开发环境放宽以支持 Swagger UI
       contentSecurityPolicy: isDev
         ? false

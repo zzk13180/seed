@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { Test } from '@nestjs/testing'
 import { HealthController } from './health.controller'
 import { HealthService } from './health.service'
@@ -7,11 +8,11 @@ describe('HealthController', () => {
   let controller: HealthController
 
   const mockHealthService = {
-    ping: jest.fn().mockReturnValue({
+    ping: vi.fn().mockReturnValue({
       status: 'ok',
       timestamp: expect.any(String),
     }),
-    check: jest.fn().mockResolvedValue({
+    check: vi.fn().mockResolvedValue({
       status: 'ok',
       details: {
         database: { status: 'up' },

@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
 import { Test } from '@nestjs/testing'
 import { UserStatus } from '../../common/enums/user.enum'
 import { ResponseDto } from '../../common/dto/response.dto'
@@ -8,7 +9,7 @@ import type { TestingModule } from '@nestjs/testing'
 
 describe('UserController', () => {
   let controller: UserController
-  let service: jest.Mocked<UserService>
+  let service: Mocked<UserService>
 
   const mockUser = {
     id: 1,
@@ -23,15 +24,15 @@ describe('UserController', () => {
   }
 
   const mockUserService = {
-    page: jest.fn(),
-    findAll: jest.fn(),
-    findById: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    deleteBatch: jest.fn(),
-    updateStatus: jest.fn(),
-    resetPassword: jest.fn(),
+    page: vi.fn(),
+    findAll: vi.fn(),
+    findById: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    deleteBatch: vi.fn(),
+    updateStatus: vi.fn(),
+    resetPassword: vi.fn(),
   }
 
   beforeEach(async () => {
@@ -48,7 +49,7 @@ describe('UserController', () => {
     controller = module.get<UserController>(UserController)
     service = module.get(UserService)
 
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should be defined', () => {
@@ -62,9 +63,7 @@ describe('UserController', () => {
 
       const result = await controller.page({ page: 1, pageSize: 10 } as any)
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
-      expect(result.data).toEqual(pageResult)
+      expect(result).toEqual(pageResult)
     })
   })
 
@@ -74,9 +73,7 @@ describe('UserController', () => {
 
       const result = await controller.list()
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
-      expect(result.data).toEqual([mockUser])
+      expect(result).toEqual([mockUser])
     })
   })
 
@@ -86,9 +83,7 @@ describe('UserController', () => {
 
       const result = await controller.getById(1)
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
-      expect(result.data).toEqual(mockUser)
+      expect(result).toEqual(mockUser)
     })
   })
 
@@ -103,8 +98,7 @@ describe('UserController', () => {
 
       const result = await controller.create(createDto)
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
+      expect(result).toEqual({ ...mockUser, ...createDto })
       expect(mockUserService.create).toHaveBeenCalledWith(createDto)
     })
   })
@@ -116,8 +110,7 @@ describe('UserController', () => {
 
       const result = await controller.update(1, updateDto)
 
-      expect(result).toBeInstanceOf(ResponseDto)
-      expect(result.code).toBe(200)
+      expect(result).toEqual({ ...mockUser, ...updateDto })
       expect(mockUserService.update).toHaveBeenCalledWith(1, updateDto)
     })
   })
@@ -136,7 +129,7 @@ describe('UserController', () => {
     it('should delete multiple users', async () => {
       mockUserService.deleteBatch.mockResolvedValue(undefined)
 
-      await controller.deleteBatch([1, 2, 3])
+      await controller.deleteBatch({ ids: [1, 2, 3] } as any)
 
       expect(mockUserService.deleteBatch).toHaveBeenCalledWith([1, 2, 3])
     })
@@ -146,7 +139,7 @@ describe('UserController', () => {
     it('should update user status', async () => {
       mockUserService.updateStatus.mockResolvedValue(undefined)
 
-      await controller.updateStatus(1, UserStatus.DISABLED)
+      await controller.updateStatus(1, { status: UserStatus.DISABLED } as any)
 
       expect(mockUserService.updateStatus).toHaveBeenCalledWith(1, UserStatus.DISABLED)
     })
@@ -156,7 +149,7 @@ describe('UserController', () => {
     it('should reset user password', async () => {
       mockUserService.resetPassword.mockResolvedValue(undefined)
 
-      await controller.resetPassword(1, 'newpassword123')
+      await controller.resetPassword(1, { password: 'newpassword123' } as any)
 
       expect(mockUserService.resetPassword).toHaveBeenCalledWith(1, 'newpassword123')
     })

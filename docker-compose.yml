@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   admin:
     build:
@@ -25,39 +23,36 @@ services:
     ports:
       - '3003:3003'
     depends_on:
-      - mysql
+      - postgres
       - redis
     environment:
       - NODE_ENV=production
       - PORT=3003
       - JWT_SECRET=${JWT_SECRET}
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USERNAME=root
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=seed
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
-  # MySQL 数据库
-  mysql:
-    image: mysql:8.0
-    container_name: seed-mysql
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:16-alpine
+    container_name: seed-postgres
     restart: unless-stopped
     ports:
-      - '3306:3306'
+      - '5432:5432'
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=seed
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=seed
       - TZ=Asia/Shanghai
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d
-    command:
-      - --default-authentication-plugin=mysql_native_password
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
 
   # Redis 缓存
   redis:
@@ -71,5 +66,7 @@ services:
       - redis_data:/data
 
 volumes:
-  mysql_data:
+  postgres_data:
   redis_data:
+# cp .env.example .env
+# docker compose up -d postgres redis

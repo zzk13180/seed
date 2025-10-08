@@ -1,30 +1,39 @@
-# TypeORM Migrations
+# Drizzle Migrations
 
 此目录存放数据库迁移文件。
 
 ## 使用方法
 
 ### 生成迁移
-当你修改了 Entity 后，运行以下命令生成迁移文件：
+
+当你修改了 Schema 后，运行以下命令生成迁移文件：
+
 ```bash
-pnpm migration:generate -- -n YourMigrationName
+pnpm db:generate
 ```
 
 ### 运行迁移
+
 将待执行的迁移应用到数据库：
+
 ```bash
-pnpm migration:run
+pnpm db:migrate
 ```
 
-### 回滚迁移
-回滚最近一次迁移：
+### 推送 Schema（开发用）
+
+直接将 Schema 推送到数据库，不生成迁移文件（仅用于开发）：
+
 ```bash
-pnpm migration:revert
+pnpm db:push
 ```
 
-### 查看迁移状态
+### 查看数据库 Studio
+
+启动 Drizzle Studio 可视化管理数据库：
+
 ```bash
-pnpm migration:show
+pnpm db:studio
 ```
 
 ## 注意事项

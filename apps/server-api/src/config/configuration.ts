@@ -27,12 +27,12 @@ export default () => {
       refreshTokenExpiry: process.env.JWT_REFRESH_TOKEN_EXPIRY || '7d',
     },
 
-    // 数据库配置
+    // 数据库配置 (PostgreSQL)
     database: {
-      type: 'mysql',
+      type: 'postgresql',
       host: process.env.DB_HOST || 'localhost',
-      port: Number.parseInt(process.env.DB_PORT || '3306', 10),
-      username: process.env.DB_USERNAME || 'root',
+      port: Number.parseInt(process.env.DB_PORT || '5432', 10),
+      username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_DATABASE || 'seed',
       synchronize: isProd ? false : dbSync, // 生产环境强制禁用

@@ -1,10 +1,7 @@
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { Test } from '@nestjs/testing'
-import {
-  HealthCheckService,
-  TypeOrmHealthIndicator,
-  MemoryHealthIndicator,
-  DiskHealthIndicator,
-} from '@nestjs/terminus'
+import { HealthCheckService, MemoryHealthIndicator, DiskHealthIndicator } from '@nestjs/terminus'
+import { DRIZZLE_DB } from '../../common/database/drizzle.constants'
 import { HealthService } from './health.service'
 import type { TestingModule } from '@nestjs/testing'
 
@@ -13,7 +10,7 @@ describe('HealthService', () => {
   let healthCheckService: HealthCheckService
 
   const mockHealthCheckService = {
-    check: jest.fn().mockResolvedValue({
+    check: vi.fn().mockResolvedValue({
       status: 'ok',
       details: {
         database: { status: 'up' },
@@ -24,17 +21,17 @@ describe('HealthService', () => {
     }),
   }
 
-  const mockTypeOrmHealthIndicator = {
-    pingCheck: jest.fn().mockResolvedValue({ database: { status: 'up' } }),
+  const mockDrizzleDB = {
+    execute: vi.fn().mockResolvedValue([{ '1': 1 }]),
   }
 
   const mockMemoryHealthIndicator = {
-    checkHeap: jest.fn().mockResolvedValue({ memory_heap: { status: 'up' } }),
-    checkRSS: jest.fn().mockResolvedValue({ memory_rss: { status: 'up' } }),
+    checkHeap: vi.fn().mockResolvedValue({ memory_heap: { status: 'up' } }),
+    checkRSS: vi.fn().mockResolvedValue({ memory_rss: { status: 'up' } }),
   }
 
   const mockDiskHealthIndicator = {
-    checkStorage: jest.fn().mockResolvedValue({ disk: { status: 'up' } }),
+    checkStorage: vi.fn().mockResolvedValue({ disk: { status: 'up' } }),
   }
 
   beforeEach(async () => {
@@ -42,7 +39,7 @@ describe('HealthService', () => {
       providers: [
         HealthService,
         { provide: HealthCheckService, useValue: mockHealthCheckService },
-        { provide: TypeOrmHealthIndicator, useValue: mockTypeOrmHealthIndicator },
+        { provide: DRIZZLE_DB, useValue: mockDrizzleDB },
         { provide: MemoryHealthIndicator, useValue: mockMemoryHealthIndicator },
         { provide: DiskHealthIndicator, useValue: mockDiskHealthIndicator },
       ],

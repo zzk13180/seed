@@ -1,14 +1,15 @@
+import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
 import { RolesGuard } from './roles.guard'
 import type { ExecutionContext } from '@nestjs/common'
 import type { Reflector } from '@nestjs/core'
 
 describe('RolesGuard', () => {
   let guard: RolesGuard
-  let reflector: jest.Mocked<Reflector>
+  let reflector: Mocked<Reflector>
 
   beforeEach(() => {
     reflector = {
-      getAllAndOverride: jest.fn(),
+      getAllAndOverride: vi.fn(),
     } as any
     guard = new RolesGuard(reflector)
   })
@@ -45,7 +46,7 @@ describe('RolesGuard', () => {
       reflector.getAllAndOverride.mockReturnValue(['ADMIN'])
       const context = createMockExecutionContext({ roles: ['USER'] })
 
-      expect(guard.canActivate(context)).toBe(false)
+      expect(() => guard.canActivate(context)).toThrow()
     })
 
     it('should return true when user has any of the required roles', () => {
@@ -59,7 +60,7 @@ describe('RolesGuard', () => {
       reflector.getAllAndOverride.mockReturnValue(['ADMIN'])
       const context = createMockExecutionContext({ roles: undefined })
 
-      expect(guard.canActivate(context)).toBe(false)
+      expect(() => guard.canActivate(context)).toThrow()
     })
   })
 })

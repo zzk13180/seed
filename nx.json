@@ -9,8 +9,7 @@
       "cache": true
     },
     "dev": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "test": {
       "inputs": ["default", "^production", "{workspaceRoot}/vitest.workspace.yaml"],
@@ -74,6 +73,5 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "plugins": [],
-  "nxCloudAccessToken": null
+  "plugins": []
 }

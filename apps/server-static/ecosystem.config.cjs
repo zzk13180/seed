@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'seed-static', // 应用名称，用于 pm2 管理和显示
-      script: 'pnpm',  // 启动脚本路径，pm2 会运行此文件
+      script: 'pnpm', // 启动脚本路径，pm2 会运行此文件
       instances: '1', // 实例数量，'max' 表示根据 CPU 核心数自动启动多个进程(max 要配合 cluster 模式使用)
       args: 'start',
       cwd: '.',

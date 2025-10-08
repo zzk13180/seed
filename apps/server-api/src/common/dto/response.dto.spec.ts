@@ -1,11 +1,13 @@
+import { describe, it, expect } from 'vitest'
+import { ResponseCode } from '../enums/response-code.enum'
 import { ResponseDto } from './response.dto'
 
 describe('ResponseDto', () => {
   describe('constructor', () => {
     it('should create a response with all properties', () => {
-      const response = new ResponseDto(200, 'Success', { id: 1 })
+      const response = new ResponseDto(ResponseCode.SUCCESS, 'Success', { id: 1 })
 
-      expect(response.code).toBe(200)
+      expect(response.code).toBe(ResponseCode.SUCCESS)
       expect(response.message).toBe('Success')
       expect(response.data).toEqual({ id: 1 })
       expect(response.timestamp).toBeDefined()
@@ -18,7 +20,7 @@ describe('ResponseDto', () => {
       const data = { id: 1, name: 'test' }
       const response = ResponseDto.ok(data)
 
-      expect(response.code).toBe(200)
+      expect(response.code).toBe(ResponseCode.SUCCESS)
       expect(response.message).toBe('Success')
       expect(response.data).toEqual(data)
     })
@@ -26,7 +28,7 @@ describe('ResponseDto', () => {
     it('should create a success response with custom message', () => {
       const response = ResponseDto.ok(null, 'Created successfully')
 
-      expect(response.code).toBe(200)
+      expect(response.code).toBe(ResponseCode.SUCCESS)
       expect(response.message).toBe('Created successfully')
       expect(response.data).toBeNull()
     })
@@ -34,7 +36,7 @@ describe('ResponseDto', () => {
     it('should create a success response without data', () => {
       const response = ResponseDto.ok()
 
-      expect(response.code).toBe(200)
+      expect(response.code).toBe(ResponseCode.SUCCESS)
       expect(response.data).toBeNull()
     })
   })
@@ -43,8 +45,8 @@ describe('ResponseDto', () => {
     it('should create an error response with default values', () => {
       const response = ResponseDto.error()
 
-      expect(response.code).toBe(500)
-      expect(response.message).toBe('Internal Server Error')
+      expect(response.code).toBe(ResponseCode.ERROR)
+      expect(response.message).toBe('操作失败')
       expect(response.data).toBeNull()
     })
 

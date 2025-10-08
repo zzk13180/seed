@@ -15,9 +15,7 @@ $the-breakpoints: (
     @media (max-width: $breakpoint) {
       @content;
     }
-  }
-
- @else {
+  } @else {
     @warn "断点 #{$size} 未定义，请检查 breakpoints 变量";
   }
 }

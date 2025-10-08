@@ -12,10 +12,10 @@ export const validationSchema = Joi.object({
   JWT_ACCESS_TOKEN_EXPIRY: Joi.string().default('1h'),
   JWT_REFRESH_TOKEN_EXPIRY: Joi.string().default('7d'),
 
-  // Database
+  // Database (PostgreSQL)
   DB_HOST: Joi.string().default('localhost'),
-  DB_PORT: Joi.number().default(3306),
-  DB_USERNAME: Joi.string().default('root'),
+  DB_PORT: Joi.number().default(5432),
+  DB_USERNAME: Joi.string().default('postgres'),
   DB_PASSWORD: Joi.string().required(),
   DB_DATABASE: Joi.string().default('seed'),
   DB_SYNC: Joi.boolean().default(false),

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { PageRequestDto } from './page-request.dto'
 
 describe('PageRequestDto', () => {

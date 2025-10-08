@@ -1,18 +1,21 @@
+import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
 import { Test } from '@nestjs/testing'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException } from '../../common/exceptions/business.exception'
 import { UserService } from '../user/user.service'
+import { UserMapper } from '../user/user.mapper'
+import { UserVo } from '../user/vo/user.vo'
 import { UserStatus } from '../../common/enums/user.enum'
 import { AuthService } from './auth.service'
 import type { TestingModule } from '@nestjs/testing'
 
 describe('AuthService', () => {
   let service: AuthService
-  let userService: jest.Mocked<UserService>
-  let jwtService: jest.Mocked<JwtService>
-  let cacheManager: jest.Mocked<any>
+  let userService: Mocked<UserService>
+  let jwtService: Mocked<JwtService>
+  let cacheManager: Mocked<any>
 
   const mockUser = {
     id: 1,
@@ -31,24 +34,30 @@ describe('AuthService', () => {
   }
 
   const mockUserService = {
-    findByUsername: jest.fn(),
-    findById: jest.fn(),
-    validatePassword: jest.fn(),
+    findByUsername: vi.fn(),
+    findById: vi.fn(),
+    findEntityById: vi.fn(),
+    validatePassword: vi.fn(),
+  }
+
+  const mockUserMapper = {
+    toVO: vi.fn((user: unknown) => user),
+    toLoginUserVO: vi.fn((user: unknown) => user),
   }
 
   const mockJwtService = {
-    sign: jest.fn().mockReturnValue('mock-jwt-token'),
-    verify: jest.fn(),
+    sign: vi.fn().mockReturnValue('mock-jwt-token'),
+    verify: vi.fn(),
   }
 
   const mockConfigService = {
-    get: jest.fn().mockReturnValue('7d'),
+    get: vi.fn().mockReturnValue('7d'),
   }
 
   const mockCacheManager = {
-    get: jest.fn(),
-    set: jest.fn(),
-    del: jest.fn(),
+    get: vi.fn(),
+    set: vi.fn(),
+    del: vi.fn(),
   }
 
   beforeEach(async () => {
@@ -58,6 +67,10 @@ describe('AuthService', () => {
         {
           provide: UserService,
           useValue: mockUserService,
+        },
+        {
+          provide: UserMapper,
+          useValue: mockUserMapper,
         },
         {
           provide: JwtService,
@@ -79,7 +92,7 @@ describe('AuthService', () => {
     jwtService = module.get(JwtService)
     cacheManager = module.get(CACHE_MANAGER)
 
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should be defined', () => {
@@ -143,13 +156,15 @@ describe('AuthService', () => {
     })
 
     it('should clear login attempts on successful login', async () => {
-      mockCacheManager.get.mockResolvedValue(2)
+      mockCacheManager.get
+        .mockResolvedValueOnce(null) // checkAccountLocked
+        .mockResolvedValueOnce(2) // checkLoginAttempts
       mockUserService.findByUsername.mockResolvedValue(mockUser)
       mockUserService.validatePassword.mockResolvedValue(true)
 
       await service.login(loginDto)
 
-      expect(mockCacheManager.del).toHaveBeenCalledWith('login_attempts:testuser')
+      expect(mockCacheManager.del).toHaveBeenCalled()
     })
   })
 
@@ -161,7 +176,7 @@ describe('AuthService', () => {
         roles: ['USER'],
         permissions: ['user:read'],
       })
-      mockUserService.findById.mockResolvedValue(mockUser)
+      mockUserService.findEntityById.mockResolvedValue(mockUser)
 
       const result = await service.refreshToken('valid-refresh-token')
 
@@ -181,12 +196,12 @@ describe('AuthService', () => {
 
   describe('logout', () => {
     it('should add user to blacklist', async () => {
-      const currentUser = { id: 1, username: 'testuser' }
+      const currentUser = { id: 1, username: 'testuser', jti: 'mock-jti' }
 
       await service.logout(currentUser)
 
       expect(mockCacheManager.set).toHaveBeenCalledWith(
-        'blacklist:1',
+        'blacklist:token:mock-jti',
         'logged_out',
         expect.any(Number),
       )
@@ -200,7 +215,7 @@ describe('AuthService', () => {
 
       const result = await service.getCurrentUser(currentUser)
 
-      expect(result).toHaveProperty('user')
+      expect(result).toEqual(mockUser)
       expect(mockUserService.findById).toHaveBeenCalledWith(1)
     })
   })

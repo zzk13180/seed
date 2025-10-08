@@ -8,6 +8,7 @@ interface RobotInfo {
 
 interface GetRobotInfoParams {
   robotId?: number
+  [key: string]: unknown
 }
 
 export const apiGetRobotInfo = (params?: GetRobotInfoParams): Promise<RobotInfo> => {

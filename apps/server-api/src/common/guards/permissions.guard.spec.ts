@@ -1,14 +1,15 @@
+import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
 import { PermissionsGuard } from './permissions.guard'
 import type { ExecutionContext } from '@nestjs/common'
 import type { Reflector } from '@nestjs/core'
 
 describe('PermissionsGuard', () => {
   let guard: PermissionsGuard
-  let reflector: jest.Mocked<Reflector>
+  let reflector: Mocked<Reflector>
 
   beforeEach(() => {
     reflector = {
-      getAllAndOverride: jest.fn(),
+      getAllAndOverride: vi.fn(),
     } as any
     guard = new PermissionsGuard(reflector)
   })
@@ -49,7 +50,7 @@ describe('PermissionsGuard', () => {
         permissions: ['user:read', 'user:write'],
       })
 
-      expect(guard.canActivate(context)).toBe(false)
+      expect(() => guard.canActivate(context)).toThrow()
     })
 
     it('should return true when user has any of the required permissions', () => {
@@ -65,7 +66,7 @@ describe('PermissionsGuard', () => {
       reflector.getAllAndOverride.mockReturnValue(['user:read'])
       const context = createMockExecutionContext({ permissions: undefined })
 
-      expect(guard.canActivate(context)).toBe(false)
+      expect(() => guard.canActivate(context)).toThrow()
     })
   })
 })

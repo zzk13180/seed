@@ -1,39 +1,51 @@
-import { Module, Global } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { Module, Global, OnModuleDestroy } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { AuditSubscriber } from '../subscribers/audit.subscriber'
+import { createDrizzleConnection, type DrizzleDB } from './drizzle'
+import { DRIZZLE_DB } from './drizzle.constants'
+import type { Pool } from 'pg'
 
 /**
  * 数据库模块
+ * 使用 Drizzle ORM 连接 PostgreSQL
  */
 @Global()
 @Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+  imports: [ConfigModule],
+  providers: [
+    {
+      provide: DRIZZLE_DB,
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      useFactory: async (configService: ConfigService) => {
         const dbConfig = configService.get('database')
-        return {
-          type: dbConfig.type,
+        const { db, pool } = await createDrizzleConnection({
           host: dbConfig.host,
           port: dbConfig.port,
-          username: dbConfig.username,
+          user: dbConfig.username,
           password: dbConfig.password,
           database: dbConfig.database,
-          entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
-          // 注册 TypeORM Subscriber
-          subscribers: [AuditSubscriber],
-          synchronize: dbConfig.synchronize,
           logging: dbConfig.logging,
-          timezone: '+08:00', // 东八区时间
-          charset: 'utf8mb4',
-          extra: {
-            connectionLimit: 10,
-          },
-        }
+        })
+
+        // 将 pool 附加到 db 实例上，用于模块销毁时关闭连接
+        ;(db as any).__pool = pool
+
+        return db
       },
-    }),
+    },
   ],
+  exports: [DRIZZLE_DB],
 })
-export class DatabaseModule {}
+export class DatabaseModule implements OnModuleDestroy {
+  private readonly db: DrizzleDB | null = null
+  constructor(private readonly configService: ConfigService) {}
+
+  /**
+   * 模块销毁时关闭数据库连接池
+   */
+  async onModuleDestroy() {
+    if (this.db && (this.db as any).__pool) {
+      const pool = (this.db as any).__pool as Pool
+      await pool.end()
+    }
+  }
+}

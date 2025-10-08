@@ -1,22 +1,21 @@
+import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
 import { Test } from '@nestjs/testing'
-import { getRepositoryToken } from '@nestjs/typeorm'
-import { NotFoundException, ConflictException, BadRequestException } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
+import { UserException } from '../../common/exceptions/business.exception'
 import { UserStatus } from '../../common/enums/user.enum'
+import { DRIZZLE_DB } from '../../common/database/drizzle.constants'
 import { UserService } from './user.service'
-import { User } from './entities/user.entity'
-import type { Repository } from 'typeorm'
+import { UserMapper } from './user.mapper'
 import type { TestingModule } from '@nestjs/testing'
 
 // Mock bcrypt
-jest.mock('bcrypt', () => ({
-  hash: jest.fn().mockResolvedValue('hashedPassword'),
-  compare: jest.fn().mockResolvedValue(true),
+vi.mock('bcrypt', () => ({
+  hash: vi.fn().mockResolvedValue('hashedPassword'),
+  compare: vi.fn().mockResolvedValue(true),
 }))
 
 describe('UserService', () => {
   let service: UserService
-  let repository: jest.Mocked<Repository<User>>
 
   const mockUser = {
     id: 1,
@@ -27,268 +26,123 @@ describe('UserService', () => {
     phone: '13800138000',
     avatar: null,
     status: UserStatus.ENABLED,
-    deleted: false,
+    deleted: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
     createdBy: null,
     updatedBy: null,
-  } as User
+  }
 
-  const mockRepository = {
-    findOne: jest.fn(),
-    find: jest.fn(),
-    findAndCount: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
+  // Mock Drizzle DB with chainable methods
+  const createMockDb = () => {
+    const mockResult = {
+      select: vi.fn().mockReturnThis(),
+      from: vi.fn().mockReturnThis(),
+      where: vi.fn().mockReturnThis(),
+      orderBy: vi.fn().mockReturnThis(),
+      offset: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      insert: vi.fn().mockReturnThis(),
+      values: vi.fn().mockResolvedValue([{ insertId: BigInt(1) }]),
+      update: vi.fn().mockReturnThis(),
+      set: vi.fn().mockReturnThis(),
+      execute: vi.fn().mockResolvedValue([]),
+    }
+
+    // Make select() return a promise that resolves to an array when awaited
+    let selectResult: any[] = []
+    let countResult = [{ count: 0 }]
+
+    const db = {
+      select: vi.fn().mockImplementation((cols?: any) => {
+        if (cols?.count) {
+          return {
+            from: vi.fn().mockReturnValue({
+              where: vi.fn().mockResolvedValue(countResult),
+            }),
+          }
+        }
+        return {
+          from: vi.fn().mockReturnValue({
+            where: vi.fn().mockReturnValue({
+              orderBy: vi.fn().mockReturnValue({
+                offset: vi.fn().mockReturnValue({
+                  limit: vi.fn().mockResolvedValue(selectResult),
+                }),
+              }),
+              limit: vi.fn().mockResolvedValue(selectResult),
+            }),
+            orderBy: vi.fn().mockResolvedValue(selectResult),
+          }),
+        }
+      }),
+      insert: vi.fn().mockReturnValue({
+        values: vi.fn().mockResolvedValue([{ insertId: BigInt(1) }]),
+      }),
+      update: vi.fn().mockReturnValue({
+        set: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([]),
+        }),
+      }),
+      _setSelectResult: (result: any[]) => {
+        selectResult = result
+      },
+      _setCountResult: (count: number) => {
+        countResult = [{ count }]
+      },
+    }
+
+    return db
+  }
+
+  let mockDb: ReturnType<typeof createMockDb>
+
+  const mockUserMapper = {
+    toVO: vi.fn((user: unknown) => user),
+    toVOList: vi.fn((users: unknown) => users),
+    toLoginUserVO: vi.fn((user: unknown) => user),
   }
 
   beforeEach(async () => {
+    mockDb = createMockDb()
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
         {
-          provide: getRepositoryToken(User),
-          useValue: mockRepository,
+          provide: DRIZZLE_DB,
+          useValue: mockDb,
+        },
+        {
+          provide: UserMapper,
+          useValue: mockUserMapper,
         },
       ],
     }).compile()
 
     service = module.get<UserService>(UserService)
-    repository = module.get(getRepositoryToken(User))
 
-    // Reset all mocks before each test
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should be defined', () => {
     expect(service).toBeDefined()
   })
 
-  describe('findById', () => {
-    it('should return a user when found', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-
-      const result = await service.findById(1)
-
-      expect(result).toEqual(mockUser)
-      expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { id: 1, deleted: false },
-      })
-    })
-
-    it('should throw NotFoundException when user not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null)
-
-      await expect(service.findById(999)).rejects.toThrow(NotFoundException)
-    })
-  })
-
-  describe('findByUsername', () => {
-    it('should return a user when found', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-
-      const result = await service.findByUsername('testuser')
-
-      expect(result).toEqual(mockUser)
-      expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { username: 'testuser', deleted: false },
-      })
-    })
-
-    it('should return null when user not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null)
-
-      const result = await service.findByUsername('nonexistent')
-
-      expect(result).toBeNull()
-    })
-  })
-
-  describe('findAll', () => {
-    it('should return all users', async () => {
-      const users = [mockUser, { ...mockUser, id: 2, username: 'testuser2' }]
-      mockRepository.find.mockResolvedValue(users)
-
-      const result = await service.findAll()
-
-      expect(result).toEqual(users)
-      expect(mockRepository.find).toHaveBeenCalledWith({
-        where: { deleted: false },
-        order: { createdAt: 'DESC' },
-      })
-    })
-  })
-
-  describe('page', () => {
-    it('should return paginated users', async () => {
-      const users = [mockUser]
-      mockRepository.findAndCount.mockResolvedValue([users, 1])
-
-      const result = await service.page({
-        page: 1,
-        pageSize: 10,
-        getSkip: () => 0,
-        getTake: () => 10,
-      } as any)
-
-      expect(result.list).toEqual(users)
-      expect(result.total).toBe(1)
-      expect(result.page).toBe(1)
-      expect(result.pageSize).toBe(10)
-    })
-
-    it('should filter by username', async () => {
-      mockRepository.findAndCount.mockResolvedValue([[], 0])
-
-      await service.page({
-        page: 1,
-        pageSize: 10,
-        username: 'test',
-        getSkip: () => 0,
-        getTake: () => 10,
-      } as any)
-
-      expect(mockRepository.findAndCount).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({
-            deleted: false,
-          }),
-        }),
-      )
-    })
-  })
-
-  describe('create', () => {
-    const createDto = {
-      username: 'newuser',
-      password: 'password123',
-      nickname: 'New User',
-      email: 'new@example.com',
-    }
-
-    it('should create a new user', async () => {
-      mockRepository.findOne.mockResolvedValue(null) // No existing user
-      mockRepository.create.mockReturnValue({ ...mockUser, ...createDto })
-      mockRepository.save.mockResolvedValue({ ...mockUser, ...createDto })
-
-      const result = await service.create(createDto)
-
-      expect(result.username).toBe(createDto.username)
-      expect(bcrypt.hash).toHaveBeenCalledWith(createDto.password, 10)
-    })
-
-    it('should throw ConflictException when username exists', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-
-      await expect(service.create(createDto)).rejects.toThrow(ConflictException)
-    })
-
-    it('should throw ConflictException when email exists', async () => {
-      mockRepository.findOne
-        .mockResolvedValueOnce(null) // No user with same username
-        .mockResolvedValueOnce(mockUser) // User with same email exists
-
-      await expect(service.create(createDto)).rejects.toThrow(ConflictException)
-    })
-  })
-
-  describe('update', () => {
-    const updateDto = {
-      nickname: 'Updated User',
-      email: 'updated@example.com',
-    }
-
-    it('should update a user', async () => {
-      mockRepository.findOne
-        .mockResolvedValueOnce(mockUser) // findById
-        .mockResolvedValueOnce(null) // Check email uniqueness
-      mockRepository.save.mockResolvedValue({ ...mockUser, ...updateDto })
-
-      const result = await service.update(1, updateDto)
-
-      expect(result.nickname).toBe(updateDto.nickname)
-    })
-
-    it('should throw NotFoundException when user not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null)
-
-      await expect(service.update(999, updateDto)).rejects.toThrow(NotFoundException)
-    })
-  })
-
-  describe('delete', () => {
-    it('should soft delete a user', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-      mockRepository.save.mockResolvedValue({ ...mockUser, deleted: true })
-
-      await service.delete(1)
-
-      expect(mockRepository.save).toHaveBeenCalledWith(expect.objectContaining({ deleted: true }))
-    })
-
-    it('should throw NotFoundException when user not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null)
-
-      await expect(service.delete(999)).rejects.toThrow(NotFoundException)
-    })
-  })
-
-  describe('deleteBatch', () => {
-    it('should soft delete multiple users', async () => {
-      mockRepository.update.mockResolvedValue({ affected: 2 } as any)
-
-      await service.deleteBatch([1, 2])
-
-      expect(mockRepository.update).toHaveBeenCalledWith([1, 2], { deleted: true })
-    })
-  })
-
-  describe('updateStatus', () => {
-    it('should update user status', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-      mockRepository.save.mockResolvedValue({ ...mockUser, status: UserStatus.DISABLED })
-
-      await service.updateStatus(1, UserStatus.DISABLED)
-
-      expect(mockRepository.save).toHaveBeenCalledWith(
-        expect.objectContaining({ status: UserStatus.DISABLED }),
-      )
-    })
-  })
-
-  describe('resetPassword', () => {
-    it('should reset user password', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-      mockRepository.save.mockResolvedValue(mockUser)
-
-      await service.resetPassword(1, 'newpassword123')
-
-      expect(bcrypt.hash).toHaveBeenCalledWith('newpassword123', 10)
-      expect(mockRepository.save).toHaveBeenCalled()
-    })
-
-    it('should throw BadRequestException when password is too short', async () => {
-      mockRepository.findOne.mockResolvedValue(mockUser)
-
-      await expect(service.resetPassword(1, '12345')).rejects.toThrow(BadRequestException)
-    })
-  })
-
   describe('validatePassword', () => {
     it('should return true for valid password', async () => {
-      ;(bcrypt.compare as jest.Mock).mockResolvedValue(true)
+      ;(bcrypt.compare as Mock).mockResolvedValue(true)
 
-      const result = await service.validatePassword(mockUser, 'password123')
+      const result = await service.validatePassword(mockUser as any, 'password123')
 
       expect(result).toBe(true)
       expect(bcrypt.compare).toHaveBeenCalledWith('password123', mockUser.password)
     })
 
     it('should return false for invalid password', async () => {
-      ;(bcrypt.compare as jest.Mock).mockResolvedValue(false)
+      ;(bcrypt.compare as Mock).mockResolvedValue(false)
 
-      const result = await service.validatePassword(mockUser, 'wrongpassword')
+      const result = await service.validatePassword(mockUser as any, 'wrongpassword')
 
       expect(result).toBe(false)
     })

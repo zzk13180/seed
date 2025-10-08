@@ -7,7 +7,7 @@
 - **框架**: NestJS 11
 - **语言**: TypeScript 5
 - **认证**: JWT + Passport
-- **ORM**: TypeORM
+- **ORM**: Drizzle ORM
 - **缓存**: Redis + Cache Manager
 - **数据库**: MySQL 8
 - **API 文档**: Swagger (OpenAPI 3)
@@ -19,6 +19,9 @@
 src/
 ├── common/                    # 公共模块
 │   ├── database/              # 数据库配置
+│   │   ├── schema/            # Drizzle Schema 定义
+│   │   ├── drizzle.ts         # Drizzle 连接配置
+│   │   └── database.module.ts # 数据库模块
 │   ├── decorators/            # 自定义装饰器
 │   │   ├── get-user.decorator.ts
 │   │   ├── permissions.decorator.ts
@@ -28,8 +31,6 @@ src/
 │   │   ├── page-request.dto.ts
 │   │   ├── page-result.dto.ts
 │   │   └── response.dto.ts
-│   ├── entities/              # 基础实体
-│   │   └── base.entity.ts
 │   ├── enums/                 # 枚举定义
 │   │   └── user.enum.ts
 │   ├── filters/               # 异常过滤器
@@ -71,23 +72,23 @@ src/
 
 ## 环境变量
 
-| 变量名 | 描述 | 默认值 |
-| --- | --- | --- |
-| `NODE_ENV` | 运行环境 | `development` |
-| `PORT` | 服务端口 | `3003` |
-| `API_PREFIX` | API 前缀 | `api` |
-| `JWT_SECRET` | JWT 密钥 | - |
-| `JWT_ACCESS_TOKEN_EXPIRY` | 访问令牌过期时间 | `1h` |
-| `JWT_REFRESH_TOKEN_EXPIRY` | 刷新令牌过期时间 | `7d` |
-| `DB_HOST` | 数据库主机 | `localhost` |
-| `DB_PORT` | 数据库端口 | `3306` |
-| `DB_USERNAME` | 数据库用户名 | `root` |
-| `DB_PASSWORD` | 数据库密码 | - |
-| `DB_DATABASE` | 数据库名称 | `seed` |
-| `DB_SYNC` | 自动同步表结构 | `false` |
-| `REDIS_HOST` | Redis 主机 | `localhost` |
-| `REDIS_PORT` | Redis 端口 | `6379` |
-| `REDIS_PASSWORD` | Redis 密码 | - |
+| 变量名                     | 描述             | 默认值        |
+| -------------------------- | ---------------- | ------------- |
+| `NODE_ENV`                 | 运行环境         | `development` |
+| `PORT`                     | 服务端口         | `3003`        |
+| `API_PREFIX`               | API 前缀         | `api`         |
+| `JWT_SECRET`               | JWT 密钥         | -             |
+| `JWT_ACCESS_TOKEN_EXPIRY`  | 访问令牌过期时间 | `1h`          |
+| `JWT_REFRESH_TOKEN_EXPIRY` | 刷新令牌过期时间 | `7d`          |
+| `DB_HOST`                  | 数据库主机       | `localhost`   |
+| `DB_PORT`                  | 数据库端口       | `3306`        |
+| `DB_USERNAME`              | 数据库用户名     | `root`        |
+| `DB_PASSWORD`              | 数据库密码       | -             |
+| `DB_DATABASE`              | 数据库名称       | `seed`        |
+| `DB_SYNC`                  | 自动同步表结构   | `false`       |
+| `REDIS_HOST`               | Redis 主机       | `localhost`   |
+| `REDIS_PORT`               | Redis 端口       | `6379`        |
+| `REDIS_PASSWORD`           | Redis 密码       | -             |
 
 ## 开发命令
 
@@ -178,25 +179,25 @@ pnpm test:e2e
 
 测试用例覆盖以下模块：
 
-| 模块 | 测试文件 | 测试内容 |
-| --- | --- | --- |
-| **UserService** | `user.service.spec.ts` | 用户增删改查、分页、密码验证 |
-| **UserController** | `user.controller.spec.ts` | 用户相关 API 接口 |
-| **AuthService** | `auth.service.spec.ts` | 登录、登出、令牌刷新、登录次数限制 |
-| **AuthController** | `auth.controller.spec.ts` | 认证相关 API 接口 |
-| **HealthController** | `health.controller.spec.ts` | 健康检查接口 |
-| **HealthService** | `health.service.spec.ts` | 健康检查服务 |
-| **ResponseDto** | `response.dto.spec.ts` | 统一响应格式 |
-| **PageResultDto** | `page-result.dto.spec.ts` | 分页结果 |
-| **PageRequestDto** | `page-request.dto.spec.ts` | 分页请求 |
-| **RolesGuard** | `roles.guard.spec.ts` | 角色守卫 |
-| **PermissionsGuard** | `permissions.guard.spec.ts` | 权限守卫 |
+| 模块                 | 测试文件                    | 测试内容                           |
+| -------------------- | --------------------------- | ---------------------------------- |
+| **UserService**      | `user.service.spec.ts`      | 用户增删改查、分页、密码验证       |
+| **UserController**   | `user.controller.spec.ts`   | 用户相关 API 接口                  |
+| **AuthService**      | `auth.service.spec.ts`      | 登录、登出、令牌刷新、登录次数限制 |
+| **AuthController**   | `auth.controller.spec.ts`   | 认证相关 API 接口                  |
+| **HealthController** | `health.controller.spec.ts` | 健康检查接口                       |
+| **HealthService**    | `health.service.spec.ts`    | 健康检查服务                       |
+| **ResponseDto**      | `response.dto.spec.ts`      | 统一响应格式                       |
+| **PageResultDto**    | `page-result.dto.spec.ts`   | 分页结果                           |
+| **PageRequestDto**   | `page-request.dto.spec.ts`  | 分页请求                           |
+| **RolesGuard**       | `roles.guard.spec.ts`       | 角色守卫                           |
+| **PermissionsGuard** | `permissions.guard.spec.ts` | 权限守卫                           |
 
 ### 测试统计
 
 - **测试套件**: 11 个
 - **测试用例**: 82 个
-- **代码覆盖率**: 
+- **代码覆盖率**:
   - 核心服务 > 90%
   - 控制器 100%
   - DTO 100%
