@@ -10,7 +10,7 @@
     >
       <router-link v-if="singleChild.meta" :to="getFullPath(singleChild.path, singleChild.query)">
         <el-menu-item :index="getFullPath(singleChild.path).toString()">
-          <svg-icon :name="singleChild.meta?.icon || (menuItem.meta && menuItem.meta.icon)" />
+          <svg-icon :name="singleChild.meta?.icon || menuItem.meta?.icon || ''" />
           <span :title="getTitleTooltip(singleChild.meta?.title)">{{
             singleChild.meta?.title
           }}</span>

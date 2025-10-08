@@ -59,25 +59,25 @@
           0% {
             top: 17px;
             left: 220px;
-            opacity: 0;
+            opacity: 0%;
           }
 
           20% {
             top: 33px;
             left: 188px;
-            opacity: 1;
+            opacity: 100%;
           }
 
           80% {
             top: 81px;
             left: 92px;
-            opacity: 1;
+            opacity: 100%;
           }
 
           100% {
             top: 97px;
             left: 60px;
-            opacity: 0;
+            opacity: 0%;
           }
         }
 
@@ -85,25 +85,25 @@
           0% {
             top: 10px;
             left: 420px;
-            opacity: 0;
+            opacity: 0%;
           }
 
           20% {
             top: 40px;
             left: 360px;
-            opacity: 1;
+            opacity: 100%;
           }
 
           70% {
             top: 130px;
             left: 180px;
-            opacity: 1;
+            opacity: 100%;
           }
 
           100% {
             top: 160px;
             left: 120px;
-            opacity: 0;
+            opacity: 0%;
           }
         }
 
@@ -111,25 +111,25 @@
           0% {
             top: 100px;
             left: 500px;
-            opacity: 0;
+            opacity: 0%;
           }
 
           20% {
             top: 120px;
             left: 460px;
-            opacity: 1;
+            opacity: 100%;
           }
 
           80% {
             top: 180px;
             left: 340px;
-            opacity: 1;
+            opacity: 100%;
           }
 
           100% {
             top: 200px;
             left: 300px;
-            opacity: 0;
+            opacity: 0%;
           }
         }
 
@@ -139,7 +139,7 @@
           width: 80px;
           top: 17px;
           left: 220px;
-          opacity: 0;
+          opacity: 0%;
           animation-name: cloudLeft;
           animation-duration: 2s;
           animation-timing-function: linear;
@@ -151,7 +151,7 @@
           width: 46px;
           top: 10px;
           left: 420px;
-          opacity: 0;
+          opacity: 0%;
           animation-name: cloudMid;
           animation-duration: 2s;
           animation-timing-function: linear;
@@ -163,7 +163,7 @@
           width: 62px;
           top: 100px;
           left: 500px;
-          opacity: 0;
+          opacity: 0%;
           animation-name: cloudRight;
           animation-duration: 2s;
           animation-timing-function: linear;
@@ -177,12 +177,12 @@
       @keyframes slideUp {
         0% {
           transform: translateY(60px);
-          opacity: 0;
+          opacity: 0%;
         }
 
         100% {
           transform: translateY(0);
-          opacity: 1;
+          opacity: 100%;
         }
       }
 
@@ -197,7 +197,7 @@
         font-weight: bold;
         line-height: 40px;
         color: #1482f0;
-        opacity: 0;
+        opacity: 0%;
         margin-bottom: 20px;
         animation-name: slideUp;
         animation-duration: 0.5s;
@@ -209,7 +209,7 @@
         line-height: 24px;
         color: #222;
         font-weight: bold;
-        opacity: 0;
+        opacity: 0%;
         margin-bottom: 10px;
         animation-name: slideUp;
         animation-duration: 0.5s;
@@ -221,7 +221,7 @@
         font-size: 13px;
         line-height: 21px;
         color: grey;
-        opacity: 0;
+        opacity: 0%;
         margin-bottom: 30px;
         animation-name: slideUp;
         animation-duration: 0.5s;
@@ -238,7 +238,7 @@
         border-radius: 100px;
         text-align: center;
         color: #fff;
-        opacity: 0;
+        opacity: 0%;
         font-size: 14px;
         line-height: 36px;
         cursor: pointer;

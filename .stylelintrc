@@ -109,7 +109,11 @@ rules:
       - type: at-rule
         name: media
       - rules
-    - severity: warning
+    - severity: 'warning'
+
+  # 现代 CSS 规则
+  color-function-notation: modern # 使用现代颜色函数 rgb() 而非 rgba()
+  alpha-value-notation: percentage # 使用百分比表示透明度
 
 # 忽略的文件或目录
 ignoreFiles:
@@ -118,7 +122,6 @@ ignoreFiles:
   - '**/*.tsx'
   - '**/*.ts'
   - '**/dist/'
-  - '**/*.css'
 
 # 针对特定文件的覆盖配置
 overrides:
@@ -152,3 +155,7 @@ overrides:
             - v-deep
             - v-global
             - v-slotted
+
+      # 现代 CSS 规则
+      color-function-notation: modern
+      alpha-value-notation: percentage

@@ -32,8 +32,7 @@ export class VersionService {
   }
 
   async getAllVersions() {
-    // eslint-disable-next-line no-return-await
-    return await this.loadVersions()
+    return this.loadVersions()
   }
 
   private async loadVersions() {

@@ -55,16 +55,17 @@
   import { useFullscreen } from '@vueuse/core'
   import TheLogo from '@/components/TheLogo.vue'
   import profile from '@/assets/images/profile.jpeg'
-  import { AccessTokenUtil } from '@/utils/token.util'
+  import { useUserStore } from '@/stores/user/user.store'
 
   const router = useRouter()
+  const userStore = useUserStore()
 
-  const logout = () => {
+  const logout = async () => {
     console.log('logout')
-    AccessTokenUtil.removeToken()
+    await userStore.controller.logout()
     router.push('/login')
   }
-  const commandMap: { [key: string]: any } = {
+  const commandMap: { [key: string]: () => void | Promise<void> } = {
     logout,
   }
   const handleCommand = (command: string) => {
@@ -148,16 +149,16 @@
         font-size: 14px;
         border: 0;
         padding: 0 16px;
-        opacity: 0.8;
+        opacity: 80%;
       }
 
       > .el-menu-item:hover {
-        opacity: 1;
+        opacity: 100%;
       }
 
       > .el-menu-item.is-active {
         font-weight: 600;
-        opacity: 1;
+        opacity: 100%;
       }
 
       .el-menu-item:not(.is-disabled):focus,
@@ -171,16 +172,16 @@
           font-weight: 400;
           font-size: 14px;
           border: 0;
-          opacity: 0.8;
+          opacity: 80%;
         }
 
         > .el-sub-menu__title:hover {
-          opacity: 1;
+          opacity: 100%;
         }
 
         > .el-sub-menu__title.is-active {
           font-weight: 600;
-          opacity: 1;
+          opacity: 100%;
         }
 
         .el-sub-menu__title:not(.is-disabled):focus,

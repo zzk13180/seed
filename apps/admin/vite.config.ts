@@ -8,9 +8,15 @@ import type { UserConfig, ConfigEnv } from 'vite'
 export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd())
 
+  // 根据后端类型选择目标地址
+  const apiTarget =
+    env.VITE_API_TYPE === 'java'
+      ? env.VITE_JAVA_API_URL || 'http://127.0.0.1:8080'
+      : env.VITE_NEST_API_URL || 'http://127.0.0.1:3003/api'
+
   const proxy = {
     [env.VITE_API_BASE_PATH]: {
-      target: 'http://127.0.0.1:3000',
+      target: apiTarget,
       changeOrigin: true,
       ws: true,
 

@@ -1,4 +1,4 @@
-import type { MapState } from '../map.store'
+import type { MapState } from '../map.types'
 import type { ViewManager } from '../managers/view.manager'
 import type { Subscription } from 'rxjs'
 
@@ -13,7 +13,7 @@ export class MapGridManager {
   private subscriptions: Subscription[] = []
   private readonly mapState: MapState
   private readonly events: MapGridEvents
-  private readonly viewManager: ViewManager | null = null
+  private readonly viewManager: ViewManager
 
   private readonly _boundHandlers = {
     resize: this.resize.bind(this),
@@ -42,10 +42,8 @@ export class MapGridManager {
     this.subscriptions.push(
       this.viewManager.viewStateChange$.subscribe(() => {
         // 同步视图状态到MapState
-        if (this.viewManager) {
-          // 更新网格绘制
-          this.draw()
-        }
+        // 更新网格绘制
+        this.draw()
       }),
     )
 

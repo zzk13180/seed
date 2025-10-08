@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useAppStore } from '@/stores/app.store'
+  import { useAppStore } from '@/stores/app/app.store'
   import LayoutSidebar from './LayoutSidebar.vue'
   import LayoutNavbar from './LayoutNavbar.vue'
   import LayoutContent from './LayoutContent.vue'

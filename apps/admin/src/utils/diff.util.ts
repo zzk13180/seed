@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch'
 import type { ChatItem } from './typewriter.util'
 

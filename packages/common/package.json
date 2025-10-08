@@ -24,6 +24,10 @@
     "test": "vitest run",
     "type-check": "tsc --noEmit"
   },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "@date-fns/tz": "^1.2.0"
+  },
   "files": [
     "index.ts",
     "constants",

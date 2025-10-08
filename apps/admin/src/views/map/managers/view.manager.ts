@@ -57,18 +57,8 @@ export interface ViewManagerOptions {
 export class ViewManager {
   container: HTMLElement
 
-  /**
-   * 私有的 Subject，用于内部触发视图状态变化事件。
-   * 使用私有字段语法 (#) 确保外部无法直接访问，同时满足 ESLint 的
-   * @typescript-eslint/member-ordering 规则要求，使相关的私有字段
-   * 和对应的公有访问器能够在类成员声明中保持逻辑上的邻近性
-   */
   readonly #viewStateSubject = new Subject<ViewState>()
-  /**
-   * 对外暴露的只读 Observable 流，用于订阅视图状态变化
-   * $ 后缀表明这是一个 Observable 流，遵循 RxJS 命名约定
-   * 通过 asObservable() 确保外部只能订阅，无法调用 next/error/complete 方法
-   */
+
   readonly viewStateChange$ = this.#viewStateSubject.asObservable()
 
   /**
@@ -443,7 +433,7 @@ export class ViewManager {
     if (!this.state.inputMovement) return
 
     // 检查是否应该阻止拖拽（例如：用户点击了按钮）
-    if (this.options.shouldPreventDrag && this.options.shouldPreventDrag((event as Event).target)) {
+    if (this.options.shouldPreventDrag?.((event as Event).target)) {
       return
     }
 
@@ -481,7 +471,7 @@ export class ViewManager {
     }
 
     // 检查是否应该停止拖拽
-    if (this.options.shouldPreventDrag && this.options.shouldPreventDrag((event as Event).target)) {
+    if (this.options.shouldPreventDrag?.((event as Event).target)) {
       this.drag_start = undefined
       return
     }
@@ -593,9 +583,6 @@ export class ViewManager {
       clientY = wheelEvent.clientY
     }
 
-    // 如果缩放级别实际上没有改变（达到边界限制），仍然需要继续处理中心点调整
-    // 这确保了即使在缩放边界，缩放中心的位置计算仍然正确
-
     // 将视口坐标转换为容器内坐标，用于 screenToFixed 计算
     const containerRect = this.container.getBoundingClientRect()
     const screenPoint = {
@@ -637,7 +624,7 @@ export class ViewManager {
   private handleTouchStart(event: TouchEvent): void {
     if (!this.state.inputMovement) return
 
-    if (this.options.shouldPreventDrag && this.options.shouldPreventDrag((event as Event).target)) {
+    if (this.options.shouldPreventDrag?.((event as Event).target)) {
       return
     }
 

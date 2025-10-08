@@ -1,11 +1,14 @@
 import plugin from 'tailwindcss/plugin'
 import typographyPlugin from '@tailwindcss/typography'
+import seedPreset from '@seed/tailwind-config/preset'
 
 export default {
+  presets: [seedPreset],
   content: ['./src/**/*.{astro,html,js,jsx,json,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
       colors: {
+        // 覆盖或扩展共享预设的颜色
         primary: 'var(--aw-color-primary)',
         secondary: 'var(--aw-color-secondary)',
         accent: 'var(--aw-color-accent)',

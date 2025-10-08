@@ -6,37 +6,44 @@
       </div>
     </div>
     <div class="right-section">
-      <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+      <el-form ref="loginFormRef" :model="state.form" :rules="loginRules" class="login-form">
         <div class="login-form-welcome">欢迎登录</div>
+
         <el-form-item prop="username">
           <el-input
-            v-model="loginForm.username"
+            v-model="state.form.username"
             type="text"
             size="large"
             clearable
             auto-complete="off"
             placeholder="请输入账号（必填）"
-          >
-          </el-input>
+          />
         </el-form-item>
+
         <el-form-item prop="password">
           <el-input
-            v-model="loginForm.password"
+            v-model="state.form.password"
             type="password"
             size="large"
             clearable
             auto-complete="off"
             placeholder="请输入密码（必填）"
             @keyup.enter="handleLogin"
-          >
-          </el-input>
+          />
         </el-form-item>
+
         <div class="login-form-remember-me">
-          <el-checkbox v-model="loginForm.rememberMe">记住密码</el-checkbox>
+          <el-checkbox v-model="state.form.rememberMe">记住密码</el-checkbox>
         </div>
+
         <el-form-item class="login-form-btn">
-          <el-button :loading="loading" size="large" type="primary" @click.prevent="handleLogin">
-            <span v-if="!loading">登录</span>
+          <el-button
+            :loading="state.loading"
+            size="large"
+            type="primary"
+            @click.prevent="handleLogin"
+          >
+            <span v-if="!state.loading">登录</span>
             <span v-else>登录中...</span>
           </el-button>
         </el-form-item>
@@ -46,69 +53,43 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted, onUnmounted } from 'vue'
   import TheLogo from '@/components/TheLogo.vue'
-  import { AccessTokenUtil } from '@/utils/token.util'
+  import { useLoginStore } from './login.store'
+  import type { FormInstance, FormRules } from 'element-plus'
 
-  const router = useRouter()
-  const loginRef = ref()
-  const loading = ref(false)
+  const loginStore = useLoginStore()
+  const { state, controller } = loginStore
 
-  const loginForm = ref({
-    username: 'admin',
-    password: 'admin',
-    rememberMe: false,
-  })
+  const loginFormRef = ref<FormInstance>()
 
-  const loginRules = {
+  // 表单验证规则
+  const loginRules: FormRules = {
     username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
     password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
   }
 
-  const handleLogin = () => {
-    loginRef.value.validate((valid: boolean) => {
-      if (valid) {
-        loading.value = true
+  /**
+   * 处理登录
+   */
+  const handleLogin = async () => {
+    const formEl = loginFormRef.value
+    if (!formEl) return
 
-        try {
-          AccessTokenUtil.setToken('mock-token')
-          if (loginForm.value.rememberMe) {
-            localStorage.setItem('username', loginForm.value.username)
-            localStorage.setItem('password', loginForm.value.password)
-            localStorage.setItem('rememberMe', 'true')
-          } else {
-            localStorage.removeItem('username')
-            localStorage.removeItem('password')
-            localStorage.removeItem('rememberMe')
-          }
-
-          router.push('/')
-        } catch (error) {
-          console.error('登录失败', error)
-        } finally {
-          loading.value = false
-        }
-      }
-    })
-  }
-
-  const getLoginData = () => {
-    const username = localStorage.getItem('username')
-    const password = localStorage.getItem('password')
-    const rememberMe = localStorage.getItem('rememberMe')
-
-    if (username && password && rememberMe) {
-      loginForm.value = {
-        username,
-        password,
-        rememberMe: true,
-      }
+    try {
+      await formEl.validate()
+      await controller.login()
+    } catch {
+      // 表单验证失败，不需要额外处理
     }
   }
 
   onMounted(() => {
-    getLoginData()
+    controller.initialize()
+  })
+
+  onUnmounted(() => {
+    controller.dispose()
   })
 </script>
 
@@ -133,14 +114,6 @@
         :deep(.the-logo) {
           user-select: none;
           pointer-events: none;
-
-          .the-logo-svg {
-            color: var(--el-color-primary);
-          }
-
-          h1 {
-            color: var(--el-color-primary);
-          }
         }
       }
     }

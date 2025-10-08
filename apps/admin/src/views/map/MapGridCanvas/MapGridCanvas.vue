@@ -10,7 +10,9 @@
   const gridCanvasRef = ref<HTMLCanvasElement | null>(null)
 
   onMounted(() => {
-    controller.initializeGrid(gridCanvasRef.value)
+    if (gridCanvasRef.value) {
+      controller.initializeGrid(gridCanvasRef.value)
+    }
   })
 
   onUnmounted(() => {

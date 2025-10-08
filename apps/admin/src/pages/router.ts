@@ -64,6 +64,25 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: '/system',
+    component: TheLayout,
+    meta: {
+      title: '系统管理',
+      icon: 'setting',
+    },
+    children: [
+      {
+        path: 'users',
+        component: () => import('./users.vue'),
+        meta: {
+          requiresAuth: true,
+          title: '用户管理',
+          icon: 'user',
+        },
+      },
+    ],
+  },
+  {
     path: '/login',
     component: () => import('./login.vue'),
     meta: {

@@ -134,9 +134,10 @@ app.all('/proxy/*', logger(), zValidator('header', headerSchema), async (c: Cont
     if (responseHeaders.has('location')) {
       try {
         const locationUrl = responseHeaders.get('location')
-        const loc = new URL(locationUrl, targetUrl)
+        if (!locationUrl) throw new Error('Invalid location header')
+        const loc = new URL(locationUrl, targetUrl ?? undefined)
         // 如果目标 host 与 location host 相同，重写为当前服务 host
-        if (loc.host === new URL(targetUrl).host) {
+        if (loc.host === new URL(targetUrl ?? '').host) {
           loc.host = c.req.header('host') || loc.host
           loc.protocol = originalUrl.protocol
           responseHeaders.set('location', loc.toString())
@@ -145,8 +146,6 @@ app.all('/proxy/*', logger(), zValidator('header', headerSchema), async (c: Cont
         // 忽略无效的 Location URL
       }
     }
-
-    // 处理 HTTP/1.0 Transfer-Encoding
 
     const rawRequest = c.req.raw as any
     if (rawRequest?.raw?.httpVersion === '1.0') {

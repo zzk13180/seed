@@ -384,7 +384,4 @@ export function createHttpClient(
 }
 
 // 默认实例（仅在浏览器环境使用）
-export const $http =
-  typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_PATH
-    ? new HttpClient(import.meta.env.VITE_API_BASE_PATH)
-    : null
+export const $http = new HttpClient(import.meta.env.VITE_API_BASE_PATH!)

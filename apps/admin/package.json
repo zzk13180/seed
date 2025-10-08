@@ -20,6 +20,7 @@
     "es-toolkit": "^1.39.5",
     "eventemitter2": "^6.4.9",
     "fabric": "^6.7.0",
+    "lucide-vue-next": "^0.562.0",
     "pinia": "^3.0.3",
     "ros3d": "^1.1.0",
     "roslib": "^1.4.1",

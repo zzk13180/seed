@@ -8,8 +8,6 @@ import tsEslintParser from '@typescript-eslint/parser'
 
 import eslintCommentsPlugin from 'eslint-plugin-eslint-comments'
 import importPlugin from 'eslint-plugin-import'
-import nodePlugin from 'eslint-plugin-node'
-import promisePlugin from 'eslint-plugin-promise'
 import regexpPlugin from 'eslint-plugin-regexp'
 import securityPlugin from 'eslint-plugin-security'
 import sonarjsPlugin from 'eslint-plugin-sonarjs'
@@ -20,6 +18,127 @@ import unicornPlugin from 'eslint-plugin-unicorn'
 
 import svelteEslintParser from 'svelte-eslint-parser'
 import vueParser from 'vue-eslint-parser'
+
+/**
+ * 自定义规则：禁止孤立注释
+ *
+ * 规则：
+ * 1. 注释必须紧邻代码（在代码上方或同一行），不允许孤立注释
+ * 2. 例外：文件开头的注释块（从第1行开始的连续注释）允许存在
+ *
+ * @type {import('eslint').Rule.RuleModule}
+ */
+const noIsolatedComments = {
+  meta: {
+    type: 'suggestion',
+    docs: {
+      description: '禁止孤立注释，注释必须紧邻代码或在文件开头',
+      recommended: false,
+    },
+    fixable: 'code',
+    schema: [],
+    messages: {
+      isolatedComment: '注释必须紧邻相关代码（在代码上方或同一行），不允许孤立注释: "{{comment}}"',
+    },
+  },
+
+  create(context) {
+    /**
+     * 创建修复器：移除整行注释
+     */
+    function createFixer(fixer, sourceCode, comment) {
+      const startLine = comment.loc.start.line
+      const endLine = comment.loc.end.line
+      const lineStart = sourceCode.getIndexFromLoc({ line: startLine, column: 0 })
+      const nextLineStart =
+        endLine < sourceCode.lines.length
+          ? sourceCode.getIndexFromLoc({ line: endLine + 1, column: 0 })
+          : sourceCode.text.length
+      return fixer.removeRange([lineStart, nextLineStart])
+    }
+
+    /**
+     * 检查从指定行开始，连续的注释块最终是否紧邻代码
+     */
+    function doesCommentBlockReachCode(startLineIndex, lines) {
+      for (let i = startLineIndex; i < lines.length; i++) {
+        const line = lines[i].trim()
+        if (line === '') {
+          // 遇到空行，注释块结束且未紧邻代码
+          return false
+        }
+        if (line.startsWith('//') || line.startsWith('/*') || line.startsWith('*')) {
+          // 继续是注释，继续检查下一行
+          continue
+        }
+        // 遇到代码行，注释块紧邻代码
+        return true
+      }
+      // 到达文件末尾，未紧邻代码
+      return false
+    }
+
+    return {
+      Program() {
+        const sourceCode = context.sourceCode || context.getSourceCode()
+        const comments = sourceCode.getAllComments()
+        const lines = sourceCode.lines
+
+        // 找出文件开头的注释块（从第1行开始的连续注释/空行）
+        const fileHeaderEndLine = (() => {
+          let lastHeaderLine = 0
+          for (const [i, line_] of lines.entries()) {
+            const line = line_.trim()
+            if (
+              line === '' ||
+              line.startsWith('//') ||
+              line.startsWith('/*') ||
+              line.startsWith('*') ||
+              line.endsWith('*/')
+            ) {
+              lastHeaderLine = i + 1
+            } else {
+              break
+            }
+          }
+          return lastHeaderLine
+        })()
+
+        for (const comment of comments) {
+          // 只处理单行注释
+          if (comment.type !== 'Line') continue
+
+          const value = comment.value
+          const commentLine = comment.loc.start.line
+
+          // 跳过文件头部注释
+          if (commentLine <= fileHeaderEndLine) continue
+
+          // 检查注释是否在代码同一行（行尾注释）
+          const lineContent = lines[commentLine - 1]
+          const codeBeforeComment = lineContent.slice(0, comment.loc.start.column).trim()
+          if (codeBeforeComment.length > 0) continue
+
+          // 检查从下一行开始，是否最终能紧邻代码
+          const nextLineIndex = commentLine // 0-based index for next line
+          if (doesCommentBlockReachCode(nextLineIndex, lines)) {
+            continue // 注释块最终紧邻代码，允许
+          }
+
+          // 孤立注释：注释块下方是空行或文件结尾
+          context.report({
+            loc: comment.loc,
+            messageId: 'isolatedComment',
+            data: {
+              comment: `//${value}`.slice(0, 50) + (value.length > 48 ? '...' : ''),
+            },
+            fix: fixer => createFixer(fixer, sourceCode, comment),
+          })
+        }
+      },
+    }
+  },
+}
 
 export default defineConfig([
   js.configs.recommended, // 使用 ESLint 官方推荐的 JS 配置
@@ -32,9 +151,9 @@ export default defineConfig([
       '**/target/',
       '**/.svelte-kit/',
       '**/node_modules/',
-      './packages/',
-      './apps/docs/',
-      './vitest.config.ts',
+      'packages/**',
+      'apps/docs/**',
+      'vitest.config.ts',
     ],
   },
   {
@@ -42,11 +161,15 @@ export default defineConfig([
     plugins: {
       regexp: regexpPlugin,
       import: importPlugin,
-      promise: promisePlugin,
-      node: nodePlugin,
       sonarjs: sonarjsPlugin,
       security: securityPlugin,
       unicorn: unicornPlugin,
+      // 自定义规则插件
+      'custom-rules': {
+        rules: {
+          'no-isolated-comments': noIsolatedComments,
+        },
+      },
     },
     languageOptions: {
       ecmaVersion: 'latest',
@@ -62,6 +185,10 @@ export default defineConfig([
       ...sonarjsPlugin.configs.recommended.rules, // 引入 SonarJS 推荐规则集
       ...securityPlugin.configs.recommended.rules, // 引入 Security 推荐规则集
       ...unicornPlugin.configs.recommended.rules,
+
+      // 禁止孤立注释（可自动修复）
+      'custom-rules/no-isolated-comments': 'error',
+
       // 关闭 SonarJS 部分过于严格的检查
       'sonarjs/pseudo-random': 'off', // 允许使用 Math.random
       'sonarjs/no-ignored-exceptions': 'off', // 允许空的 catch 块
@@ -116,6 +243,10 @@ export default defineConfig([
       'no-useless-escape': 'off', // 允许多余转义
       complexity: 'off', // 关闭复杂度限制
       'max-lines': 'off', // 关闭长度限制
+
+      // 生产代码质量
+      'no-console': ['warn', { allow: ['warn', 'error'] }], // 生产代码不应有 console.log
+      'no-debugger': 'error', // 禁止 debugger 语句
 
       'no-use-before-define': ['warn', { functions: false, classes: false }], // 禁止在声明前使用，防止引用错误
       eqeqeq: ['warn', 'always', { null: 'ignore' }], // 强制使用全等避免隐式类型转换
@@ -229,7 +360,6 @@ export default defineConfig([
       'no-proto': 'warn', // 禁用 __proto__ 属性
       'no-restricted-properties': 'warn', // 禁止使用某些对象属性
       'no-return-assign': 'warn', // 禁止在 return 中赋值
-      'no-return-await': 'warn', // 禁止在 return 中使用 await
       'no-self-compare': 'warn', // 禁止与自身比较
       'no-sequences': 'warn', // 禁止使用逗号运算符
       'no-throw-literal': 'warn', // 强制抛出 Error 对象
@@ -295,77 +425,19 @@ export default defineConfig([
       '@typescript-eslint/no-empty-object-type': 'off', // 允许空对象类型
       '@typescript-eslint/consistent-type-imports': ['warn', { disallowTypeAnnotations: true }], // 建议使用统一的类型导入风格
       '@typescript-eslint/no-unsafe-call': 'off', // 允许调用不安全类型
-      'no-prototype-builtins': 'off', // 允许使用 Object.prototype.* 调用
-      'no-control-regex': 'off', // 允许正则中使用控制字符
-      'no-empty-character-class': 'off', // 允许空字符类
-      'no-useless-escape': 'off', // 允许字符串或正则中的转义
 
-      // 规定类成员的书写顺序
-      '@typescript-eslint/member-ordering': [
-        'warn',
-        {
-          default: [
-            // 1. 公共静态字段/方法
-            'public-static-field',
-            'public-static-readonly-field',
-            'static-initialization',
-            'public-static-get',
-            'public-static-set',
-            'public-static-method',
+      // Promise 相关规则（防止异步错误）
+      '@typescript-eslint/no-floating-promises': 'error', // 防止未处理的 Promise
+      '@typescript-eslint/await-thenable': 'error', // 防止 await 非 Promise 值
+      '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: false }], // 防止 Promise 误用
+      '@typescript-eslint/return-await': ['warn', 'in-try-catch'], // 在 try-catch 中使用 return await
 
-            // 2. 受保护静态字段/方法
-            'protected-static-field',
-            'protected-static-readonly-field',
-            'protected-static-get',
-            'protected-static-set',
-            'protected-static-method',
+      // 现代化 TypeScript 规则
+      '@typescript-eslint/prefer-nullish-coalescing': 'warn', // 优先使用 ?? 而非 ||
+      '@typescript-eslint/prefer-optional-chain': 'warn', // 优先使用可选链 ?.
 
-            // 3. 私有静态字段/方法
-            'private-static-field',
-            'private-static-readonly-field',
-            'private-static-get',
-            'private-static-set',
-            'private-static-method',
-
-            // 4. 公共实例字段
-            'public-instance-field',
-            'public-decorated-field',
-            'public-readonly-field',
-
-            // 5. 受保护实例字段
-            'protected-instance-field',
-            'protected-readonly-field',
-
-            // 6. 私有实例字段
-            'private-instance-field',
-            'private-readonly-field',
-
-            // 7. 构造函数
-            'constructor',
-
-            // 8. 公共存取器
-            'public-instance-get',
-            'public-instance-set',
-
-            // 9. 受保护存取器
-            'protected-instance-get',
-            'protected-instance-set',
-
-            // 10. 私有存取器
-            'private-instance-get',
-            'private-instance-set',
-
-            // 11. 公共实例方法
-            'public-instance-method',
-
-            // 12. 受保护实例方法
-            'protected-instance-method',
-
-            // 13. 私有实例方法
-            'private-instance-method',
-          ],
-        },
-      ],
+      // 规定类成员的书写顺序（使用 sort-class-members 替代，支持自动修复）
+      '@typescript-eslint/member-ordering': 'off',
       'sort-class-members/sort-class-members': [
         'warn',
         {
@@ -565,7 +637,7 @@ export default defineConfig([
       },
     },
     rules: {
-      ...vuePlugin.configs.rules, // 使用 Vue 官方推荐配置
+      ...vuePlugin.configs['flat/recommended'].rules, // 使用 Vue 官方推荐配置
       'vue/no-deprecated-slot-attribute': 'off', // 允许使用已废弃的 slot 属性
       'vue/prefer-import-from-vue': 'off', // 允许直接从其他地方导入
       'vue/multi-word-component-names': 'off', // 允许单词组件名
@@ -583,7 +655,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['eslint.config.mjs'],
+    files: ['eslint.config.js'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -638,12 +710,13 @@ export default defineConfig([
     ],
     languageOptions: {
       globals: {
-        // Jest 全局变量
+        // Jest/Vitest 全局变量
         describe: 'readonly',
         it: 'readonly',
         test: 'readonly',
         expect: 'readonly',
         jest: 'readonly',
+        vi: 'readonly',
         beforeEach: 'readonly',
         afterEach: 'readonly',
         beforeAll: 'readonly',
@@ -653,6 +726,9 @@ export default defineConfig([
     rules: {
       // 测试文件中允许传递 undefined 作为 mock 返回值
       'unicorn/no-useless-undefined': 'off',
+      // 测试文件中放宽 Promise 规则
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
     },
   },
   eslintConfigPrettier, // 使用 Prettier 配置覆盖部分格式化规则

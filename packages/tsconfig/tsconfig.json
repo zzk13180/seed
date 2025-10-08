@@ -18,9 +18,9 @@
     "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致性
     "removeComments": true, // 删除编译后文件中的注释
     // "sourceMap": true, // 生成.map文件
-    "strictNullChecks": false, // 关闭严格的null和undefined检查
-    "strictFunctionTypes": false, // 关闭函数参数的双向协变检查
-    "noUnusedLocals": false, // 允许未使用的局部变量
-    "noImplicitAny": false // 允许隐式any类型
+    "strictNullChecks": true, // 严格的null和undefined检查
+    "strictFunctionTypes": true, // 函数参数的双向协变检查
+    "noUnusedLocals": false, // 允许未使用的局部变量（可后续开启）
+    "noImplicitAny": true // 禁止隐式any类型
   }
 }

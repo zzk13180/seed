@@ -1,28 +1,26 @@
 <template>
   <transition mode="out-in">
     <router-link key="expand" to="/" class="the-logo">
-      <svg v-if="svgContent" class="the-logo-svg">
-        <use :xlink:href="'#vv-logo-svg-symbol'"></use>
-      </svg>
+      <div :style="logoStyle"></div>
       <h1>{{ title }}</h1>
     </router-link>
   </transition>
 </template>
 
 <script setup lang="ts">
-  const logoUrl = '/logo/default.svg'
-  const title = 'title'
-  const svgContent = ref<string | null>(null)
+  const logoUrl = '/favicon/default.svg'
+  const title = '@seed/admin'
 
-  onMounted(async () => {
-    const response = await fetch(logoUrl)
-    const svgText = await response.text()
-    svgContent.value = svgText
-    const symbol = document.createElementNS('http://www.w3.org/2000/svg', 'symbol')
-    symbol.setAttribute('id', 'vv-logo-svg-symbol')
-    symbol.innerHTML = svgText
-    document.body.append(symbol)
-  })
+  /**
+   * 使用 CSS Mask 技术实现图标
+   * 原理：以 SVG 为遮罩，通过 background-color 控制颜色
+   */
+  const logoStyle = computed(() => ({
+    width: '24px',
+    height: '24px',
+    mask: `url(${logoUrl}) no-repeat center / contain`,
+    backgroundColor: 'var(--el-text-color-primary)',
+  }))
 </script>
 
 <style lang="scss" scoped>
@@ -33,20 +31,13 @@
     align-items: center;
     gap: 4px;
 
-    .the-logo-svg {
-      width: 24px;
-      height: 24px;
-      color: #fff;
-    }
-
     h1 {
       font-weight: 600;
       font-size: 16px;
-      color: var(--el-color-white);
-      margin-left: var(--vv-gap-small);
       height: 100%;
       display: flex;
       align-items: center;
+      color: var(--el-text-color-primary);
     }
   }
 </style>

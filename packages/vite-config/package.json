@@ -1,0 +1,20 @@
+{
+  "name": "@seed/vite-config",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./plugins": "./plugins/index.ts",
+    "./utils": "./utils/index.ts"
+  },
+  "peerDependencies": {
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vitejs/plugin-vue-jsx": "^5.0.0",
+    "vite-plugin-compression2": "^1.0.0",
+    "vite-plugin-svg-icons": "^2.0.1"
+  }
+}

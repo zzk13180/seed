@@ -176,7 +176,7 @@ export class UserService {
       updatedBy: currentUserId,
     })
 
-    const insertId = Number(result[0].insertId)
+    const insertId = Number((result as unknown as { insertId: number | bigint }[])[0].insertId)
     const savedUser = await this.findUserEntityById(insertId)
     return this.userMapper.toVO(savedUser)!
   }

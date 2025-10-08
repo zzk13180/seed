@@ -1,4 +1,65 @@
+# ===========================================
+# Docker Build Context Optimization
+# 排除不需要参与构建的文件和目录
+# ===========================================
+
+# 依赖目录（将在容器内安装）
 node_modules
+**/node_modules
+
+# Nx 缓存
 .nx
+**/.nx
+
+# Git 相关
 .git
+.gitignore
+.gitattributes
+
+# 构建产物
 dist
+**/dist
+coverage
+**/coverage
+.next
+**/.next
+.svelte-kit
+**/.svelte-kit
+
+# IDE 配置
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# 测试相关
+**/*.spec.ts
+**/*.test.ts
+**/__tests__
+**/test
+vitest.config.ts
+**/vitest.config.ts
+
+# 文档和配置
+*.md
+!README.md
+LICENSE
+OPTIMIZATION.md
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# 环境变量（敏感信息）
+.env
+.env.*
+!.env.example
+
+# Tauri/Rust 构建产物
+**/target
+
+# SQL 脚本（非运行时需要）
+sql/

@@ -71,7 +71,7 @@ export class Snapshots extends Array<Snapshot> {
     }
   }
 
-  async #typewriter(prev: Snapshot, snap: Snapshot) {
+  async #typewriter(prev: Snapshot | undefined, snap: Snapshot) {
     const charSteps = animateSteps(prev, snap)
     const sleepSteps = typingAnimator(charSteps)
     for await (const step of sleepSteps) {
@@ -107,7 +107,7 @@ export interface AnimatorStep {
   index?: number // 删除/插入的位置（单个字符）
 }
 
-function* animateSteps(prev: Snapshot, snap: Snapshot): Generator<AnimatorStep> {
+function* animateSteps(prev: Snapshot | undefined, snap: Snapshot): Generator<AnimatorStep> {
   if (prev === undefined || prev.content.id !== snap.content.id) {
     yield {
       type: AnimatorType.START,
@@ -177,7 +177,7 @@ async function* typingAnimator(steps: Generator<AnimatorStep>): AsyncGenerator<A
   const getOptions = (snap?: Snapshot) => ({
     ...snap?.options,
   })
-  const actions = {
+  const actions: Partial<Record<AnimatorType, (step: AnimatorStep) => Promise<void>>> = {
     [AnimatorType.START]: async (step: AnimatorStep) => {
       const { wait } = getOptions(step.snap)
       if (wait) {
@@ -193,8 +193,9 @@ async function* typingAnimator(steps: Generator<AnimatorStep>): AsyncGenerator<A
   }
 
   for (const step of steps) {
-    if (actions[step.type]) {
-      await actions[step.type](step)
+    const action = actions[step.type]
+    if (action) {
+      await action(step)
     }
     yield step
   }

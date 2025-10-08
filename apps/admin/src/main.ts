@@ -7,6 +7,9 @@ import { createPinia } from 'pinia'
 import SvgIcon from '@/components/SvgIcon.vue'
 import App from './App.vue'
 import { router } from './pages/router'
+import { injectRouter } from './stores/user/user.store'
+import { setupHttpInterceptors } from './core/http.interceptor'
+import { setupNetworkListener } from './core/network.service'
 
 /**
  * 初始化应用主题
@@ -28,6 +31,15 @@ function initializeTheme(): void {
 function bootstrap(): void {
   const app = createApp(App as Component)
   const store = createPinia()
+
+  // 设置 HTTP 拦截器（全局错误处理）
+  setupHttpInterceptors()
+
+  // 设置网络状态监听
+  setupNetworkListener()
+
+  // 注入 router 到 user store（解决循环依赖）
+  injectRouter(router)
 
   // 注册插件
   app.use(store)

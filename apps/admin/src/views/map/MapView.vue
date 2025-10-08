@@ -1,13 +1,28 @@
 <template>
   <div class="map-view-container">
     <el-card class="map-view-header">
-      <template v-if="isControllerInitialized">
-        <div>iconbar</div>
-      </template>
+      <div class="map-view-header-content">
+        <span class="map-title">地图视图</span>
+        <div class="map-status">
+          <el-tag v-if="isViewReady" type="success" size="small">视图就绪</el-tag>
+          <el-tag v-if="isGridReady" type="success" size="small">网格就绪</el-tag>
+        </div>
+      </div>
     </el-card>
-    <el-card class="map-view-content">
+
+    <el-card class="map-view-content" v-loading="state.loading">
+      <template v-if="state.errorMessage">
+        <el-alert
+          :title="state.errorMessage"
+          type="error"
+          show-icon
+          closable
+          @close="controller.clearError()"
+        />
+      </template>
+
       <div class="map-view-canvas-container" ref="canvasContainerRef">
-        <template v-if="isControllerInitialized">
+        <template v-if="isViewReady">
           <MapGridCanvas />
         </template>
       </div>
@@ -16,22 +31,33 @@
 </template>
 
 <script setup lang="ts">
+  import { ref, onMounted, onBeforeUnmount } from 'vue'
   import MapGridCanvas from './MapGridCanvas/MapGridCanvas.vue'
   import { useMapStore } from './map.store'
 
   const canvasContainerRef = ref<HTMLDivElement | null>(null)
 
-  const { state, controller } = useMapStore()
-  const isControllerInitialized = ref(false)
+  const mapStore = useMapStore()
+  const { state, controller, isViewReady, isGridReady } = mapStore
 
-  onMounted(() => {
+  onMounted(async () => {
     console.log('MapView mounted', performance.now())
-    controller.initialize(canvasContainerRef.value)
-    isControllerInitialized.value = true
+
+    try {
+      // 先初始化 BaseController
+      await controller.initialize()
+
+      // 然后初始化视图（需要 DOM 容器）
+      if (canvasContainerRef.value) {
+        controller.initializeView(canvasContainerRef.value)
+      }
+    } catch (error) {
+      console.error('MapView initialization failed:', error)
+    }
   })
 
-  onBeforeUnmount(() => {
-    controller.destroy()
+  onBeforeUnmount(async () => {
+    await controller.dispose()
   })
 </script>
 
@@ -49,9 +75,21 @@
     }
 
     .map-view-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      .map-view-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .map-title {
+          font-size: 18px;
+          font-weight: 600;
+        }
+
+        .map-status {
+          display: flex;
+          gap: 8px;
+        }
+      }
     }
 
     .map-view-content {

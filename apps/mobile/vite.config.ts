@@ -6,12 +6,9 @@ import { optimizeDeps } from './vite/optimization'
 import type { UserConfig, ConfigEnv } from 'vite'
 
 export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
-  const commonEnvDir = path.resolve(import.meta.dirname, '../../packages/common')
-  console.log('commonEnvDir', commonEnvDir)
-  const environment = loadEnv(mode, commonEnvDir)
+  const environment = loadEnv(mode, process.cwd())
 
   return {
-    envDir: commonEnvDir,
     base: '/',
     resolve: {
       alias: {

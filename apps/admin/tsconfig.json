@@ -6,6 +6,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["."],
+  "include": [".", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "*.d.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }

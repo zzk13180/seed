@@ -3,7 +3,7 @@ tabWidth: 2 # 缩进的空格数
 useTabs: false # 使用空格而不是制表符
 semi: false # 在语句末尾不使用分号
 singleQuote: true # 使用单引号而不是双引号
-quoteProps: preserve # 保持对象属性的引号使用
+quoteProps: as-needed # 仅在必要时添加对象属性引号
 jsxSingleQuote: false # 在 JSX 中使用双引号
 bracketSameLine: false # 将多行元素的闭合括号放在新行
 trailingComma: all # 对象和数组中，末尾添加逗号
