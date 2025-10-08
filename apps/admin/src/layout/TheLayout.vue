@@ -1,7 +1,10 @@
 <template>
   <div class="the-layout-container">
-    <LayoutSidebar v-if="!state.sidebarIsHidden" />
-    <div :class="{ 'layout-sidebar-hide': state.sidebarIsHidden }" class="layout-content-container">
+    <LayoutSidebar v-if="!appStore.state.sidebarIsHidden" />
+    <div
+      :class="{ 'layout-sidebar-hide': appStore.state.sidebarIsHidden }"
+      class="layout-content-container"
+    >
       <div class="layout-fixed-header">
         <LayoutNavbar />
       </div>
@@ -16,7 +19,7 @@
   import LayoutNavbar from './LayoutNavbar.vue'
   import LayoutContent from './LayoutContent.vue'
 
-  const { state } = useAppStore()
+  const appStore = useAppStore()
 </script>
 
 <style lang="scss" scoped>

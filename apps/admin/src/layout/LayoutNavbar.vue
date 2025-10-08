@@ -45,12 +45,12 @@
 </template>
 
 <script setup lang="ts">
-  import '@element-plus/components/base/style/css'
-  import '@element-plus/components/button/style/css'
-  import '@element-plus/components/button-group/style/css'
-  import '@element-plus/components/popper/style/css'
-  import '@element-plus/components/scrollbar/style/css'
-  import '@element-plus/theme-chalk/el-dropdown.css'
+  import 'element-plus/es/components/base/style/css'
+  import 'element-plus/es/components/button/style/css'
+  import 'element-plus/es/components/button-group/style/css'
+  import 'element-plus/es/components/popper/style/css'
+  import 'element-plus/es/components/scrollbar/style/css'
+  import 'element-plus/theme-chalk/el-dropdown.css'
   import { useRouter } from 'vue-router'
   import { useFullscreen } from '@vueuse/core'
   import TheLogo from '@/components/TheLogo.vue'

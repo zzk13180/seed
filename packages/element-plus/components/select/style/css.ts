@@ -1,7 +1,0 @@
-import '@seed/element-plus-components/base/style/css'
-import '@seed/element-plus-components/tag/style/css'
-import '@seed/element-plus-components/option/style/css'
-import '@seed/element-plus-components/option-group/style/css'
-import '@seed/element-plus-components/scrollbar/style/css'
-import '@seed/element-plus-components/popper/style/css'
-import '@seed/element-plus-theme-chalk/el-select.css'

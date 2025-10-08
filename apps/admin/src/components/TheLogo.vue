@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
   const logoUrl = '/logo/default.svg'
-  const title = 'Title'
+  const title = 'title'
   const svgContent = ref<string | null>(null)
 
   onMounted(async () => {

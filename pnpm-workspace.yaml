@@ -1,7 +1,8 @@
 packages:
-  - 'apps/**'
-  - 'packages/**'
-# 忽略构建依赖：指定在构建时忽略的包，避免不必要的构建步骤
+  - apps/**
+  - packages/**
 ignoredBuiltDependencies:
   - ssh2
   - cpu-features
+onlyBuiltDependencies:
+  - bcrypt

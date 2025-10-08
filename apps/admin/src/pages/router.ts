@@ -1,7 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { AccessTokenUtil } from '@/utils/token.util'
 import TheLayout from '@/layout/TheLayout.vue'
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw, NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+
+/**
+ * 白名单路由（无需认证）
+ */
+const WHITE_LIST = new Set(['/login', '/redirect', '/401', '/404'])
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('./map.vue'),
         meta: {
           requiresAuth: true,
-          title: '地图导航',
+          title: 'routes',
           icon: 'map',
         },
       },
@@ -35,8 +40,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('./panel.vue'),
         meta: {
           requiresAuth: true,
-          title: '控制面板',
-          icon: 'panel-control',
+          title: 'routes',
+          icon: 'map',
         },
       },
     ],
@@ -91,23 +96,58 @@ const routes: Array<RouteRecordRaw> = [
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_PATH),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition
-    } else {
-      return { top: 0 }
     }
+    return { top: 0 }
   },
   strict: true,
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !AccessTokenUtil.token) {
-    next({
-      path: '/login',
-      query: { redirect: to.fullPath },
-    })
-  } else {
+/**
+ * 路由前置守卫
+ */
+router.beforeEach(
+  (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    // 设置页面标题
+    if (to.meta?.title) {
+      document.title = `${to.meta.title as string} - Seed Admin`
+    }
+
+    // 白名单路由直接放行
+    if (WHITE_LIST.has(to.path)) {
+      next()
+      return
+    }
+
+    // 检查认证状态
+    const hasToken = AccessTokenUtil.token
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+    if (requiresAuth) {
+      if (!hasToken) {
+        // 未登录，重定向到登录页
+        next({
+          path: '/login',
+          query: { redirect: to.fullPath },
+        })
+        return
+      }
+
+      // 检查 token 是否过期
+      if (AccessTokenUtil.isExpired && AccessTokenUtil.refreshToken) {
+        // TODO: 可在此处添加刷新 token 的逻辑
+        // 目前先重定向到登录页
+        AccessTokenUtil.clear()
+        next({
+          path: '/login',
+          query: { redirect: to.fullPath },
+        })
+        return
+      }
+    }
+
     next()
-  }
-})
+  },
+)

@@ -53,8 +53,7 @@ function kebabCase(key: string) {
 // eslint-disable-next-line consistent-return
 function getSideEffects(dirName: string, options: ElementPlusResolverOptionsResolved): any {
   const { importStyle, ssr, nightly } = options
-  // const themeFolder = '@element-plus/theme-chalk'
-  const esComponentsFolder = '@element-plus/components'
+  const esComponentsFolder = 'element-plus/es/components'
 
   if (importStyle === 'sass') {
     console.log('custom-resolver importStyle 禁用 sass')
@@ -85,7 +84,7 @@ function resolveComponent(name: string, options: ElementPlusResolverOptionsResol
   // eslint-disable-next-line consistent-return
   return {
     name,
-    from: '@element-plus/components',
+    from: 'element-plus',
 
     sideEffects: getSideEffects(partialName, options),
   }
@@ -113,7 +112,7 @@ function resolveDirective(name: string, options: ElementPlusResolverOptionsResol
   // eslint-disable-next-line consistent-return
   return {
     name: directive.importName,
-    from: '@element-plus/components',
+    from: 'element-plus',
 
     sideEffects: getSideEffects(directive.styleName, options),
   }

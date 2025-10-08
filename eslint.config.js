@@ -34,7 +34,7 @@ export default defineConfig([
       '**/node_modules/',
       './packages/',
       './apps/docs/',
-      './apps/admin/src/components/VvDropdown/',
+      './vitest.config.ts',
     ],
   },
   {
@@ -613,6 +613,46 @@ export default defineConfig([
       'unicorn/prefer-top-level-await': 'off',
       'unicorn/no-process-exit': 'off',
       'unicorn/prefer-module': 'off',
+    },
+  },
+  {
+    files: ['apps/server-api/**/*.ts'],
+    rules: {
+      '@typescript-eslint/parameter-properties': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      'unicorn/prefer-top-level-await': 'off',
+      'unicorn/no-process-exit': 'off',
+      'unicorn/prefer-module': 'off',
+      '@typescript-eslint/require-await': 'off',
+      'unicorn/no-anonymous-default-export': 'off',
+    },
+  },
+  {
+    // 测试文件配置 - 添加 Jest 全局变量
+    files: [
+      '**/*.spec.ts',
+      '**/*.test.ts',
+      '**/*.spec.js',
+      '**/*.test.js',
+      'apps/server-api/test/**/*.ts',
+    ],
+    languageOptions: {
+      globals: {
+        // Jest 全局变量
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        jest: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+      },
+    },
+    rules: {
+      // 测试文件中允许传递 undefined 作为 mock 返回值
+      'unicorn/no-useless-undefined': 'off',
     },
   },
   eslintConfigPrettier, // 使用 Prettier 配置覆盖部分格式化规则

@@ -14,6 +14,8 @@
     "strictNullChecks": true,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
+    "types": ["jest", "node"],
     "paths": {
       "@/*": ["src/*"]
     }

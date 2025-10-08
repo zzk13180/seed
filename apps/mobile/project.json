@@ -1,0 +1,40 @@
+{
+  "name": "@seed/mobile",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mobile/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite serve --mode development",
+        "cwd": "apps/mobile"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "vite build --mode production",
+        "cwd": "apps/mobile"
+      },
+      "outputs": ["{projectRoot}/dist"],
+      "configurations": {
+        "development": {
+          "command": "vite build --mode development"
+        },
+        "production": {
+          "command": "vite build --mode production"
+        }
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite preview",
+        "cwd": "apps/mobile"
+      }
+    }
+  },
+  "tags": ["type:app", "platform:mobile", "framework:ionic", "framework:vue"]
+}

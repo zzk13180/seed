@@ -3,59 +3,100 @@ import { serve } from '@hono/node-server'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { logger } from 'hono/logger'
+import type { Context } from 'hono'
 
-const app = new Hono()
+/**
+ * 代理服务配置
+ */
+const CONFIG = {
+  PORT: Number(process.env.PORT) || 3000,
+  REQUEST_TIMEOUT: 60_000, // 60 秒
+} as const
 
-app.get('/', c => {
-  return c.text('Hello')
-})
-
-const schema = z.object({
+/**
+ * 请求头验证 Schema
+ */
+const headerSchema = z.object({
   'Target-URL': z.string().url(),
 })
 
-app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
+/**
+ * 无需请求体的 HTTP 方法
+ */
+const METHODS_WITHOUT_BODY = new Set(['GET', 'HEAD'])
+
+/**
+ * 需要处理 content-length 的方法
+ */
+const METHODS_NEEDING_CONTENT_LENGTH = new Set(['DELETE', 'OPTIONS'])
+
+const app = new Hono()
+
+/**
+ * 健康检查端点
+ */
+app.get('/', (c: Context) => {
+  return c.json({
+    status: 'ok',
+    service: 'seed-proxy',
+    timestamp: new Date().toISOString(),
+  })
+})
+
+/**
+ * 健康检查端点
+ */
+app.get('/health', (c: Context) => {
+  return c.json({ status: 'ok' })
+})
+
+/**
+ * 代理请求处理
+ */
+app.all('/proxy/*', logger(), zValidator('header', headerSchema), async (c: Context) => {
   const originalUrl = new URL(c.req.url)
   const targetUrl = c.req.header('Target-URL')
   const method = c.req.method
   const originalPath = c.req.path
   const queryString = originalUrl.search
   const proxiedUrl = `${targetUrl}${originalPath}${queryString}`
-  let requestBody: any
+
+  let requestBody: ArrayBuffer | undefined
 
   // 1. 处理 DELETE/OPTIONS 请求的 content-length
   const clientContentType = c.req.header('Content-Type')
   const clientContentLength = c.req.header('Content-Length')
-  if ((method === 'DELETE' || method === 'OPTIONS') && !clientContentLength) {
-    // 某些服务端需要 content-length: 0
-    c.req.raw.headers['content-length'] = '0'
-    delete c.req.raw.headers['transfer-encoding']
+  if (METHODS_NEEDING_CONTENT_LENGTH.has(method) && !clientContentLength) {
+    const rawHeaders = c.req.raw.headers as any
+    rawHeaders['content-length'] = '0'
+    delete rawHeaders['transfer-encoding']
   }
 
   // 2. 读取请求体
-  if (method !== 'GET' && method !== 'HEAD') {
+  if (!METHODS_WITHOUT_BODY.has(method)) {
     try {
-      if (
+      const hasContent =
         (clientContentLength && clientContentLength !== '0') ||
         (clientContentType &&
           (clientContentType.includes('json') ||
             clientContentType.includes('x-www-form-urlencoded') ||
             clientContentType.includes('multipart/form-data')))
-      ) {
+
+      if (hasContent) {
         requestBody = await c.req.arrayBuffer()
       }
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       console.warn(
-        `[Proxy Warning] Could not read request body for ${method} ${originalPath}: ${error.message}`,
+        `[Proxy Warning] Could not read request body for ${method} ${originalPath}: ${errorMessage}`,
       )
     }
   }
 
   // 3. 构建转发请求头（最小可用头部转发）
   const headersToForward = new Headers()
-  const contentTypeFromClient = c.req.header('Content-Type')
-  if (contentTypeFromClient) {
-    headersToForward.set('Content-Type', contentTypeFromClient)
+  if (clientContentType) {
+    headersToForward.set('Content-Type', clientContentType)
   }
   const acceptHeaderFromClient = c.req.header('Accept')
   if (acceptHeaderFromClient) {
@@ -67,7 +108,7 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
   // 4. 发起转发
   try {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 60_000) // 60s 超时
+    const timeout = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT)
 
     const targetResponse = await fetch(proxiedUrl, {
       method,
@@ -83,7 +124,6 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
     for (const [key, value] of targetResponse.headers.entries()) {
       // 处理 set-cookie 多值
       if (key.toLowerCase() === 'set-cookie') {
-        // Hono/Fetch Headers 只支持 append
         responseHeaders.append('set-cookie', value)
       } else {
         responseHeaders.set(key, value)
@@ -93,18 +133,23 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
     // 处理重定向 Location
     if (responseHeaders.has('location')) {
       try {
-        const loc = new URL(responseHeaders.get('location'), targetUrl)
+        const locationUrl = responseHeaders.get('location')
+        const loc = new URL(locationUrl, targetUrl)
         // 如果目标 host 与 location host 相同，重写为当前服务 host
         if (loc.host === new URL(targetUrl).host) {
           loc.host = c.req.header('host') || loc.host
           loc.protocol = originalUrl.protocol
           responseHeaders.set('location', loc.toString())
         }
-      } catch {}
+      } catch {
+        // 忽略无效的 Location URL
+      }
     }
 
     // 处理 HTTP/1.0 Transfer-Encoding
-    if (c.req.raw?.raw?.httpVersion === '1.0') {
+
+    const rawRequest = c.req.raw as any
+    if (rawRequest?.raw?.httpVersion === '1.0') {
       responseHeaders.delete('transfer-encoding')
       responseHeaders.set('connection', c.req.header('connection') || 'close')
     }
@@ -114,19 +159,25 @@ app.all('/proxy/*', logger(), zValidator('header', schema), async c => {
       statusText: targetResponse.statusText,
       headers: responseHeaders,
     })
-  } catch (error: any) {
-    console.error(`[Proxy Error] Failed to fetch ${proxiedUrl}:`, error.message)
-    if (error.message.includes('ECONNREFUSED')) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error(`[Proxy Error] Failed to fetch ${proxiedUrl}:`, errorMessage)
+
+    if (errorMessage.includes('ECONNREFUSED')) {
       return c.json({ error: 'Proxy request failed: Connection refused by target server' }, 502)
     }
-    return c.json({ error: 'Proxy request failed', details: error.message }, 502)
+
+    return c.json({ error: 'Proxy request failed', details: errorMessage }, 502)
   }
 })
 
+/**
+ * 启动服务器
+ */
 serve(
   {
     fetch: app.fetch,
-    port: 3000,
+    port: CONFIG.PORT,
   },
   info => {
     console.log(`Server is running on http://localhost:${info.port}`)

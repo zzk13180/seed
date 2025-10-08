@@ -1,17 +1,16 @@
 import { createApp } from 'vue'
 
+// 应用样式
 import '@/styles/index.scss'
 import 'virtual:svg-icons-register'
 
-/* Core CSS required for Ionic components to work properly */
+// Ionic 核心样式
 import '@ionic/vue/css/core.css'
-
-/* Basic CSS for apps built with Ionic */
 import '@ionic/vue/css/normalize.css'
 import '@ionic/vue/css/structure.css'
 import '@ionic/vue/css/typography.css'
 
-/* Optional CSS utils that can be commented out */
+// Ionic 可选样式
 import '@ionic/vue/css/padding.css'
 import '@ionic/vue/css/float-elements.css'
 import '@ionic/vue/css/text-alignment.css'
@@ -19,46 +18,51 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
-/* Theme variables */
+// 主题变量
 import './styles/theme/variables.css'
 import './styles/theme/custom.css'
 import '@ionic/core/css/core.css'
 import '@ionic/core/css/ionic.bundle.css'
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-// import "@ionic/vue/css/palettes/dark.always.css";
-// import "@ionic/vue/css/palettes/dark.system.css";
+// 暗色模式
 import '@ionic/vue/css/palettes/dark.class.css'
 
 import { IonicVue } from '@ionic/vue'
-
 import { register } from 'swiper/element/bundle'
-
 import { createPinia } from 'pinia'
+
 import App from './App.vue'
 import SvgIcon from './components/SvgIcon.vue'
 import router from './router'
 
+// 注册 Swiper 自定义元素
 register()
 
-const app = createApp(App)
+/**
+ * 创建并挂载 Vue 应用
+ */
+async function bootstrap(): Promise<void> {
+  const app = createApp(App)
+  const store = createPinia()
 
-const store = createPinia()
-app.use(store)
-app.use(IonicVue, {
-  mode: 'md',
-})
-app.use(router)
+  // 注册插件
+  app.use(store)
+  app.use(IonicVue, {
+    mode: 'md', // Material Design 风格
+  })
+  app.use(router)
 
-app.component('SvgIcon', SvgIcon)
+  // 注册全局组件
+  app.component('SvgIcon', SvgIcon)
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises, unicorn/prefer-top-level-await
-router.isReady().then(() => {
+  // 等待路由就绪后挂载
+  await router.isReady()
   app.mount('#app')
-})
+}
+
+// 启动应用
+try {
+  await bootstrap()
+} catch (error) {
+  console.error('Failed to start app:', error)
+}

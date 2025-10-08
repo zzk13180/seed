@@ -1,0 +1,24 @@
+{
+  "name": "@seed/http",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/http",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run tests",
+        "cwd": "packages/http"
+      },
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint .",
+        "cwd": "packages/http"
+      }
+    }
+  },
+  "tags": ["type:lib", "scope:shared"]
+}

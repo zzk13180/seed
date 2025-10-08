@@ -1,0 +1,50 @@
+---
+title: Getting Started
+description: Quick start guide
+layout: ../../layouts/MainLayout.astro
+---
+import DocIcon from '../../components/DocIcon.astro'
+
+## <DocIcon name="lucide:clipboard-list" /> Prerequisites
+
+Before starting, please ensure your development environment meets the following requirements:
+
+| Tool | Minimum Version | Recommended Version |
+|------|-----------------|---------------------|
+| **Node.js** | 18.x | 22.x |
+| **pnpm** | 9.x | 10.x |
+
+## <DocIcon name="lucide:rocket" /> Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-org/your-repo.git my-project
+cd my-project
+```
+
+### 2. Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 3. Start Development
+
+```bash
+# Start the docs development server
+pnpm --filter @seed/docs dev
+```
+
+## <DocIcon name="lucide:package" /> Build
+
+```bash
+# Build for production
+pnpm --filter @seed/docs build
+```
+
+## <DocIcon name="lucide:wrench" /> Customization
+
+- Edit `src/config.ts` to configure site settings
+- Add new pages in `src/pages/` directory
+- Customize styles in `src/assets/styles/`

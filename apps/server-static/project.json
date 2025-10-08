@@ -1,0 +1,33 @@
+{
+  "name": "@seed/server-static",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/server-static/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node main.ts",
+        "cwd": "apps/server-static"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "tsc",
+        "cwd": "apps/server-static"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/main.js",
+        "cwd": "apps/server-static"
+      }
+    }
+  },
+  "tags": ["type:app", "platform:node", "framework:fastify"]
+}

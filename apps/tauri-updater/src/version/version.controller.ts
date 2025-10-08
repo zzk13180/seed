@@ -18,12 +18,12 @@ export class VersionController {
     try {
       const result = await this.versionService.getUpdateInfo(target, arch, currentVersion)
       if (!result) {
-        res.status(HttpStatus.NO_CONTENT).send();
-        return;
+        res.status(HttpStatus.NO_CONTENT).send()
+        return
       }
-      res.status(HttpStatus.OK).send(result);
+      res.status(HttpStatus.OK).send(result)
     } catch {
-      res.status(HttpStatus.NO_CONTENT).send();
+      res.status(HttpStatus.NO_CONTENT).send()
     }
   }
 

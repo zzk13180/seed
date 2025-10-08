@@ -1,5 +1,17 @@
 {
   "name": "@seed/types",
   "version": "0.0.0",
-  "types": "index.d.ts"
+  "private": true,
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts"
+    },
+    "./vite-env": {
+      "types": "./vite-env.d.ts"
+    },
+    "./vue-global": {
+      "types": "./vue-global.d.ts"
+    }
+  }
 }

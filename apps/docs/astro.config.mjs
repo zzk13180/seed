@@ -3,6 +3,7 @@ import preact from '@astrojs/preact'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwind from '@astrojs/tailwind'
+import mdx from '@astrojs/mdx'
 import icon from 'astro-icon'
 import compressor from 'astro-compressor'
 
@@ -29,6 +30,7 @@ export default defineConfig({
   },
   prefetch: true,
   integrations: [
+    mdx(),
     // Enable Preact to support Preact JSX components.
     preact(),
     // Enable React for the Algolia search component.
@@ -44,6 +46,7 @@ export default defineConfig({
     icon({
       include: {
         tabler: ['*'],
+        lucide: ['*'],
         'flat-color-icons': [
           'template',
           'gallery',

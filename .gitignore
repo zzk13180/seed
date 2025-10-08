@@ -22,6 +22,6 @@ apps/admin/auto-import-vue.d.ts
 
 gen/
 target/
+coverage/
 
-z-tmp.md
-z-test.sh
+.env

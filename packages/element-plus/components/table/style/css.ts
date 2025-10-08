@@ -1,5 +1,0 @@
-import '@seed/element-plus-components/base/style/css'
-import '@seed/element-plus-theme-chalk/el-table.css'
-import '@seed/element-plus-components/checkbox/style/css'
-import '@seed/element-plus-components/tooltip/style/css'
-import '@seed/element-plus-components/scrollbar/style/css'

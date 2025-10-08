@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-  import zhCN from '@element-plus/locale/lang/zh-cn'
+  import zhCN from 'element-plus/es/locale/lang/zh-cn'
 </script>

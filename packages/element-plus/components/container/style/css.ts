@@ -1,6 +1,0 @@
-import '@seed/element-plus-components/base/style/css'
-import '@seed/element-plus-theme-chalk/el-container.css'
-import '@seed/element-plus-theme-chalk/el-aside.css'
-import '@seed/element-plus-theme-chalk/el-footer.css'
-import '@seed/element-plus-theme-chalk/el-header.css'
-import '@seed/element-plus-theme-chalk/el-main.css'

@@ -2,7 +2,30 @@
   "name": "@seed/common",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "module": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts"
+    },
+    "./constants": {
+      "types": "./constants/index.ts",
+      "import": "./constants/index.ts"
+    },
+    "./utils/*": {
+      "types": "./utils/*.ts",
+      "import": "./utils/*.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
   "files": [
-    "tsconfig.json"
+    "index.ts",
+    "constants",
+    "utils"
   ]
 }

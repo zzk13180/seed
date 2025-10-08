@@ -130,22 +130,29 @@ async function startServer(): Promise<void> {
   }
 }
 
-// 处理未捕获的异常和 Promise 拒绝
-process.on('uncaughtException', error => {
-  console.error('💥 未捕获的异常:')
-  console.error(error)
-  process.exit(1)
-})
+/**
+ * 注册全局异常处理器
+ */
+function registerExceptionHandlers(): void {
+  process.on('uncaughtException', (error: Error) => {
+    console.error('💥 未捕获的异常:')
+    console.error(error)
+    process.exit(1)
+  })
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('⚠️ 未处理的 Promise 拒绝:')
-  console.error('Promise:', promise)
-  console.error('Reason:', reason)
-  process.exit(1)
-})
+  process.on('unhandledRejection', (reason: unknown, promise: Promise<unknown>) => {
+    console.error('⚠️ 未处理的 Promise 拒绝:')
+    console.error('Promise:', promise)
+    console.error('Reason:', reason)
+    process.exit(1)
+  })
+}
+
+// 注册异常处理器
+registerExceptionHandlers()
 
 // 启动服务器
-await startServer().catch(error => {
+await startServer().catch((error: Error) => {
   console.error('❌ 服务启动失败:', error)
   process.exit(1)
 })

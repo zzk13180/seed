@@ -1,8 +1,8 @@
 export const BASE = 'seed'
 
 export const SITE = {
-  title: 'Seed',
-  description: 'monorepo seed project.',
+  title: 'Seed Docs',
+  description: 'Documentation template for your project.',
   defaultLanguage: 'zh_CN',
 }
 
@@ -23,7 +23,7 @@ export const KNOWN_LANGUAGES = {
 } as const
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES)
 
-export const GITHUB_EDIT_URL = 'https://github.com/zzk13180/seed/tree/main/apps/docs'
+export const GITHUB_EDIT_URL = 'https://github.com/your-org/your-repo/tree/main/apps/docs'
 
 // See "Algolia" section of the README for more information.
 export const ALGOLIA = {
@@ -38,19 +38,15 @@ export type Sidebar = Record<
 >
 export const SIDEBAR: Sidebar = {
   zh_CN: {
-    Section: [
-      { text: 'Introduction', link: 'zh_CN/introduction' },
-      { text: 'Page 2', link: 'zh_CN/page-2' },
-      { text: 'Page 3', link: 'zh_CN/page-3' },
-      { text: 'Page 4', link: 'zh_CN/page-4' },
+    快速开始: [
+      { text: '介绍', link: 'zh_CN/introduction' },
+      { text: '快速开始', link: 'zh_CN/getting-started' },
     ],
   },
   en: {
-    Section: [
+    'Getting Started': [
       { text: 'Introduction', link: 'en/introduction' },
-      { text: 'Page 2', link: 'en/page-2' },
-      { text: 'Page 3', link: 'en/page-3' },
-      { text: 'Page 4', link: 'en/page-4' },
+      { text: 'Quick Start', link: 'en/getting-started' },
     ],
   },
 }
