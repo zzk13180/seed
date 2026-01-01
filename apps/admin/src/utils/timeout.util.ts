@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 interface Execution {
   fn: Function // () => void

@@ -1,3 +1,24 @@
+/**
+ * ESLint 配置文件
+ *
+ * 本配置文件采用 ESLint Flat Config 格式，集成了多个插件以确保代码质量：
+ * - @typescript-eslint: TypeScript 静态分析
+ * - eslint-plugin-import: 模块导入规范
+ * - eslint-plugin-regexp: 正则表达式最佳实践
+ * - eslint-plugin-security: 安全漏洞检测
+ * - eslint-plugin-sonarjs: 代码异味检测
+ * - eslint-plugin-unicorn: 现代 JavaScript 最佳实践
+ * - eslint-plugin-vue: Vue.js 规范
+ * - eslint-plugin-svelte: Svelte 规范
+ * - eslint-plugin-sort-class-members: 类成员排序（支持自动修复）
+ *
+ * 配置文件结构：
+ * - eslint/rules/: 规则配置模块
+ * - eslint/custom-rules/: 自定义规则实现
+ */
+
+import fs from 'node:fs'
+import path from 'node:path'
 import globals from 'globals'
 import js from '@eslint/js'
 import { defineConfig } from 'eslint/config'
@@ -19,283 +40,173 @@ import unicornPlugin from 'eslint-plugin-unicorn'
 import svelteEslintParser from 'svelte-eslint-parser'
 import vueParser from 'vue-eslint-parser'
 
+// ----- 规则配置导入 -----
+import { disabledRules, regexpRules, classMembersOrder, nestjsRules } from './eslint/rules/index.js'
+import { noIsolatedComments } from './eslint/custom-rules/index.js'
+
 /**
- * 自定义规则：禁止孤立注释
+ * 加载 unplugin-auto-import 生成的 ESLint 全局变量配置
  *
- * 规则：
- * 1. 注释必须紧邻代码（在代码上方或同一行），不允许孤立注释
- * 2. 例外：文件开头的注释块（从第1行开始的连续注释）允许存在
+ * 该文件由 apps/admin/vite-config/auto-import-vue.ts 中的 eslintrc 选项自动生成，
+ * 包含所有通过 unplugin-auto-import 自动导入的 Vue/Pinia/VueRouter API。
  *
- * @type {import('eslint').Rule.RuleModule}
+ * 首次使用前需要运行一次 admin 项目的开发服务器来生成此文件：
+ *   pnpm --filter admin dev
+ *
+ * 如果文件不存在，将使用空对象，不会影响 ESLint 运行。
  */
-const noIsolatedComments = {
-  meta: {
-    type: 'suggestion',
-    docs: {
-      description: '禁止孤立注释，注释必须紧邻代码或在文件开头',
-      recommended: false,
-    },
-    fixable: 'code',
-    schema: [],
-    messages: {
-      isolatedComment: '注释必须紧邻相关代码（在代码上方或同一行），不允许孤立注释: "{{comment}}"',
-    },
-  },
-
-  create(context) {
-    /**
-     * 创建修复器：移除整行注释
-     */
-    function createFixer(fixer, sourceCode, comment) {
-      const startLine = comment.loc.start.line
-      const endLine = comment.loc.end.line
-      const lineStart = sourceCode.getIndexFromLoc({ line: startLine, column: 0 })
-      const nextLineStart =
-        endLine < sourceCode.lines.length
-          ? sourceCode.getIndexFromLoc({ line: endLine + 1, column: 0 })
-          : sourceCode.text.length
-      return fixer.removeRange([lineStart, nextLineStart])
+function loadAutoImportGlobals() {
+  const configPath = path.resolve(import.meta.dirname, 'apps/admin/.eslintrc-auto-import.json')
+  try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    if (fs.existsSync(configPath)) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      const content = fs.readFileSync(configPath, 'utf-8')
+      const config = JSON.parse(content)
+      return config.globals || {}
     }
-
-    /**
-     * 检查从指定行开始，连续的注释块最终是否紧邻代码
-     */
-    function doesCommentBlockReachCode(startLineIndex, lines) {
-      for (let i = startLineIndex; i < lines.length; i++) {
-        const line = lines[i].trim()
-        if (line === '') {
-          // 遇到空行，注释块结束且未紧邻代码
-          return false
-        }
-        if (line.startsWith('//') || line.startsWith('/*') || line.startsWith('*')) {
-          // 继续是注释，继续检查下一行
-          continue
-        }
-        // 遇到代码行，注释块紧邻代码
-        return true
-      }
-      // 到达文件末尾，未紧邻代码
-      return false
-    }
-
-    return {
-      Program() {
-        const sourceCode = context.sourceCode || context.getSourceCode()
-        const comments = sourceCode.getAllComments()
-        const lines = sourceCode.lines
-
-        // 找出文件开头的注释块（从第1行开始的连续注释/空行）
-        const fileHeaderEndLine = (() => {
-          let lastHeaderLine = 0
-          for (const [i, line_] of lines.entries()) {
-            const line = line_.trim()
-            if (
-              line === '' ||
-              line.startsWith('//') ||
-              line.startsWith('/*') ||
-              line.startsWith('*') ||
-              line.endsWith('*/')
-            ) {
-              lastHeaderLine = i + 1
-            } else {
-              break
-            }
-          }
-          return lastHeaderLine
-        })()
-
-        for (const comment of comments) {
-          // 只处理单行注释
-          if (comment.type !== 'Line') continue
-
-          const value = comment.value
-          const commentLine = comment.loc.start.line
-
-          // 跳过文件头部注释
-          if (commentLine <= fileHeaderEndLine) continue
-
-          // 检查注释是否在代码同一行（行尾注释）
-          const lineContent = lines[commentLine - 1]
-          const codeBeforeComment = lineContent.slice(0, comment.loc.start.column).trim()
-          if (codeBeforeComment.length > 0) continue
-
-          // 检查从下一行开始，是否最终能紧邻代码
-          const nextLineIndex = commentLine // 0-based index for next line
-          if (doesCommentBlockReachCode(nextLineIndex, lines)) {
-            continue // 注释块最终紧邻代码，允许
-          }
-
-          // 孤立注释：注释块下方是空行或文件结尾
-          context.report({
-            loc: comment.loc,
-            messageId: 'isolatedComment',
-            data: {
-              comment: `//${value}`.slice(0, 50) + (value.length > 48 ? '...' : ''),
-            },
-            fix: fixer => createFixer(fixer, sourceCode, comment),
-          })
-        }
-      },
-    }
-  },
+  } catch {
+    console.warn('[ESLint] 无法加载 auto-import 全局变量配置，使用空配置')
+  }
+  return {}
 }
 
+const autoImportGlobals = loadAutoImportGlobals()
+
 export default defineConfig([
-  js.configs.recommended, // 使用 ESLint 官方推荐的 JS 配置
-  sortClassMembers.configs['flat/recommended'],
+  // ----- 基础配置 -----
+  js.configs.recommended, // ESLint 官方推荐的 JS 配置
+  sortClassMembers.configs['flat/recommended'], // 类成员排序插件默认配置
+
+  // ----- 忽略目录 -----
   {
-    // 指定需要忽略的目录
     ignores: [
-      '**/dist/',
-      '**/public/',
-      '**/target/',
-      '**/.svelte-kit/',
-      '**/node_modules/',
-      'packages/**',
-      'apps/docs/**',
-      'vitest.config.ts',
+      '**/dist/', // 构建输出
+      '**/public/', // 静态资源
+      '**/target/', // Rust/Tauri 构建输出
+      '**/.svelte-kit/', // SvelteKit 构建缓存
+      '**/node_modules/', // 依赖目录
+      'packages/**', // 共享包（独立配置）
+      'apps/docs/**', // 文档站点（独立配置）
+      'vitest.config.ts', // Vitest 配置文件
+      'eslint/**', // ESLint 配置模块
     ],
   },
+
+  // 全局配置（作用于所有文件）
   {
-    // “全局”配置，作用于所有文件
     plugins: {
       regexp: regexpPlugin,
       import: importPlugin,
       sonarjs: sonarjsPlugin,
       security: securityPlugin,
       unicorn: unicornPlugin,
-      // 自定义规则插件
-      'custom-rules': {
-        rules: {
-          'no-isolated-comments': noIsolatedComments,
-        },
-      },
     },
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...vue3Globals(),
-        ...elementPlusGlobals(),
-      },
+      /**
+       * 全局变量配置
+       * - globals.browser: 浏览器环境全局变量（window, document 等）
+       * - globals.node: Node.js 环境全局变量（process, __dirname 等）
+       * - autoImportGlobals: unplugin-auto-import 自动导入的 API（ref, computed 等）
+       *
+       * 注意：autoImportGlobals 由 apps/admin/.eslintrc-auto-import.json 自动生成，
+       * 无需手动维护 Vue/Pinia/Element Plus 的 API 列表。
+       */
+      globals: { ...globals.browser, ...globals.node, ...autoImportGlobals },
     },
     rules: {
-      ...sonarjsPlugin.configs.recommended.rules, // 引入 SonarJS 推荐规则集
-      ...securityPlugin.configs.recommended.rules, // 引入 Security 推荐规则集
+      // 引入推荐规则集
+      ...sonarjsPlugin.configs.recommended.rules,
+      ...securityPlugin.configs.recommended.rules,
       ...unicornPlugin.configs.recommended.rules,
+      ...disabledRules,
+      ...regexpRules,
 
-      // 禁止孤立注释（可自动修复）
-      'custom-rules/no-isolated-comments': 'error',
-
-      // 关闭 SonarJS 部分过于严格的检查
-      'sonarjs/pseudo-random': 'off', // 允许使用 Math.random
-      'sonarjs/no-ignored-exceptions': 'off', // 允许空的 catch 块
-      'sonarjs/todo-tag': 'off', // 允许无 issue 的 TODO 注释
-      'sonarjs/no-unused-vars': 'off', // 允许未使用变量
-      'sonarjs/no-dead-store': 'off', // 允许无效赋值
-      'sonarjs/cognitive-complexity': 'off', // 关闭复杂度警告
-      'sonarjs/no-hardcoded-ip': 'off', // 允许硬编码 IP
-      'sonarjs/no-hardcoded-passwords': 'off', // 允许硬编码密码
-      'sonarjs/slow-regex': 'off', // 允许慢正则
-      'sonarjs/prefer-regexp-exec': 'off', // 允许 String.match
-      'sonarjs/unused-import': 'off', // 允许未使用的 import
-      'sonarjs/no-commented-code': 'off', // 允许注释掉的代码
-
-      // 关闭安全检测中对对象注入的限制
-      'security/detect-object-injection': 'off', // 允许动态属性访问
-
-      // 禁用有兼容性问题的规则
-      'unicorn/expiring-todo-comments': 'off',
-      // 关闭 Unicorn 插件的代码风格限制
-      'unicorn/no-abusive-eslint-disable': 'off', // 允许不指定规则全局禁用 ESLint
-      'unicorn/filename-case': 'off', // 不强制文件名 kebab-case
-      'unicorn/no-null': 'off', // 允许使用 null
-      'unicorn/prevent-abbreviations': 'off', // 允许缩写变量名
-      'unicorn/prefer-logical-operator-over-ternary': 'off', // 允许简单三元
-      'unicorn/prefer-spread': 'off', // 允许使用 split/apply
-      'unicorn/prefer-number-properties': 'off', // 允许全局 isNaN/isFinite
-      'unicorn/consistent-function-scoping': 'off', // 允许嵌套函数
-      'unicorn/no-invalid-remove-event-listener': 'off', // 关闭 removeEventListener 参数检查
-      'unicorn/prefer-add-event-listener': 'off', // 允许 onmessage/onerror
-      'unicorn/prefer-single-call': 'off', // 允许多次 push
-      'unicorn/no-useless-switch-case': 'off', // 允许无意义的 switch case
-      'unicorn/prefer-code-point': 'off', // 允许 fromCharCode/charCodeAt
-      'unicorn/no-useless-spread': 'off', // 允许无用的 spread
-      'unicorn/prefer-blob-reading-methods': 'off', // 允许 FileReader
-      'unicorn/prefer-structured-clone': 'off', // 允许 JSON deep clone
-      'unicorn/import-style': 'off', // 不强制某种 import 语法
-      'unicorn/text-encoding-identifier-case': 'off', // 允许 utf-8 标识
-      'unicorn/no-object-as-default-parameter': 'off', // 允许对象字面量默认值
-      'unicorn/prefer-ternary': 'off', // 允许 if-else
-      'unicorn/prefer-regexp-test': 'off', // 允许 String.match
-      'unicorn/no-array-for-each': 'off', // 允许使用 Array.forEach
-
-      // 关闭 ESLint 核心规则的部分警告
-      'no-lone-blocks': 'off', // 允许多余的嵌套块
-      'no-void': 'off', // 允许 void 运算符
-      'no-unused-vars': 'off', // 关闭未使用变量检查
-      'no-prototype-builtins': 'off', // 允许直接调用 Object.prototype
-      'no-inner-declarations': 'off', // 允许函数内声明
-      'no-control-regex': 'off', // 允许正则控制字符
-      'no-empty-character-class': 'off', // 允许空字符类
-      'no-useless-escape': 'off', // 允许多余转义
-      complexity: 'off', // 关闭复杂度限制
-      'max-lines': 'off', // 关闭长度限制
-
-      // 生产代码质量
-      'no-console': ['warn', { allow: ['warn', 'error'] }], // 生产代码不应有 console.log
+      // ----- 代码质量 -----
       'no-debugger': 'error', // 禁止 debugger 语句
+      eqeqeq: ['error', 'always', { null: 'ignore' }], // 强制全等，null 除外
+      'no-var': 'error', // 禁止 var，使用 let/const
+      'prefer-const': ['error', { destructuring: 'all' }], // 优先 const（可自动修复）
+      'prefer-spread': 'error', // 优先展开运算符
+      'prefer-template': 'error', // 优先模板字符串（可自动修复）
+      'prefer-arrow-callback': 'error', // 优先箭头函数回调（可自动修复）
+      'object-shorthand': ['error', 'always', { avoidQuotes: true }], // 对象简写（可自动修复）
+      'one-var': ['error', 'never'], // 每个变量单独声明
+      curly: 'error', // 条件语句必须使用大括号（可自动修复）
+      'no-empty': ['error', { allowEmptyCatch: true }], // 禁止空代码块（catch 除外）
 
-      'no-use-before-define': ['warn', { functions: false, classes: false }], // 禁止在声明前使用，防止引用错误
-      eqeqeq: ['warn', 'always', { null: 'ignore' }], // 强制使用全等避免隐式类型转换
-      'no-var': 'warn', // 不允许使用 var 声明
-      'object-shorthand': ['warn', 'always', { avoidQuotes: true }], // 强制对象字面量使用速记语法
-      'one-var': ['warn', 'never'], // 禁止使用一条声明多个变量
-      'prefer-arrow-callback': 'warn', // 优先使用箭头函数回调
-      'prefer-const': ['warn', { destructuring: 'all' }], // 建议使用 const 声明只读变量
-      'prefer-spread': 'warn', // 建议使用扩展运算符而非 apply调用
-      curly: 'warn', // 在条件语句中强制使用大括号
-      semi: ['warn', 'never'], // 不允许语句末尾有分号
-      quotes: ['warn', 'single', { avoidEscape: true, allowTemplateLiterals: false }], // 强制使用单引号
-      'no-restricted-syntax': ['warn', 'LabeledStatement', 'WithStatement'], // 禁止使用部分易混淆语法
-      'no-empty': ['warn', { allowEmptyCatch: true }], // 禁止空代码块
-      'prefer-template': 'warn', // 建议使用模板字符串
-      'no-unreachable': 'warn', // 禁止在可达不到的代码中继续编写
-      'no-caller': 'warn', // 禁止使用 arguments.caller 或 arguments.callee
-      'no-div-regex': 'warn', // 警告可能错误的正则表达式分隔符
-      'no-eval': 'warn', // 避免使用 eval
-      'no-extend-native': 'warn', // 禁止扩展原生对象
-      'no-extra-bind': 'warn', // 禁止不必要的 bind
-      'no-floating-decimal': 'warn', // 数值不能脱离小数点
-      'lines-between-class-members': ['warn', 'always', { exceptAfterSingleLine: true }], // 强制类成员之间的空行
-      'import/first': 'warn', // 可以在 import 之前编写其他语句
-      'import/no-absolute-path': 'warn', // 禁止从绝对路径导入
-      'import/no-amd': 'warn', // 禁止使用 AMD 模块语法
-      'import/no-deprecated': 'warn', // 禁止导入已被弃用的模块
-      'import/no-mutable-exports': 'warn', // 禁止可变的导出变量
-      'import/newline-after-import': 'warn', // import 后需有换行
+      // ----- 代码风格（可自动修复）-----
+      semi: ['error', 'never'], // 不使用分号
+      quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: false }], // 单引号
+      'no-floating-decimal': 'error', // 数值必须有完整小数点
+      'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }], // 类成员间空行
+
+      // ----- 错误预防 -----
+      'no-unreachable': 'error', // 禁止不可达代码
+      'no-caller': 'error', // 禁止 arguments.caller/callee
+      'no-eval': 'error', // 禁止 eval
+      'no-implied-eval': 'error', // 禁止隐式 eval
+      'no-extend-native': 'error', // 禁止扩展原生对象
+      'no-extra-bind': 'error', // 禁止多余的 bind（可自动修复）
+      'no-div-regex': 'error', // 避免正则歧义
+      'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'], // 禁止特定语法
+      'no-template-curly-in-string': 'error', // 检测字符串中的模板语法
+      'no-unsafe-negation': 'error', // 禁止错误的否定运算
+      'array-callback-return': 'error', // 数组方法必须 return
+
+      // ----- 最佳实践 -----
+      'no-alert': 'error', // 禁止 alert/confirm/prompt
+      'no-iterator': 'error', // 禁止 __iterator__
+      'no-labels': 'error', // 禁止标签语句
+      'no-loop-func': 'error', // 禁止循环中定义函数
+      'no-new-func': 'error', // 禁止 Function 构造函数
+      'no-new-wrappers': 'error', // 禁止原始值包装器
+      'no-proto': 'error', // 禁止 __proto__
+      'no-restricted-properties': 'error', // 禁止特定属性
+      'no-return-assign': 'error', // 禁止 return 中赋值
+      'no-self-compare': 'error', // 禁止自比较
+      'no-sequences': 'error', // 禁止逗号运算符
+      'no-throw-literal': 'error', // 只能抛出 Error 对象
+      'no-unmodified-loop-condition': 'error', // 循环条件必须变化
+      'no-useless-call': 'error', // 禁止无用的 call/apply
+      'no-useless-concat': 'error', // 禁止无用的字符串拼接
+      'no-useless-return': 'error', // 禁止无用的 return（可自动修复）
+      radix: 'error', // parseInt 必须指定进制
+      'wrap-iife': 'error', // IIFE 必须包裹（可自动修复）
+      yoda: 'error', // 禁止 Yoda 条件（可自动修复）
+
+      // ----- 代码复杂度 -----
+      'max-depth': 'error', // 限制嵌套深度（默认 4）
+      'max-params': ['error', 4], // 函数最多 4 个参数
+      'no-lonely-if': 'error', // 禁止孤立 if（可自动修复）
+      'no-nested-ternary': 'error', // 禁止嵌套三元
+      'func-style': ['error', 'declaration', { allowArrowFunctions: true }], // 函数声明风格
+      'no-array-constructor': 'error', // 禁止 Array 构造函数
+      'no-multi-assign': 'error', // 禁止链式赋值
+      'no-new-object': 'error', // 禁止 new Object()
+      'no-unneeded-ternary': 'error', // 禁止多余三元（可自动修复）
+
+      // ----- Import 规则 -----
+      'import/first': 'error', // import 必须在文件开头
+      'import/no-absolute-path': 'error', // 禁止绝对路径导入
+      'import/no-amd': 'error', // 禁止 AMD 语法
+      'import/no-deprecated': 'off', // 允许导入已弃用模块
+      'import/no-mutable-exports': 'error', // 禁止可变导出
+      'import/newline-after-import': 'error', // import 后换行（可自动修复）
       'import/order': [
-        'warn',
+        'error',
         {
           groups: [
-            // 内置模块
-            'builtin',
-            // 外部依赖
-            'external',
-            // 项目内部模块
-            'internal',
-            // 父级目录导入
-            'parent',
-            // 同级目录导入
-            'sibling',
-            // 入口文件或当前目录
-            'index',
-            // 对象方式导入
-            'object',
-            // 类型导入
-            'type',
+            'builtin', // Node.js 内置模块
+            'external', // 外部依赖
+            'internal', // 项目内部模块
+            'parent', // 父级目录
+            'sibling', // 同级目录
+            'index', // 当前目录
+            'object', // 对象导入
+            'type', // 类型导入
           ],
           pathGroups: [
             { pattern: '@seed/**', group: 'internal', position: 'before' },
@@ -304,403 +215,183 @@ export default defineConfig([
           pathGroupsExcludedImportTypes: ['type'],
         },
       ],
-      'regexp/no-dupe-disjunctions': 'warn', // 禁止在正则中重复筛选模式
-      'regexp/no-empty-alternative': 'warn', // 正则的分组替代不得为空
-      'regexp/no-empty-capturing-group': 'warn', // 禁止空捕获组
-      'regexp/no-empty-lookarounds-assertion': 'warn', // 禁止空的环视断言
-      'regexp/no-lazy-ends': 'warn', // 禁止在不必要的地方使用惰性量词
-      'regexp/no-obscure-range': 'warn', // 禁止低可读性的字符范围
-      'regexp/no-optional-assertion': 'warn', // 禁止使用可选断言
-      'regexp/no-standalone-backslash': 'warn', // 禁止孤立的反斜杠
-      'regexp/no-super-linear-backtracking': 'warn', // 防止超级线性回溯风险
-      'regexp/no-unused-capturing-group': 'warn', // 禁止未使用的捕获组
-      'regexp/no-zero-quantifier': 'warn', // 禁止无效的零宽量词
-      'regexp/optimal-lookaround-quantifier': 'warn', // 优化 lookaround 量词使用
-      'regexp/match-any': 'warn', // 规范正则中任意字符的写法
-      'regexp/negation': 'warn', // 规范否定匹配
-      'regexp/no-dupe-characters-character-class': 'warn', // 字符类中不允许重复字符
-      'regexp/no-trivially-nested-assertion': 'warn', // 防止无意义的断言嵌套
-      'regexp/no-trivially-nested-quantifier': 'warn', // 防止无意义的量词嵌套
-      'regexp/no-useless-character-class': 'warn', // 消除无用的字符类
-      'regexp/no-useless-flag': 'warn', // 不要使用无意义的正则标志
-      'regexp/no-useless-lazy': 'warn', // 不要使用无意义的惰性量词
-      'regexp/no-useless-range': 'warn', // 禁止多余的字符区间
-      'regexp/prefer-d': ['warn', { insideCharacterClass: 'ignore' }], // 优先使用 \d
-      'regexp/prefer-plus-quantifier': 'warn', // 优先使用 + 而不是 {1,}
-      'regexp/prefer-question-quantifier': 'warn', // 优先使用 ? 而不是 {0,1}
-      'regexp/prefer-star-quantifier': 'warn', // 优先使用 * 而不是 {0,}
-      'regexp/prefer-w': 'warn', // 优先使用 \w
-      'regexp/sort-alternatives': 'warn', // 使用有意义的排序方式管理正则分组
-      'regexp/sort-flags': 'warn', // 排序正则标志以提高可读性
-      'regexp/strict': 'warn', // 鼓励更严格的正则规范
-
-      'max-depth': 'warn', // 限制代码块嵌套深度
-      'max-params': ['warn', 4], // 函数最多允许四个参数
-      'no-lonely-if': 'warn', // 禁止孤立的 if 块
-      'no-nested-ternary': 'warn', // 禁用嵌套三元表达式
-      'func-style': ['warn', 'declaration', { allowArrowFunctions: true }], // 使用声明式函数
-      'no-array-constructor': 'warn', // 禁止使用 Array 构造函数
-      'no-bitwise': 'warn', // 避免使用位操作符
-      'no-multi-assign': 'warn', // 禁止链式赋值
-      'no-new-object': 'warn', // 禁止 new Object()
-      'no-unneeded-ternary': 'warn', // 禁止不必要的三元运算
-      'no-template-curly-in-string': 'warn', // 禁止在字符串中出现模板特殊字符
-      'no-unsafe-negation': 'warn', // 禁止对关系运算符的错误使用
-      'array-callback-return': 'warn', // 回调必须有 return
-      'consistent-return': 'warn', // 函数分支返回值类型要一致
-      'guard-for-in': 'warn', // 需要在 for-in 中检查 hasOwnProperty
-      'no-alert': 'warn', // 警告使用 alert
-      'no-implied-eval': 'warn', // 禁止隐式调用 eval
-      'no-iterator': 'warn', // 禁止使用 __iterator__
-      'no-labels': 'warn', // 禁用标签语句
-      'no-loop-func': 'warn', // 禁止在循环中定义函数
-      'no-new': 'warn', // 禁用不存储结果的 new 操作
-      'no-new-func': 'warn', // 禁止接受字符串作为参数的 Function 构造函数
-      'no-new-wrappers': 'warn', // 避免 String/Number/Boolean 对象包装
-      'no-proto': 'warn', // 禁用 __proto__ 属性
-      'no-restricted-properties': 'warn', // 禁止使用某些对象属性
-      'no-return-assign': 'warn', // 禁止在 return 中赋值
-      'no-self-compare': 'warn', // 禁止与自身比较
-      'no-sequences': 'warn', // 禁止使用逗号运算符
-      'no-throw-literal': 'warn', // 强制抛出 Error 对象
-      'no-unmodified-loop-condition': 'warn', // 循环条件禁止始终不变
-      'no-unused-expressions': 'off', // 禁止无用的表达式（关闭以避免插件读取未定义的选项时报错）
-      'no-useless-call': 'warn', // 禁止不必要的 call 或 apply
-      'no-useless-concat': 'warn', // 禁止没必要的字符串拼接
-      'no-useless-return': 'warn', // 禁止不必要的 return
-      radix: 'warn', // parseInt 必须指定进制
-      'require-await': 'warn', // async 函数内必须有 await
-      'wrap-iife': 'warn', // 立即执行函数需要用括号包裹
-      yoda: 'warn', // 避免在条件判断中使用字面量在左侧的比较
-      'consistent-this': ['warn', 'that'], // this 需被赋值给 that
     },
     settings: {
-      regexp: {
-        allowedCharacterRanges: ['alphanumeric', 'а-я', 'А-Я'], // 允许在正则中使用的字符范围
-      },
-      'import/ignore': ['node_modules'], // 忽略指定目录的 import
+      regexp: { allowedCharacterRanges: ['alphanumeric', 'а-я', 'А-Я'] },
+      'import/ignore': ['node_modules'],
     },
   },
+
+  // ----- TypeScript 文件配置 -----
   {
     files: ['**/*.ts'],
     plugins: {
       '@typescript-eslint': tsEslintPlugin,
       'eslint-comments': eslintCommentsPlugin,
-      regexp: regexpPlugin,
+      // 自定义规则插件（仅用于 TypeScript 文件）
+      'custom-rules': { rules: { 'no-isolated-comments': noIsolatedComments } },
     },
     languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
+      globals: { ...globals.browser },
       parser: tsEslintParser,
-      parserOptions: {
-        projectService: true, // 允许基于当前项目进行类型检查
-      },
+      /**
+       * TypeScript 项目服务配置
+       *
+       * projectService: true 启用 typescript-eslint 的项目服务模式，这是推荐的高性能配置方式。
+       *
+       * 工作原理：
+       * - 自动发现并使用最近的 tsconfig.json 进行类型检查
+       * - 使用持久化的 TypeScript 语言服务，避免重复解析
+       * - 支持跨文件类型推断和类型感知规则
+       *
+       * 注意事项：
+       * 1. 确保每个需要 lint 的 .ts 文件都被某个 tsconfig.json 包含
+       * 2. 未被 tsconfig 包含的文件会触发警告，可能无法使用类型感知规则
+       * 3. 如果遇到 "file not included in any tsconfig" 错误，检查：
+       *    - tsconfig.json 的 include/exclude 配置
+       *    - 是否需要创建专门的 tsconfig.eslint.json
+       * 4. 对于 monorepo，每个 app/package 应有自己的 tsconfig.json
+       */
+      parserOptions: { projectService: true },
     },
     rules: {
-      ...eslintCommentsPlugin.configs.recommended.rules, // 使用 ESLint 注释规则推荐配置
-      ...tsEslintPlugin.configs.recommended.rules, // 使用 TS 推荐规则
-      ...tsEslintPlugin.configs['recommended-requiring-type-checking'].rules, // 需要类型检查的推荐规则
-      ...regexpPlugin.configs.recommended.rules, // 正则相关推荐规则
+      // 引入推荐规则集
+      ...eslintCommentsPlugin.configs.recommended.rules,
+      ...tsEslintPlugin.configs.recommended.rules,
+      ...tsEslintPlugin.configs['recommended-requiring-type-checking'].rules,
 
-      '@typescript-eslint/no-unused-expressions': 'off',
-      // 根据项目需求关闭部分规则（建议打开，删除即可）
-      '@typescript-eslint/no-unsafe-member-access': 'off', // 允许访问不安全的成员
-      '@typescript-eslint/no-unsafe-assignment': 'off', // 允许不安全的赋值
+      // ----- 自定义规则（仅 TypeScript）-----
+      'custom-rules/no-isolated-comments': 'error', // 禁止孤立注释（可自动修复）
 
-      '@typescript-eslint/no-unsafe-argument': 'off', // 允许 any/unknown 参数
-
-      'no-use-before-define': 'off', // 允许在声明前使用（由 TS 检测）
-      'eslint-comments/no-unlimited-disable': 'off', // 允许在文件开头禁用全部规则
+      // ----- 关闭的规则（由 TypeScript 接管或项目需求）-----
+      'no-use-before-define': 'off', // 由 @typescript-eslint 接管
+      'no-loop-func': 'off', // 由 @typescript-eslint 接管
+      'eslint-comments/no-unlimited-disable': 'off', // 允许全局禁用
+      '@typescript-eslint/no-unused-expressions': 'off', // 允许表达式语句
+      '@typescript-eslint/no-unsafe-member-access': 'off', // 允许不安全成员访问
+      '@typescript-eslint/no-unsafe-assignment': 'off', // 允许不安全赋值
+      '@typescript-eslint/no-unsafe-argument': 'off', // 允许 any 参数
+      '@typescript-eslint/no-unsafe-call': 'off', // 允许不安全调用
       '@typescript-eslint/no-empty-function': 'off', // 允许空函数
-      '@typescript-eslint/no-explicit-any': 'off', // 允许使用 any
-      '@typescript-eslint/no-unused-vars': 'off', // 允许未使用变量（可能由各插件自行处理）
-      '@typescript-eslint/no-this-alias': 'off', // 允许将 this 赋值给其他变量
+      '@typescript-eslint/no-explicit-any': 'off', // 允许 any 类型
+      '@typescript-eslint/no-unused-vars': 'off', // 由编译器检查
+      '@typescript-eslint/no-this-alias': 'off', // 允许 this 别名
       '@typescript-eslint/naming-convention': 'off', // 不强制命名规范
-      '@typescript-eslint/ban-ts-comment': 'off', // 允许使用 @ts- 注释
-      '@typescript-eslint/explicit-module-boundary-types': 'off', // 不强制导出函数需声明返回类型
-      '@typescript-eslint/no-non-null-assertion': 'off', // 允许使用非空断言
-      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off', // 允许在可选链中使用非空断言
-      '@typescript-eslint/no-var-requires': 'off', // 允许使用 require 导入
-      '@typescript-eslint/no-empty-object-type': 'off', // 允许空对象类型
-      '@typescript-eslint/consistent-type-imports': ['warn', { disallowTypeAnnotations: true }], // 建议使用统一的类型导入风格
-      '@typescript-eslint/no-unsafe-call': 'off', // 允许调用不安全类型
+      '@typescript-eslint/ban-ts-comment': 'off', // 允许 @ts- 注释
+      '@typescript-eslint/explicit-module-boundary-types': 'off', // 不强制导出类型
+      '@typescript-eslint/no-non-null-assertion': 'off', // 允许非空断言 !
+      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off', // 允许 ?.!
+      '@typescript-eslint/no-var-requires': 'off', // 允许 require
+      '@typescript-eslint/no-empty-object-type': 'off', // 允许空对象类型 {}
+      '@typescript-eslint/member-ordering': 'off', // 由 sort-class-members 接管
+      '@typescript-eslint/parameter-properties': 'off', // 允许构造函数参数属性
+      '@typescript-eslint/prefer-nullish-coalescing': 'off', // 不强制 ??
 
-      // Promise 相关规则（防止异步错误）
-      '@typescript-eslint/no-floating-promises': 'error', // 防止未处理的 Promise
-      '@typescript-eslint/await-thenable': 'error', // 防止 await 非 Promise 值
+      // ----- 类型导入（可自动修复）-----
+      '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: true }],
+
+      // ----- Promise 规则（防止异步错误）-----
+      '@typescript-eslint/no-floating-promises': 'error', // 必须处理 Promise
+      '@typescript-eslint/await-thenable': 'error', // 只能 await Promise
       '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: false }], // 防止 Promise 误用
-      '@typescript-eslint/return-await': ['warn', 'in-try-catch'], // 在 try-catch 中使用 return await
+      '@typescript-eslint/return-await': ['error', 'in-try-catch'], // try-catch 中使用 return await
+      '@typescript-eslint/require-await': 'error', // async 函数必须有 await
 
-      // 现代化 TypeScript 规则
-      '@typescript-eslint/prefer-nullish-coalescing': 'warn', // 优先使用 ?? 而非 ||
-      '@typescript-eslint/prefer-optional-chain': 'warn', // 优先使用可选链 ?.
+      // ----- 代码质量 -----
+      '@typescript-eslint/no-use-before-define': ['error', { functions: false, classes: false }],
+      '@typescript-eslint/no-loop-func': 'error', // 禁止循环中定义函数
+      '@typescript-eslint/prefer-optional-chain': 'error', // 优先可选链 ?.（可自动修复）
+      '@typescript-eslint/prefer-readonly': 'error', // 不变属性声明为 readonly
+      '@typescript-eslint/adjacent-overload-signatures': 'error', // 重载签名放一起
 
-      // 规定类成员的书写顺序（使用 sort-class-members 替代，支持自动修复）
-      '@typescript-eslint/member-ordering': 'off',
-      'sort-class-members/sort-class-members': [
-        'warn',
-        {
-          order: [
-            // 1. 公共静态字段/方法
-            { type: 'property', static: true, accessibility: 'public' },
-            {
-              type: 'property',
-              static: true,
-              accessibility: 'public',
-              readonly: true,
-            },
-            {
-              type: 'method',
-              static: true,
-              accessibility: 'public',
-              kind: 'get',
-            },
-            {
-              type: 'method',
-              static: true,
-              accessibility: 'public',
-              kind: 'set',
-            },
-            { type: 'method', static: true, accessibility: 'public' },
-
-            // 2. 受保护静态字段/方法
-            { type: 'property', static: true, accessibility: 'protected' },
-            {
-              type: 'property',
-              static: true,
-              accessibility: 'protected',
-              readonly: true,
-            },
-            {
-              type: 'method',
-              static: true,
-              accessibility: 'protected',
-              kind: 'get',
-            },
-            {
-              type: 'method',
-              static: true,
-              accessibility: 'protected',
-              kind: 'set',
-            },
-            { type: 'method', static: true, accessibility: 'protected' },
-
-            // 3. 私有静态字段/方法
-            { type: 'property', static: true, accessibility: 'private' },
-            {
-              type: 'property',
-              static: true,
-              accessibility: 'private',
-              readonly: true,
-            },
-            {
-              type: 'method',
-              static: true,
-              accessibility: 'private',
-              kind: 'get',
-            },
-            {
-              type: 'method',
-              static: true,
-              accessibility: 'private',
-              kind: 'set',
-            },
-            { type: 'method', static: true, accessibility: 'private' },
-
-            // 4. 公共实例字段
-            { type: 'property', static: false, accessibility: 'public' },
-            {
-              type: 'property',
-              static: false,
-              accessibility: 'public',
-              groupByDecorator: true,
-            },
-            {
-              type: 'property',
-              static: false,
-              accessibility: 'public',
-              readonly: true,
-            },
-
-            // 5. 受保护实例字段
-            { type: 'property', static: false, accessibility: 'protected' },
-            {
-              type: 'property',
-              static: false,
-              accessibility: 'protected',
-              readonly: true,
-            },
-
-            // 6. 私有实例字段
-            { type: 'property', static: false, accessibility: 'private' },
-            {
-              type: 'property',
-              static: false,
-              accessibility: 'private',
-              readonly: true,
-            },
-
-            // 7. 构造函数
-            'constructor',
-
-            // 8. 公共存取器
-            {
-              type: 'method',
-              static: false,
-              accessibility: 'public',
-              kind: 'get',
-            },
-            {
-              type: 'method',
-              static: false,
-              accessibility: 'public',
-              kind: 'set',
-            },
-
-            // 9. 受保护存取器
-            {
-              type: 'method',
-              static: false,
-              accessibility: 'protected',
-              kind: 'get',
-            },
-            {
-              type: 'method',
-              static: false,
-              accessibility: 'protected',
-              kind: 'set',
-            },
-
-            // 10. 私有存取器
-            {
-              type: 'method',
-              static: false,
-              accessibility: 'private',
-              kind: 'get',
-            },
-            {
-              type: 'method',
-              static: false,
-              accessibility: 'private',
-              kind: 'set',
-            },
-
-            // 11. 公共实例方法
-            { type: 'method', static: false, accessibility: 'public' },
-
-            // 12. 受保护实例方法
-            { type: 'method', static: false, accessibility: 'protected' },
-
-            // 13. 私有实例方法
-            { type: 'method', static: false, accessibility: 'private' },
-          ],
-          accessorPairPositioning: 'getThenSet',
-        },
-      ],
-      '@typescript-eslint/prefer-readonly': 'warn', // 建议将不变的属性声明为只读
-      // '@typescript-eslint/no-useless-constructor': 'warn', // 禁止多余的构造器
+      // ----- 类成员可访问性（可自动修复）-----
       '@typescript-eslint/explicit-member-accessibility': [
-        'warn',
+        'error',
         {
           accessibility: 'explicit',
-          // 省略 public 修饰符
           overrides: {
-            // (getter/setter)
-            accessors: 'no-public',
-            constructors: 'no-public',
-            methods: 'no-public',
-            properties: 'no-public',
-            parameterProperties: 'no-public',
+            accessors: 'no-public', // getter/setter 省略 public
+            constructors: 'no-public', // 构造函数省略 public
+            methods: 'no-public', // 方法省略 public
+            properties: 'no-public', // 属性省略 public
+            parameterProperties: 'no-public', // 参数属性省略 public
           },
         },
       ],
-      '@typescript-eslint/parameter-properties': ['warn', { prefer: 'class-property' }], // 建议使用类属性来声明参数
-      '@typescript-eslint/adjacent-overload-signatures': 'warn', // 相邻重载签名需放在一起
-      'eslint-comments/disable-enable-pair': ['warn', { allowWholeFile: true }], // 允许在文件整体上禁用/启用 ESLint
+
+      // ----- 类成员排序（可自动修复）-----
+      'sort-class-members/sort-class-members': [
+        'error',
+        { order: classMembersOrder, accessorPairPositioning: 'getThenSet' },
+      ],
+
+      // ----- ESLint 注释规则 -----
+      'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     },
   },
+
+  // ----- Vue 文件配置 -----
   {
     files: ['**/*.vue'],
-    plugins: {
-      vue: vuePlugin,
-    },
+    plugins: { vue: vuePlugin },
     languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
+      globals: { ...globals.browser },
       parser: vueParser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        parser: tsEslintParser,
-      },
+      parserOptions: { ecmaVersion: 'latest', sourceType: 'module', parser: tsEslintParser },
     },
     rules: {
-      ...vuePlugin.configs['flat/recommended'].rules, // 使用 Vue 官方推荐配置
-      'vue/no-deprecated-slot-attribute': 'off', // 允许使用已废弃的 slot 属性
-      'vue/prefer-import-from-vue': 'off', // 允许直接从其他地方导入
+      ...vuePlugin.configs['flat/recommended'].rules, // Vue 官方推荐配置
+
+      // ----- 关闭的规则（根据项目需求）-----
+      'vue/no-deprecated-slot-attribute': 'off', // 允许旧版 slot 属性
+      'vue/prefer-import-from-vue': 'off', // 允许从其他路径导入
       'vue/multi-word-component-names': 'off', // 允许单词组件名
-      'vue/valid-define-props': 'off', // 不校验 defineProps 正确性
-      'vue/no-v-model-argument': 'off', // 允许 v-model 传参
-      'vue/no-reserved-component-names': 'off', // 允许使用保留组件名
-      'vue/require-default-prop': 'off', // 不强制要求 props 配置默认值
-      'vue/require-explicit-emits': 'off', // 不强制显式声明 emits
-      'vue/no-template-shadow': 'off', // 允许 template 级 shadow 变量
+      'vue/valid-define-props': 'off', // 不校验 defineProps
+      'vue/no-v-model-argument': 'off', // 允许 v-model 参数
+      'vue/no-reserved-component-names': 'off', // 允许保留组件名
+      'vue/require-default-prop': 'off', // 不强制 props 默认值
+      'vue/require-explicit-emits': 'off', // 不强制显式 emits
+      'vue/no-template-shadow': 'off', // 允许模板变量遮蔽
       'vue/no-mutating-props': 'off', // 允许修改 props
-      'vue/require-valid-default-prop': 'off', // 不强制校验默认值
-      'vue/no-unused-vars': 'off', // 在模板中允许出现未使用变量
-      'vue/no-v-html': 'off', // 允许使用 v-html
-      'no-unused-vars': 'off', // 关闭在 .vue 文件内的未使用变量检测
+      'vue/require-valid-default-prop': 'off', // 不校验默认值类型
+      'vue/no-unused-vars': 'off', // 允许模板中未使用变量
+      'vue/no-v-html': 'off', // 允许 v-html
+      'no-unused-vars': 'off', // Vue 文件中关闭
     },
   },
-  {
-    files: ['eslint.config.js'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
+
+  // ----- ESLint 配置文件自身 -----
+  { files: ['eslint.config.js'], languageOptions: { globals: { ...globals.node } } },
+
+  // ----- Svelte 文件配置 -----
   {
     files: ['**/*.svelte'],
-    plugins: {
-      svelte: eslintPluginSvelte,
-    },
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
-      parser: svelteEslintParser,
-    },
-    rules: {
-      ...eslintPluginSvelte.configs.recommended.rules, // 使用 Svelte 推荐规则
-    },
+    plugins: { svelte: eslintPluginSvelte },
+    languageOptions: { globals: { ...globals.browser }, parser: svelteEslintParser },
+    rules: { ...eslintPluginSvelte.configs.recommended.rules },
   },
+
+  // ----- NestJS API 服务器 -----
   {
     files: ['apps/api-server/**/*.ts'],
-    rules: {
-      '@typescript-eslint/parameter-properties': 'off',
-      '@typescript-eslint/no-base-to-string': 'off',
-      'unicorn/prefer-top-level-await': 'off',
-      'unicorn/no-process-exit': 'off',
-      'unicorn/prefer-module': 'off',
-    },
+    rules: { ...nestjsRules, 'unicorn/no-anonymous-default-export': 'off' },
   },
   {
     files: ['apps/server-api/**/*.ts'],
-    rules: {
-      '@typescript-eslint/parameter-properties': 'off',
-      '@typescript-eslint/no-base-to-string': 'off',
-      'unicorn/prefer-top-level-await': 'off',
-      'unicorn/no-process-exit': 'off',
-      'unicorn/prefer-module': 'off',
-      '@typescript-eslint/require-await': 'off',
-      'unicorn/no-anonymous-default-export': 'off',
-    },
+    rules: { ...nestjsRules, 'unicorn/no-anonymous-default-export': 'off' },
   },
+
+  // ----- Tauri 更新服务器 -----
+  { files: ['apps/tauri-updater/**/*.ts'], rules: nestjsRules },
+
+  // ----- 代理服务器和静态服务器 -----
   {
-    // 测试文件配置 - 添加 Jest 全局变量
+    files: ['apps/server-proxy/**/*.ts', 'apps/server-static/**/*.ts'],
+    rules: { 'unicorn/prefer-top-level-await': 'off', 'unicorn/no-process-exit': 'off' },
+  },
+
+  // ----- 测试文件配置 -----
+  {
     files: [
       '**/*.spec.ts',
       '**/*.test.ts',
@@ -724,167 +415,12 @@ export default defineConfig([
       },
     },
     rules: {
-      // 测试文件中允许传递 undefined 作为 mock 返回值
-      'unicorn/no-useless-undefined': 'off',
-      // 测试文件中放宽 Promise 规则
-      '@typescript-eslint/no-floating-promises': 'off',
+      'unicorn/no-useless-undefined': 'off', // 测试中允许 undefined mock
+      '@typescript-eslint/no-floating-promises': 'off', // 测试中放宽 Promise 规则
       '@typescript-eslint/no-misused-promises': 'off',
     },
   },
-  eslintConfigPrettier, // 使用 Prettier 配置覆盖部分格式化规则
+
+  // ----- Prettier 配置覆盖（必须放在最后）-----
+  eslintConfigPrettier,
 ])
-
-// Vue 3 核心 API 全局变量
-function vue3Globals() {
-  return {
-    // ===== 应用 API =====
-    createApp: true, // 创建应用实例
-
-    // ===== 基础响应式 API =====
-    ref: true, // 创建响应式引用
-    reactive: true, // 创建深度响应式对象
-    readonly: true, // 创建只读代理
-    shallowRef: true, // 创建浅层响应式引用
-    shallowReactive: true, // 创建浅层响应式对象
-    shallowReadonly: true, // 创建浅层只读对象
-
-    // ===== 响应式工具 =====
-    isRef: true, // 检查值是否为 ref 对象
-    isReactive: true, // 检查对象是否由 reactive() 创建
-    isReadonly: true, // 检查对象是否由 readonly() 创建
-    isProxy: true, // 检查对象是否是响应式代理
-    unref: true, // 返回 ref 的值或参数本身
-    toRef: true, // 将响应式对象的属性转为 ref
-    toRefs: true, // 将响应式对象转为普通对象，每个属性都是 ref
-    toRaw: true, // 返回代理对应的原始对象
-    markRaw: true, // 标记对象为不可转为代理
-
-    // ===== 计算属性与侦听器 =====
-    computed: true, // 创建计算属性
-    watch: true, // 侦听响应式数据源
-    watchEffect: true, // 立即运行函数并响应式追踪依赖
-    watchPostEffect: true, // DOM 更新后执行的 watchEffect
-    watchSyncEffect: true, // 同步执行的 watchEffect
-
-    // ===== 生命周期钩子 =====
-    onBeforeMount: true, // 组件挂载前调用
-    onMounted: true, // 组件挂载后调用
-    onBeforeUpdate: true, // 组件更新前调用
-    onUpdated: true, // 组件更新后调用
-    onBeforeUnmount: true, // 组件卸载前调用
-    onUnmounted: true, // 组件卸载后调用
-    onActivated: true, // KeepAlive 组件激活时调用
-    onDeactivated: true, // KeepAlive 组件停用时调用
-    onErrorCaptured: true, // 捕获后代组件错误时调用
-    onRenderTracked: true, // 响应式依赖被收集时调用
-    onRenderTriggered: true, // 响应式依赖被触发时调用
-    onServerPrefetch: true, // 服务端渲染前调用
-
-    // ===== 依赖注入 =====
-    provide: true, // 提供值给后代组件
-    inject: true, // 注入祖先组件提供的值
-
-    // ===== 组件定义 =====
-    defineComponent: true, // 定义组件并提供类型推导
-    defineAsyncComponent: true, // 定义异步组件
-
-    // ===== 渲染函数 =====
-    h: true, // 创建虚拟 DOM 节点
-    resolveComponent: true, // 解析已注册的组件
-    resolveDirective: true, // 解析已注册的指令
-
-    // ===== 高级 API =====
-    getCurrentInstance: true, // 获取当前组件实例
-    getCurrentScope: true, // 获取当前 effect 作用域
-    effectScope: true, // 创建 effect 作用域
-    onScopeDispose: true, // 作用域销毁时的回调
-    customRef: true, // 创建自定义 ref
-    triggerRef: true, // 强制触发 ref 的副作用
-    nextTick: true, // 等待下次 DOM 更新
-
-    // ===== 路由（Vue Router）=====
-    useRouter: true, // 获取路由器实例
-    useRoute: true, // 获取当前路由信息
-
-    // ===== 状态管理（Pinia）=====
-    storeToRefs: true, // 将 store 转换为响应式 refs
-
-    // ===== TypeScript 类型 =====
-    ComponentInternalInstance: true, // 组件内部实例类型
-    EffectScope: true, // effect 作用域类型
-    PropType: true, // 组件 props 类型定义
-  }
-}
-
-// Element Plus UI 组件库全局变量
-function elementPlusGlobals() {
-  return {
-    // ===== 组件类型定义 =====
-    // 表单相关类型
-    ElFormRules: true, // 表单验证规则类型
-    CheckboxValueType: true, // 复选框值类型
-    DateModelType: true, // 日期选择器数据类型
-    UploadFile: true, // 上传文件类型
-
-    // ===== 组件实例类型 =====
-    // 表单组件实例
-    ElFormInstance: true, // 表单组件实例类型
-    ElInputInstance: true, // 输入框组件实例类型
-    ElInputNumberInstance: true, // 数字输入框组件实例类型
-
-    // 选择器组件实例
-    ElSelectInstance: true, // 选择器组件实例类型
-    ElTreeSelectInstance: true, // 树形选择器组件实例类型
-    ElCascaderInstance: true, // 级联选择器组件实例类型
-
-    // 单选/复选组件实例
-    ElRadioInstance: true, // 单选框组件实例类型
-    ElRadioGroupInstance: true, // 单选框组组件实例类型
-    ElRadioButtonInstance: true, // 单选按钮组件实例类型
-    ElCheckboxInstance: true, // 复选框组件实例类型
-    ElCheckboxGroupInstance: true, // 复选框组组件实例类型
-    ElSwitchInstance: true, // 开关组件实例类型
-
-    // 日期时间组件实例
-    ElDatePickerInstance: true, // 日期选择器组件实例类型
-    ElTimePickerInstance: true, // 时间选择器组件实例类型
-    ElTimeSelectInstance: true, // 时间选择组件实例类型
-
-    // 数据展示组件实例
-    ElTableInstance: true, // 表格组件实例类型
-    ElTreeInstance: true, // 树形控件组件实例类型
-
-    // 上传组件实例
-    ElUploadInstance: true, // 上传组件实例类型
-
-    // 布局容器组件实例
-    ElCardInstance: true, // 卡片组件实例类型
-    ElDialogInstance: true, // 对话框组件实例类型
-    ElScrollbarInstance: true, // 滚动条组件实例类型
-
-    // 其他组件实例
-    ElColorPickerInstance: true, // 颜色选择器组件实例类型
-    ElRateInstance: true, // 评分组件实例类型
-    ElSliderInstance: true, // 滑块组件实例类型
-
-    // ===== 常用组件引用 =====
-    ElTable: true, // 表格组件
-    ElSelect: true, // 选择器组件
-    ElUpload: true, // 上传组件
-    ElForm: true, // 表单组件
-    ElTree: true, // 树形控件组件
-
-    // ===== 消息提示 =====
-    ElMessage: true, // 消息提示
-    ElMessageBox: true, // 消息弹框
-
-    // ===== 项目自定义类型 =====
-    TransferKey: true, // 穿梭框键值类型
-    ImportOption: true, // 导入选项类型
-    TreeType: true, // 树形数据类型
-    FieldOption: true, // 字段选项类型
-    PageData: true, // 分页数据类型
-    DictDataOption: true, // 字典数据选项类型
-    UploadOption: true, // 上传选项类型
-  }
-}

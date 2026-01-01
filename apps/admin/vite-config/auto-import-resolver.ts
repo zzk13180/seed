@@ -50,7 +50,6 @@ function kebabCase(key: string) {
   return result.split(' ').join('-').toLowerCase()
 }
 
-// eslint-disable-next-line consistent-return
 function getSideEffects(dirName: string, options: ElementPlusResolverOptionsResolved): any {
   const { importStyle, ssr, nightly } = options
   const esComponentsFolder = 'element-plus/es/components'
@@ -72,7 +71,6 @@ function resolveComponent(name: string, options: ElementPlusResolverOptionsResol
   }
 
   if (name.match(/^ElIcon.+/)) {
-    // eslint-disable-next-line consistent-return
     return {
       name: name.replace(/^ElIcon/, ''),
       from: '@element-plus/icons-vue',
@@ -81,7 +79,6 @@ function resolveComponent(name: string, options: ElementPlusResolverOptionsResol
 
   const partialName = kebabCase(name.slice(2)) // ElTableColumn -> table-column
 
-  // eslint-disable-next-line consistent-return
   return {
     name,
     from: 'element-plus',
@@ -109,7 +106,6 @@ function resolveDirective(name: string, options: ElementPlusResolverOptionsResol
     return
   }
 
-  // eslint-disable-next-line consistent-return
   return {
     name: directive.importName,
     from: 'element-plus',

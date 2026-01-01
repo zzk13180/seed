@@ -63,13 +63,6 @@ export class LazyRouterNavigationService implements NavigationService {
 
   constructor(private readonly getRouter: () => Router) {}
 
-  private get router(): Router {
-    if (!this._router) {
-      this._router = this.getRouter()
-    }
-    return this._router
-  }
-
   async push(to: string | RouteLocationRaw): Promise<void> {
     await this.router.push(to)
   }
@@ -92,5 +85,12 @@ export class LazyRouterNavigationService implements NavigationService {
 
   getCurrentPath(): string {
     return this.router.currentRoute.value.path
+  }
+
+  private get router(): Router {
+    if (!this._router) {
+      this._router = this.getRouter()
+    }
+    return this._router
   }
 }

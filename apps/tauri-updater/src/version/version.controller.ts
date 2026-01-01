@@ -4,7 +4,6 @@ import type { FastifyReply } from 'fastify'
 
 @Controller()
 export class VersionController {
-  // eslint-disable-next-line @typescript-eslint/parameter-properties
   constructor(private readonly versionService: VersionService) {}
 
   // GET /appimage/:arch/:currentVersion - Tauri 更新检查

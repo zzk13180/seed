@@ -99,18 +99,22 @@
     "vue-tsc": "^2.2.10"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --write",
-      "stylelint --fix --allow-empty-input"
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "eslint --fix --max-warnings=0"
     ],
     "*.vue": [
-      "eslint --fix",
-      "prettier --write",
+      "eslint --fix --max-warnings=0",
       "stylelint --fix --allow-empty-input"
+    ],
+    "*.{css,scss}": [
+      "stylelint --fix --allow-empty-input"
+    ],
+    "*.{json,md,yaml,yml,html}": [
+      "prettier --write"
+    ],
+    "*.svelte": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
     ]
   }
 }

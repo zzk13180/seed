@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-process-exit */
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import os from 'node:os'
