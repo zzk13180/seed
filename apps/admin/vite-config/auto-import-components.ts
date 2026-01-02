@@ -1,5 +1,5 @@
 import Components from 'unplugin-vue-components/vite'
-import { CustomElementPlusResolver } from './auto-import-resolver'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import type Path from 'node:path'
 import type { Plugin } from 'vite'
 import type { ComponentResolver } from 'unplugin-vue-components'
@@ -52,7 +52,7 @@ export function componentsAutoImportPlugin(path: typeof Path): Plugin {
   const dtsPath = path.resolve(rootDir, 'auto-import-components.d.ts')
 
   return Components({
-    resolvers: [CustomElementPlusResolver(), LucideIconResolver()],
+    resolvers: [ElementPlusResolver(), LucideIconResolver()],
     dts: dtsPath,
     exclude: EXCLUDE_PATTERNS,
     // 自动导入项目 components 目录下的组件

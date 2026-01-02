@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config'
 import preact from '@astrojs/preact'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
-import tailwind from '@astrojs/tailwind'
+import tailwindcss from '@tailwindcss/vite'
 import mdx from '@astrojs/mdx'
 import icon from 'astro-icon'
 import compressor from 'astro-compressor'
@@ -29,15 +29,15 @@ export default defineConfig({
     // },
   },
   prefetch: true,
+  vite: {
+    plugins: [tailwindcss()],
+  },
   integrations: [
     mdx(),
     // Enable Preact to support Preact JSX components.
     preact(),
     // Enable React for the Algolia search component.
     react(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
     sitemap(),
     compressor({
       gzip: true,

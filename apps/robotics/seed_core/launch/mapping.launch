@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+================================================================================
+文件名: mapping.launch
+描  述: 建图模式启动文件 - 使用 SLAM 技术创建环境地图
+
+功能说明:
+  1. 启动 slam_toolbox 异步建图模式
+  2. 实时处理激光雷达和里程计数据
+  3. 增量式构建二维栅格地图
+  4. 支持在线保存地图
+
+使用方法:
+  # 启动建图模式
+  roslaunch seed_core mapping.launch
+  
+  # 控制机器人移动以覆盖待建图区域
+  # 可通过 service_handler 提供的 SaveMap 服务保存地图
+
+建图流程:
+  1. 启动建图 launch 文件
+  2. 通过遥控或自主移动覆盖环境
+  3. 调用 SaveMap 服务保存地图
+  4. 停止建图，切换到导航模式
+
+依赖说明:
+  - slam_toolbox: SLAM 定位与建图工具
+  - 激光雷达驱动: 提供 /scan 话题
+  - 里程计: 提供 /odom 话题
+
+版本信息:
+  版本: 2.0.0
+  更新: 重构代码结构，优化参数配置
+
+作者: Seed Robotics Team
+日期: 2025
+================================================================================
+-->
+<launch>
+  <!-- 
+  ============================================================================
+  SLAM Toolbox 异步建图模式
+  ============================================================================
+  async_slam_toolbox_node 是异步建图节点的特点:
+  
+  异步模式 vs 同步模式:
+    - 异步模式: 激光扫描数据在后台线程处理，不阻塞主线程
+    - 同步模式: 激光扫描数据在回调中同步处理
+    
+  异步模式优势:
+    - 更高的实时性能
+    - 更好的系统响应
+    - 适合计算资源有限的嵌入式平台
+    
+  建图原理:
+    1. 接收激光雷达扫描数据 (/scan)
+    2. 接收里程计数据 (/odom)
+    3. 使用扫描匹配算法估计机器人位姿
+    4. 将激光数据插入到栅格地图中
+    5. 定期进行位姿图优化，消除累积误差
+  -->
+  <node pkg="slam_toolbox" 
+        type="async_slam_toolbox_node" 
+        name="slam_toolbox" 
+        output="log"
+        clear_params="true"
+        respawn="true"
+        respawn_delay="5">
+    
+    <!-- 
+    加载建图模式参数配置
+    
+    关键参数说明:
+    # 传感器话题配置
+    scan_topic: /scan              # 激光雷达话题
+    odom_frame: odom               # 里程计坐标系
+    base_frame: base_footprint     # 机器人底盘坐标系
+    map_frame: map                 # 地图坐标系
+    
+    # 建图参数
+    resolution: 0.05               # 地图分辨率（米/像素）
+    max_laser_range: 20.0          # 最大激光距离
+    minimum_travel_distance: 0.5   # 触发扫描匹配的最小移动距离
+    minimum_travel_heading: 0.5    # 触发扫描匹配的最小旋转角度
+    
+    # 扫描匹配参数
+    scan_buffer_size: 10           # 扫描缓冲区大小
+    use_scan_matching: true        # 启用扫描匹配
+    use_scan_barycenter: true      # 使用扫描重心
+    
+    # 优化参数
+    do_loop_closing: true          # 启用闭环检测
+    loop_search_maximum_distance: 3.0  # 闭环搜索距离
+    -->
+    <rosparam command="load"
+              file="$(find seed_core)/config/slam_toolbox/slam_toolbox_mapping.yaml" />
+  </node>
+</launch>

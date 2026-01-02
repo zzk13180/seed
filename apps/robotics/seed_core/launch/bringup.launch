@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+================================================================================
+文件名: bringup.launch
+描  述: Seed Core 机器人导航系统主启动文件
+
+功能说明:
+  1. 启动 rosbridge WebSocket 服务，提供前端与 ROS 的通信桥梁
+  2. 启动 TF 话题处理节点，优化坐标变换数据传输
+  3. 启动服务处理节点，提供节点管理、地图管理等核心功能
+  4. 启动点位管理服务，提供导航点的增删改查功能
+  5. 启动辅助功能节点（角度控制器、全局重定位）
+
+使用方法:
+  roslaunch seed_core bringup.launch
+  roslaunch seed_core bringup.launch port_rosbridge:=5002
+
+参数说明:
+  port_rosbridge    - WebSocket 服务端口号 (默认: 5001)
+  database_dir      - 点位数据库存储目录 (默认: ~/.seed/data)
+
+依赖说明:
+  - rosbridge_suite: WebSocket 通信服务
+  - rosapi: ROS API 节点，提供服务发现等功能
+  - 本包 Python 脚本: topic_handler.py, service_handler.py, point_manager.py
+
+版本信息:
+  版本: 2.0.0
+  更新: 完全重构，移除自动回充功能，优化架构设计
+
+作者: Seed Robotics Team
+日期: 2025
+================================================================================
+-->
+<launch>
+  <!-- 
+  ============================================================================
+  第一部分: 参数定义
+  ============================================================================
+  此部分定义所有可配置的启动参数，用户可通过命令行覆盖默认值
+  -->
+  
+  <!-- 
+  WebSocket 服务配置参数 
+  用于前端与 ROS 系统的实时通信
+  -->
+  <!-- WebSocket 服务端口号，前端通过此端口连接 -->
+  <arg name="port_rosbridge" default="5001" doc="rosbridge WebSocket 服务端口" />
+  
+  <!-- 启动失败后重试延迟（秒），防止快速重启占用资源 -->
+  <arg name="retry_startup_delay" default="10" doc="启动失败重试延迟" />
+  
+  <!-- 消息分片超时时间（秒），用于大消息传输 -->
+  <arg name="fragment_timeout" default="30" doc="消息分片超时时间" />
+  
+  <!-- 消息发送间隔（毫秒），0 表示无限制 -->
+  <arg name="delay_between_messages" default="0" doc="消息发送间隔" />
+  
+  <!-- 单条消息最大大小，None 表示无限制 -->
+  <arg name="max_message_size" default="None" doc="最大消息大小" />
+
+  <!-- 
+  数据存储配置参数
+  用于持久化存储导航点位等数据
+  -->
+  <!-- 点位数据库存储目录，默认存储在用户主目录下 -->
+  <arg name="database_dir" default="$(env HOME)/.seed/data" 
+       doc="点位数据库存储目录路径" />
+
+  <!-- 
+  ============================================================================
+  第 1.5 部分: 加载配置文件
+  ============================================================================
+  将仿真配置参数加载到参数服务器
+  前端和其他节点可通过 rosparam 读取这些配置
+  -->
+  <rosparam ns="seed" file="$(find seed_core)/config/simulation.yaml" />
+
+  <!-- 
+  ============================================================================
+  第二部分: rosbridge WebSocket 服务
+  ============================================================================
+  rosbridge 是 ROS 与前端 Web 应用通信的核心桥梁
+  通过 WebSocket 协议提供双向实时通信能力
+  -->
+  <node name="seed_core_rosbridge" 
+        pkg="rosbridge_server" 
+        type="rosbridge_websocket" 
+        output="log"
+        respawn="true"
+        respawn_delay="5">
+    <!-- 禁用身份验证，简化开发环境配置 -->
+    <param name="authenticate" value="false" />
+    
+    <!-- 绑定端口号 -->
+    <param name="port" value="$(arg port_rosbridge)" />
+    
+    <!-- 绑定地址为空表示监听所有网络接口 -->
+    <param name="address" value="" />
+    
+    <!-- 启动失败重试延迟配置 -->
+    <param name="retry_startup_delay" value="$(arg retry_startup_delay)" />
+    
+    <!-- 消息分片超时配置，处理大型地图数据等场景 -->
+    <param name="fragment_timeout" value="$(arg fragment_timeout)" />
+    
+    <!-- 消息发送间隔配置 -->
+    <param name="delay_between_messages" value="$(arg delay_between_messages)" />
+    
+    <!-- 最大消息大小配置 -->
+    <param name="max_message_size" value="$(arg max_message_size)" />
+    
+    <!-- 
+    取消注册超时设置为极大值
+    解决 rosbridge 在高频话题订阅时可能出现的连接断开问题
+    参考: https://github.com/RobotWebTools/rosbridge_suite/issues/298
+    -->
+    <param name="unregister_timeout" value="99999999" />
+  </node>
+
+  <!-- 
+  ============================================================================
+  第三部分: ROS API 节点
+  ============================================================================
+  rosapi 提供 ROS 系统的服务发现和元信息查询功能
+  前端可通过此节点获取可用话题、服务、参数等信息
+  -->
+  <node name="seed_core_rosapi" 
+        pkg="rosapi" 
+        type="rosapi_node" 
+        output="log"
+        respawn="true"
+        respawn_delay="5" />
+
+  <!-- 
+  ============================================================================
+  第四部分: 核心功能节点
+  ============================================================================
+  以下节点提供 Seed Core 的核心业务功能
+  -->
+
+  <!-- 
+  TF 话题处理节点
+  功能: 聚合多个 TF 坐标变换话题，减少 WebSocket 消息数量
+  原理: 将高频的 TF 数据缓存并合并，定期发布到单一话题
+  优化: 显著降低前端与后端的通信开销，提升系统性能
+  -->
+  <node name="seed_core_topic_handler" 
+        pkg="seed_core" 
+        type="topic_handler.py"
+        output="log" 
+        respawn="true" 
+        respawn_delay="5">
+    <!-- 可在此添加话题处理相关的参数配置 -->
+  </node>
+
+  <!-- 
+  服务处理节点
+  功能: 提供系统级服务接口，包括:
+    - 节点管理: 启动/停止/重启 ROS 节点
+    - 包管理: 查询可用 ROS 包和可执行文件
+    - 地图管理: 加载/保存地图文件
+    - 文件操作: 读写 PGM、YAML、JSON 等文件
+  架构: 采用管理器模式，将功能解耦为独立模块
+  -->
+  <node name="seed_core_service_handler" 
+        pkg="seed_core" 
+        type="service_handler.py"
+        output="log" 
+        respawn="true" 
+        respawn_delay="5">
+    <!-- 服务处理节点暂无需额外参数 -->
+  </node>
+
+  <!-- 
+  点位管理服务节点
+  功能: 提供导航点位的持久化管理服务
+    - 支持添加、删除、查询、列表操作
+    - 使用 SQLite 数据库存储点位数据
+    - 支持中文点位名称（Base64 编码存储）
+  数据库: 点位数据持久化存储在指定目录
+  -->
+  <node name="seed_core_point_manager" 
+        pkg="seed_core" 
+        type="point_manager.py" 
+        output="log"
+        respawn="true" 
+        respawn_delay="5">
+    <!-- 指定点位数据库存储目录 -->
+    <param name="database_dir" value="$(arg database_dir)" />
+  </node>
+
+  <!-- 
+  ============================================================================
+  第五部分: 辅助功能节点（包含其他 launch 文件）
+  ============================================================================
+  以下功能通过独立的 launch 文件配置，便于模块化管理
+  -->
+
+  <!-- 
+  角度控制器节点
+  功能: 提供精确的机器人朝向控制
+  用途: 配合导航使用，实现到达目标点后的精确转向
+  -->
+  <include file="$(find seed_core)/launch/modules/angle_controller.launch" />
+
+  <!-- 
+  全局重定位节点
+  功能: 提供机器人在地图中的重新定位能力
+  用途: 当机器人位置丢失时，通过传感器数据重新确定位置
+  -->
+  <include file="$(find seed_core)/launch/modules/global_relocation.launch" />
+</launch>

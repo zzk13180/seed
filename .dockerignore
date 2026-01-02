@@ -61,5 +61,5 @@ pnpm-debug.log*
 # Tauri/Rust 构建产物
 **/target
 
-# SQL 脚本（非运行时需要）
-sql/
+# 各项目的 docker 配置目录（避免嵌套）
+apps/*/docker/

@@ -1,0 +1,25 @@
+{
+  "name": "@seed/desktop",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/desktop/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tauri dev",
+        "cwd": "apps/desktop/crates/seed"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "cargo tauri build",
+        "cwd": "apps/desktop/crates/seed"
+      },
+      "outputs": ["{projectRoot}/crates/seed/target"]
+    }
+  },
+  "tags": ["type:app", "platform:desktop", "framework:tauri"]
+}

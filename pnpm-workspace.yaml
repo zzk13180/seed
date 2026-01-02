@@ -1,6 +1,9 @@
 packages:
   - apps/**
-  - packages/**
+  - packages/configs/**
+  - packages/libs/**
+  - packages/ui
+  - '!apps/robotics'
 ignoredBuiltDependencies:
   - ssh2
   - cpu-features

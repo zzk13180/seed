@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+================================================================================
+文件名: robot_map_pose.launch
+描  述: 机器人地图位姿发布节点启动文件
+
+功能说明:
+  以固定频率发布机器人在地图坐标系中的位姿
+  
+使用场景:
+  - 前端实时显示机器人位置
+  - 任务调度系统获取机器人状态
+  - 多机器人系统的位置共享
+
+节点说明:
+  robot_map_pose_node 是 C++ 实现的节点，提供:
+    - 监听 TF 变换
+    - 计算 map -> base_footprint 变换
+    - 以指定频率发布位姿话题
+
+版本: 2.0.0
+作者: Seed Robotics Team
+================================================================================
+-->
+<launch>
+  <!-- 
+  机器人地图位姿发布节点
+  
+  参数说明:
+    map_frame       - 地图坐标系名称（通常为 "map"）
+    robot_base_frame - 机器人底盘坐标系名称（通常为 "base_footprint"）
+    rate            - 发布频率（Hz）
+    
+  工作流程:
+    1. 以指定频率查询 TF 变换
+    2. 获取 map -> robot_base_frame 的变换
+    3. 转换为 Pose 消息
+    4. 发布到指定话题
+    
+  话题输出:
+    /robot_map_pose (geometry_msgs/PoseStamped)
+  -->
+  <node pkg="seed_core" 
+        type="robot_map_pose_node" 
+        name="robot_map_pose"
+        output="log"
+        respawn="true"
+        respawn_delay="5">
+    <!-- 地图坐标系名称 -->
+    <param name="map_frame" value="map" />
+    
+    <!-- 机器人底盘坐标系名称 -->
+    <param name="robot_base_frame" value="base_footprint" />
+    
+    <!-- 发布频率（Hz），10Hz 适合大多数应用场景 -->
+    <param name="rate" value="10.0" />
+  </node>
+</launch>

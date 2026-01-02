@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+================================================================================
+文件名: navigation.launch
+描  述: 导航模式启动文件 - 使用已建好的地图进行定位和路径规划
+
+功能说明:
+  1. 启动 slam_toolbox 定位模式，在已知地图中进行机器人定位
+  2. 启动 TEB 局部路径规划器，实现动态避障和路径优化
+  3. 加载 move_base 导航栈，提供全局和局部路径规划
+
+使用方法:
+  # 使用默认地图
+  roslaunch seed_core navigation.launch
+  
+  # 指定自定义地图
+  roslaunch seed_core navigation.launch map_file:=/path/to/map.yaml
+  
+  # 使用环境变量指定地图
+  export MAP=/path/to/map_directory
+  roslaunch seed_core navigation.launch
+
+参数说明:
+  map_file - 地图文件路径 (YAML 格式)
+             优先使用 MAP 环境变量，否则使用默认路径
+
+依赖说明:
+  - slam_toolbox: SLAM 定位与建图工具
+  - move_base: ROS 导航栈核心
+  - teb_local_planner: 时间弹性带局部规划器
+
+版本信息:
+  版本: 2.0.0
+  更新: 重构代码结构，优化参数配置
+
+作者: Seed Robotics Team
+日期: 2025
+================================================================================
+-->
+<launch>
+  <!-- 
+  ============================================================================
+  第一部分: 地图参数配置
+  ============================================================================
+  地图路径的确定逻辑:
+    1. 优先检查 MAP 环境变量是否设置
+    2. 如果设置了 MAP，则使用 ${MAP}/map.yaml
+    3. 否则使用默认路径 ~/.seed/maps/default/map.yaml
+  -->
+  
+  <!-- 
+  地图文件路径参数
+  使用 eval 表达式实现环境变量的条件判断
+  注意: optenv 在环境变量未设置时返回空字符串
+  -->
+  <arg name="map_file"
+       default="$(eval (optenv('MAP') + '/map.yaml') if optenv('MAP') else (env('HOME') + '/.seed/maps/default/map.yaml'))"
+       doc="地图文件路径，支持 YAML 格式的 map 描述文件" />
+
+  <!-- 
+  ============================================================================
+  第二部分: SLAM Toolbox 定位模式
+  ============================================================================
+  slam_toolbox 是一个高性能的 2D SLAM 工具包，支持两种模式:
+    - mapping: 建图模式，用于创建新地图
+    - localization: 定位模式，用于在已知地图中定位
+  
+  此处使用定位模式 (localization_slam_toolbox_node)
+  特点:
+    - 加载已有地图进行匹配定位
+    - 持续优化机器人位姿估计
+    - 支持动态环境中的重新定位
+  -->
+  <node pkg="slam_toolbox" 
+        type="localization_slam_toolbox_node" 
+        name="slam_toolbox" 
+        output="log"
+        clear_params="true"
+        respawn="true"
+        respawn_delay="5">
+    
+    <!-- 
+    加载 slam_toolbox 定位模式参数配置
+    配置文件包含:
+      - 激光雷达话题配置
+      - 里程计话题配置
+      - 匹配算法参数
+      - 更新频率设置
+      - 坐标变换配置
+    -->
+    <rosparam command="load"
+              file="$(find seed_core)/config/slam_toolbox/slam_toolbox_localization.yaml" />
+    
+    <!-- 
+    指定地图文件路径
+    slam_toolbox 会加载此地图用于定位匹配
+    注意: map_file_name 参数不需要 .yaml 后缀
+    -->
+    <param name="map_file_name" value="$(arg map_file)" />
+  </node>
+
+  <!-- 
+  ============================================================================
+  第三部分: TEB 局部路径规划器
+  ============================================================================
+  TEB (Timed Elastic Band) 是一种高效的局部路径规划算法
+  
+  主要特点:
+    - 时间最优路径规划
+    - 动态障碍物避让
+    - 考虑机器人运动学约束
+    - 支持多种机器人模型（差速、阿克曼、全向）
+  
+  此 launch 文件包含:
+    - move_base 节点配置
+    - 全局路径规划器参数
+    - 局部路径规划器参数
+    - 代价地图配置
+  -->
+  <include file="$(find seed_core)/launch/planners/teb_local_planner.launch" />
+</launch>

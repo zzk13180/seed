@@ -1,0 +1,8 @@
+{
+  "name": "@seed/types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/libs/types",
+  "targets": {},
+  "tags": ["type:types", "scope:shared"]
+}

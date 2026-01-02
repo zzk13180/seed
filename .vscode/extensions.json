@@ -1,0 +1,62 @@
+{
+  "recommendations": [
+    // Nx Monorepo
+    "nrwl.angular-console",
+
+    // TypeScript & JavaScript
+    "ms-vscode.vscode-typescript-next",
+
+    // Vue
+    "Vue.volar",
+
+    // Astro
+    "astro-build.astro-vscode",
+
+    // Tailwind CSS
+    "bradlc.vscode-tailwindcss",
+
+    // ESLint & Prettier & Stylelint
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+
+    // NestJS
+    "ashinzekene.nestjs",
+
+    // Rust (Tauri)
+    "rust-lang.rust-analyzer",
+    "tauri-apps.tauri-vscode",
+
+    // Vitest
+    "vitest.explorer",
+
+    // YAML & TOML & JSON
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+
+    // Markdown
+    "yzhang.markdown-all-in-one",
+
+    // dotenv
+    "mikestead.dotenv",
+
+    // SVG
+    "jock.svg",
+
+    // Language support for ROS action, msg and srv files
+    "ajshort.msg",
+    // Python
+    "ms-python.python",
+    // CMake
+    "ms-vscode.cmake-tools",
+    // C/C++
+    "ms-vscode.cpptools",
+    // styled-components
+    "styled-components.vscode-styled-components",
+    // Svelte
+    "svelte.svelte-vscode",
+    // MDX
+    "unifiedjs.vscode-mdx",
+  ],
+  "unwantedRecommendations": []
+}

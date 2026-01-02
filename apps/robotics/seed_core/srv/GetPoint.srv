@@ -1,0 +1,56 @@
+# =============================================================================
+# 获取导航点服务 (GetPoint.srv)
+# =============================================================================
+# 功能描述:
+#   查询并返回指定导航点位的详细信息
+#   支持通过ID或名称+类型两种方式查询
+#
+# 使用场景:
+#   - 获取点位坐标进行导航
+#   - 显示点位详细信息
+#   - 验证点位是否存在
+#
+# 调用示例:
+#   rosservice call /seed_core/point_manager/get_point "{point_id: 1}"
+# =============================================================================
+
+# ========================= 请求参数 (Request) =================================
+int32 point_id               # 点位ID (可选)
+                             # 如果提供, 将优先使用ID查询
+                             # 传入0或负数表示不使用此参数
+
+string name                  # 点位名称 (Base64编码, 可选)
+                             # 与 point_type 配合使用
+
+string point_type            # 点位类型 (可选)
+                             # "navigation" - 导航目标点
+---
+# ========================= 响应参数 (Response) ================================
+bool success                 # 操作是否成功
+                             # true: 查询成功, 返回点位信息
+                             # false: 查询失败(点位不存在)
+
+string message               # 返回消息
+                             # 成功时: "Point retrieved successfully"
+                             # 失败时: 包含具体的错误原因
+
+# ----------------------- 点位信息 (成功时返回) --------------------------------
+int32 point_id               # 点位ID
+
+string name                  # 点位名称 (Base64编码)
+string point_type            # 点位类型
+
+float64 x                    # X坐标 (米)
+float64 y                    # Y坐标 (米)
+float64 z                    # Z坐标 (米)
+
+float64 orientation_x        # 四元数X分量
+float64 orientation_y        # 四元数Y分量
+float64 orientation_z        # 四元数Z分量
+float64 orientation_w        # 四元数W分量
+
+string map_name              # 关联的地图名称 (Base64编码)
+string description           # 点位描述 (Base64编码)
+string metadata              # 元数据 (JSON字符串)
+string tags                  # 标签列表 (JSON数组字符串)
+bool enabled                 # 是否启用

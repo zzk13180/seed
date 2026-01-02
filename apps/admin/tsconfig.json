@@ -1,9 +1,8 @@
 {
   "extends": "@seed/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [".", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "*.d.ts"],

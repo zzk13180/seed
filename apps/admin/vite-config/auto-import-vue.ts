@@ -1,5 +1,5 @@
 import AutoImport from 'unplugin-auto-import/vite'
-import { CustomElementPlusResolver } from './auto-import-resolver'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import type Path from 'node:path'
 import type { Plugin } from 'vite'
 
@@ -32,7 +32,7 @@ export function VueAutoImportPlugin(path: typeof Path): Plugin {
       },
     ],
     vueTemplate: true,
-    resolvers: [CustomElementPlusResolver()],
+    resolvers: [ElementPlusResolver()],
     dts: dtsPath,
     exclude: EXCLUDE_PATTERNS,
     /**

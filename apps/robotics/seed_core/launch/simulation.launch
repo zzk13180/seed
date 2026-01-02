@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+================================================================================
+文件名: simulation.launch
+描  述: Gazebo 仿真环境启动文件
+
+功能说明:
+  1. 配置 Gazebo 模型搜索路径
+  2. 启动 Gazebo 仿真器并加载世界文件
+  3. 生成机器人 URDF 模型
+  4. 启动机器人状态发布节点
+  5. 启动 IMU 数据处理节点
+
+使用方法:
+  # 使用默认配置（burger 模型）
+  roslaunch seed_core simulation.launch
+  
+  # 指定机器人模型
+  roslaunch seed_core simulation.launch model:=waffle
+  
+  # 指定初始位置
+  roslaunch seed_core simulation.launch x_pos:=1.0 y_pos:=2.0 yaw_angle:=1.57
+
+参数说明:
+  model     - 机器人模型类型 (burger | waffle | waffle_pi)
+  x_pos     - 初始 X 坐标（米）
+  y_pos     - 初始 Y 坐标（米）
+  z_pos     - 初始 Z 坐标（米）
+  yaw_angle - 初始朝向角度（弧度）
+
+依赖说明:
+  - gazebo_ros: Gazebo 与 ROS 的集成包
+  - turtlebot3_description: TurtleBot3 机器人描述文件
+  - turtlebot3_bringup: TurtleBot3 启动配置
+  - turtlebot3_slam: SLAM 相关节点（IMU 处理）
+
+注意事项:
+  - 需要安装 TurtleBot3 相关包
+  - 需要设置 TURTLEBOT3_MODEL 环境变量（可选）
+  - 首次运行需要下载 Gazebo 模型文件
+
+版本信息:
+  版本: 2.0.0
+  更新: 重构代码结构，添加详细注释
+
+作者: Seed Robotics Team
+日期: 2025
+================================================================================
+-->
+<launch>
+  <!-- 
+  ============================================================================
+  第一部分: 环境配置
+  ============================================================================
+  配置 Gazebo 模型搜索路径，确保能够找到自定义模型
+  -->
+  
+  <!-- 
+  设置 GAZEBO_MODEL_PATH 环境变量
+  格式: 自定义模型路径:系统默认路径
+  这样 Gazebo 会优先搜索本包中的模型
+  -->
+  <env name="GAZEBO_MODEL_PATH"
+       value="$(find seed_core)/public/simulation/models:$(optenv GAZEBO_MODEL_PATH)" />
+
+  <!-- 
+  ============================================================================
+  第二部分: 仿真参数定义
+  ============================================================================
+  定义机器人模型和初始位姿参数
+  -->
+  
+  <!-- 
+  机器人模型类型参数
+  支持的模型:
+    - burger: 最小型号，适合入门和室内环境
+    - waffle: 中型号，配备更多传感器
+    - waffle_pi: 带有 Raspberry Pi 摄像头的版本
+  -->
+  <arg name="model" default="burger" doc="机器人模型类型: burger|waffle|waffle_pi" />
+  
+  <!-- 
+  机器人初始位姿参数
+  用于指定机器人在世界中的生成位置
+  -->
+  <arg name="x_pos" default="0.0" doc="初始 X 坐标（米）" />
+  <arg name="y_pos" default="0.0" doc="初始 Y 坐标（米）" />
+  <arg name="z_pos" default="0.0" doc="初始 Z 坐标（米）" />
+  <arg name="yaw_angle" default="0.0" doc="初始朝向角度（弧度）" />
+
+  <!-- 
+  ============================================================================
+  第三部分: 启动 Gazebo 仿真器
+  ============================================================================
+  使用 gazebo_ros 包启动 Gazebo 仿真环境
+  -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- 
+    加载自定义世界文件
+    SDF 格式的世界描述文件，包含:
+      - 环境模型（墙壁、家具等）
+      - 光照配置
+      - 物理引擎参数
+    -->
+    <arg name="world_name" value="$(find seed_core)/public/simulation/worlds/model.sdf" />
+    
+    <!-- 仿真启动时不暂停 -->
+    <arg name="paused" value="false" />
+    
+    <!-- 使用仿真时间，所有节点同步到 Gazebo 时钟 -->
+    <arg name="use_sim_time" value="true" />
+    
+    <!-- 显示 Gazebo 图形界面 -->
+    <arg name="gui" value="true" />
+    
+    <!-- 非无头模式（显示渲染窗口） -->
+    <arg name="headless" value="false" />
+    
+    <!-- 关闭调试输出 -->
+    <arg name="debug" value="false" />
+  </include>
+
+  <!-- 
+  ============================================================================
+  第四部分: 机器人模型生成
+  ============================================================================
+  加载机器人 URDF 描述并在 Gazebo 中生成模型
+  -->
+  
+  <!-- 
+  加载机器人 URDF 描述到参数服务器
+  使用 xacro 工具处理 URDF 模板
+  xacro 支持:
+    - 参数化机器人模型
+    - 模块化组件定义
+    - 条件包含
+  -->
+  <param name="robot_description"
+         command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  
+  <!-- 
+  在 Gazebo 中生成机器人模型
+  spawn_model 节点参数说明:
+    -urdf: 使用 URDF 格式
+    -model: 模型名称
+    -x, -y, -z: 生成位置
+    -Y: Yaw 角度（朝向）
+    -param: 从参数服务器读取模型描述
+  -->
+  <node pkg="gazebo_ros" 
+        type="spawn_model" 
+        name="spawn_urdf" 
+        output="log"
+        args="-urdf
+              -model turtlebot3_$(arg model)
+              -x $(arg x_pos) 
+              -y $(arg y_pos) 
+              -z $(arg z_pos)
+              -Y $(arg yaw_angle)
+              -param robot_description" />
+
+  <!-- 
+  ============================================================================
+  第五部分: 机器人状态发布
+  ============================================================================
+  发布机器人的 TF 坐标变换关系
+  -->
+  
+  <!-- 
+  TurtleBot3 远程启动文件
+  包含:
+    - robot_state_publisher: 发布机器人关节状态到 TF
+    - 静态坐标变换发布
+  -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <!-- 
+  ============================================================================
+  第六部分: IMU 数据处理
+  ============================================================================
+  处理惯性测量单元数据，优化 SLAM 性能
+  -->
+  
+  <!-- 
+  IMU 扁平化处理节点
+  
+  背景知识:
+    IMU（惯性测量单元）测量三轴加速度和三轴角速度
+    对于在平面移动的机器人，只需要关注:
+      - Z 轴角速度（偏航旋转）
+      - X、Y 轴加速度（平面移动）
+    
+  节点功能:
+    1. 订阅原始 IMU 数据 (/imu)
+    2. 移除 X、Y 轴的旋转分量（Pitch、Roll）
+    3. 保留 Z 轴旋转（Yaw）和平面加速度
+    4. 发布处理后的 IMU 数据 (/flat_imu)
+    
+  优势:
+    - 减少 SLAM 算法中的干扰数据
+    - 提高平面环境下的定位精度
+    - 更符合 2D SLAM 的假设条件
+  -->
+  <node pkg="turtlebot3_slam" 
+        type="flat_world_imu_node" 
+        name="flat_world_imu_node" 
+        output="log">
+    <!-- 输入: 原始 IMU 话题 -->
+    <remap from="imu_in" to="/imu" />
+    <!-- 输出: 扁平化后的 IMU 话题 -->
+    <remap from="imu_out" to="/flat_imu" />
+  </node>
+</launch>

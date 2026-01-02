@@ -39,10 +39,13 @@ import unicornPlugin from 'eslint-plugin-unicorn'
 
 import svelteEslintParser from 'svelte-eslint-parser'
 import vueParser from 'vue-eslint-parser'
+import astroEslintParser from 'astro-eslint-parser'
+
+import eslintPluginAstro from 'eslint-plugin-astro'
 
 // ----- 规则配置导入 -----
-import { disabledRules, regexpRules, classMembersOrder, nestjsRules } from './eslint/rules/index.js'
-import { noIsolatedComments } from './eslint/custom-rules/index.js'
+import { disabledRules, regexpRules, classMembersOrder, nestjsRules } from './packages/configs/eslint/rules/index.js'
+import { noIsolatedComments } from './packages/configs/eslint/custom-rules/index.js'
 
 /**
  * 加载 unplugin-auto-import 生成的 ESLint 全局变量配置
@@ -87,7 +90,6 @@ export default defineConfig([
       '**/.svelte-kit/', // SvelteKit 构建缓存
       '**/node_modules/', // 依赖目录
       'packages/**', // 共享包（独立配置）
-      'apps/docs/**', // 文档站点（独立配置）
       'vitest.config.ts', // Vitest 配置文件
       'eslint/**', // ESLint 配置模块
     ],
@@ -371,13 +373,48 @@ export default defineConfig([
     rules: { ...eslintPluginSvelte.configs.recommended.rules },
   },
 
+  // ----- Astro 文件配置 (apps/docs) -----
+  ...eslintPluginAstro.configs['flat/recommended'],
+  {
+    files: ['**/*.astro'],
+    languageOptions: {
+      parser: astroEslintParser,
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.astro'],
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+  {
+    // Astro Script tags
+    files: ['**/*.astro/*.js'],
+    languageOptions: {
+      parser: tsEslintParser,
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
   // ----- NestJS API 服务器 -----
   {
     files: ['apps/api-server/**/*.ts'],
     rules: { ...nestjsRules, 'unicorn/no-anonymous-default-export': 'off' },
   },
   {
-    files: ['apps/server-api/**/*.ts'],
+    files: ['apps/server/**/*.ts'],
     rules: { ...nestjsRules, 'unicorn/no-anonymous-default-export': 'off' },
   },
 
@@ -397,7 +434,7 @@ export default defineConfig([
       '**/*.test.ts',
       '**/*.spec.js',
       '**/*.test.js',
-      'apps/server-api/test/**/*.ts',
+      'apps/server/test/**/*.ts',
     ],
     languageOptions: {
       globals: {

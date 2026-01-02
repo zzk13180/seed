@@ -1,0 +1,17 @@
+{
+  "name": "@seed/eslint-config",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./rules": "./rules/index.js",
+    "./rules/*": "./rules/*.js",
+    "./custom-rules": "./custom-rules/index.js"
+  },
+  "files": [
+    "index.js",
+    "rules",
+    "custom-rules"
+  ]
+}

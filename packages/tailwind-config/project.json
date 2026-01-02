@@ -1,7 +1,0 @@
-{
-  "name": "tailwind-config",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/tailwind-config",
-  "projectType": "library",
-  "tags": ["scope:shared", "type:config"]
-}

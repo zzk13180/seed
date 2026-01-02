@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+================================================================================
+文件名: teb_local_planner.launch
+描  述: TEB 局部路径规划器及 move_base 导航栈配置
+
+功能说明:
+  1. 加载 move_base 通用参数
+  2. 加载全局路径规划器参数
+  3. 加载 TEB 局部路径规划器参数
+  4. 加载代价地图参数
+  5. 启动 move_base 导航节点
+
+TEB 算法简介:
+  TEB (Timed Elastic Band) 是一种时间最优的局部路径规划算法
+  主要特点:
+    - 考虑时间维度的路径优化
+    - 遵守机器人运动学约束
+    - 实时动态障碍物避让
+    - 支持多种机器人模型
+
+依赖说明:
+  - move_base: ROS 导航栈核心
+  - teb_local_planner: TEB 规划器插件
+  - global_planner: 全局路径规划器
+
+参数文件说明:
+  params_nav_common/    - 导航通用参数
+  params_costmap_common/ - 代价地图通用参数
+  params_costmap_car/   - 特定车型参数
+
+版本: 2.0.0
+作者: Seed Robotics Team
+================================================================================
+-->
+<launch>
+  <!-- 
+  ============================================================================
+  第一部分: 导航通用参数
+  ============================================================================
+  加载 move_base 节点的通用配置参数
+  -->
+  
+  <!-- 
+  move_base 核心参数
+  
+  关键配置项:
+    - controller_frequency: 控制频率 (Hz)
+    - planner_frequency: 规划频率 (Hz)
+    - planner_patience: 规划超时时间 (s)
+    - controller_patience: 控制超时时间 (s)
+    - oscillation_timeout: 振荡超时时间 (s)
+    - oscillation_distance: 振荡检测距离 (m)
+    - recovery_behavior_enabled: 启用恢复行为
+    - clearing_rotation_allowed: 允许清除旋转
+  -->
+  <rosparam file="$(find seed_core)/config/navigation/move_base_params.yaml"
+            command="load" 
+            ns="move_base" />
+  
+  <!-- 
+  全局路径规划器参数 (GlobalPlanner)
+  
+  GlobalPlanner 使用 Dijkstra 或 A* 算法规划全局路径
+  
+  关键配置项:
+    - allow_unknown: 允许在未知区域规划
+    - use_dijkstra: 使用 Dijkstra 算法
+    - use_quadratic: 使用二次逼近
+    - use_grid_path: 使用网格路径
+    - old_navfn_behavior: 兼容旧版 navfn 行为
+    - lethal_cost: 致命代价阈值
+    - neutral_cost: 中性代价
+    - cost_factor: 代价因子
+  -->
+  <rosparam file="$(find seed_core)/config/navigation/global_planner_params.yaml"
+            command="load" 
+            ns="move_base" />
+
+  <!-- 
+  ============================================================================
+  第二部分: TEB 局部规划器配置
+  ============================================================================
+  配置 TEB 局部路径规划器
+  -->
+  
+  <!-- 设置局部规划器类型为 TEB -->
+  <param name="move_base/base_local_planner" 
+         type="string"
+         value="teb_local_planner/TebLocalPlannerROS" />
+  
+  <!-- 
+  TEB 规划器参数
+  
+  关键配置类别:
+  
+  1. 轨迹参数:
+    - teb_autosize: 自动调整轨迹长度
+    - dt_ref: 期望时间间隔
+    - dt_hysteresis: 时间间隔滞后
+    - min_samples: 最小采样点数
+    
+  2. 机器人模型参数:
+    - max_vel_x: 最大线速度 (m/s)
+    - max_vel_theta: 最大角速度 (rad/s)
+    - acc_lim_x: 最大线加速度 (m/s²)
+    - acc_lim_theta: 最大角加速度 (rad/s²)
+    - footprint_model: 机器人轮廓模型
+    
+  3. 目标容忍度:
+    - xy_goal_tolerance: 位置容忍度 (m)
+    - yaw_goal_tolerance: 角度容忍度 (rad)
+    - free_goal_vel: 到达目标时是否自由速度
+    
+  4. 障碍物参数:
+    - min_obstacle_dist: 最小障碍物距离 (m)
+    - include_costmap_obstacles: 包含代价地图障碍物
+    - inflation_dist: 膨胀距离 (m)
+    
+  5. 优化参数:
+    - no_inner_iterations: 内层迭代次数
+    - no_outer_iterations: 外层迭代次数
+    - optimization_activate: 启用优化
+    - optimization_verbose: 显示优化信息
+  -->
+  <rosparam file="$(find seed_core)/config/navigation/teb_local_planner_params.yaml"
+            command="load" 
+            ns="move_base" />
+
+  <!-- 
+  ============================================================================
+  第三部分: 代价地图配置
+  ============================================================================
+  配置全局和局部代价地图
+  -->
+  
+  <!-- 
+  代价地图通用参数
+  
+  应用于全局和局部代价地图的共同参数:
+    - obstacle_range: 障碍物检测范围 (m)
+    - raytrace_range: 射线追踪范围 (m)
+    - footprint: 机器人轮廓
+    - footprint_padding: 轮廓填充 (m)
+    - robot_base_frame: 机器人基座坐标系
+    - map_topic: 地图话题
+    - observation_sources: 观测源配置
+  -->
+  <rosparam file="$(find seed_core)/config/costmap/costmap_common_params.yaml"
+            command="load" 
+            ns="move_base/global_costmap" />
+  <rosparam file="$(find seed_core)/config/costmap/costmap_common_params.yaml"
+            command="load" 
+            ns="move_base/local_costmap" />
+
+  <!-- 
+  局部代价地图参数
+  
+  局部代价地图特有配置:
+    - global_frame: 使用 odom 坐标系
+    - rolling_window: 使用滚动窗口
+    - width/height: 窗口大小 (m)
+    - resolution: 分辨率 (m/cell)
+    - update_frequency: 更新频率 (Hz)
+    - publish_frequency: 发布频率 (Hz)
+    - static_map: 不使用静态地图
+  -->
+  <rosparam file="$(find seed_core)/config/costmap/local_costmap_params.yaml"
+            command="load" 
+            ns="move_base" />
+  
+  <!-- 
+  全局代价地图参数
+  
+  全局代价地图特有配置:
+    - global_frame: 使用 map 坐标系
+    - static_map: 使用静态地图
+    - rolling_window: 不使用滚动窗口
+    - track_unknown_space: 跟踪未知空间
+    - update_frequency: 更新频率 (Hz)
+    - publish_frequency: 发布频率 (Hz)
+  -->
+  <rosparam file="$(find seed_core)/config/costmap/global_costmap_params.yaml"
+            command="load" 
+            ns="move_base" />
+
+  <!-- 
+  ============================================================================
+  第四部分: 启动 move_base 节点
+  ============================================================================
+  启动 ROS 导航栈核心节点
+  -->
+  <node pkg="move_base" 
+        type="move_base" 
+        respawn="false" 
+        name="move_base" 
+        output="log">
+    
+    <!-- 
+    车型特定参数
+    
+    不同车型可能有不同的:
+      - 机器人轮廓尺寸
+      - 速度限制
+      - 加速度限制
+      - 转弯半径
+      
+    通过加载特定配置文件来适配不同硬件平台
+    -->
+    
+    <!-- TEB 规划器车型参数（覆盖通用参数） -->
+    <rosparam file="$(find seed_core)/config/costmap/vehicle/teb_params.yaml"
+              command="load" />
+    
+    <!-- 全局代价地图车型参数 -->
+    <rosparam file="$(find seed_core)/config/costmap/vehicle/costmap_params.yaml"
+              command="load" 
+              ns="global_costmap" />
+    
+    <!-- 局部代价地图车型参数 -->
+    <rosparam file="$(find seed_core)/config/costmap/vehicle/costmap_params.yaml"
+              command="load" 
+              ns="local_costmap" />
+  </node>
+</launch>

@@ -1,0 +1,43 @@
+# TEB 局部规划器参数命名空间
+TebLocalPlannerROS:
+  # 最大前进速度（米/秒）
+  max_vel_x: 1.0
+
+  # 最大侧向速度（米/秒）
+  # 非全向移动机器人必须设置为 0
+  max_vel_y: 0.0
+
+  # 最大后退速度（米/秒）
+  max_vel_x_backwards: 1.0
+
+  # 最大角速度（弧度/秒）
+  max_vel_theta: 0.5
+
+  # 最大线加速度（米/秒²）
+  acc_lim_x: 0.3
+
+  # 最大侧向加速度（米/秒²）
+  # 非全向移动机器人必须设置为 0
+  acc_lim_y: 0.0
+
+  # 最大角加速度（弧度/秒²）
+  acc_lim_theta: 0.3
+
+  # 最小转弯半径（米）
+  # 差速机器人设置为 0
+  min_turning_radius: 0.0
+
+  # 轴距（米）
+  # 前轮与后轮之间的距离
+  # 差速机器人设置为 0
+  wheelbase: 0.0
+
+  # 机器人轮廓模型
+  # 用于局部路径规划的碰撞检测
+  footprint_model:
+    # 使用多边形模型
+    type: polygon # 可选类型: point, circular, two_circles, line, polygon
+
+    # 多边形顶点坐标
+    # 与代价地图的 footprint 保持一致
+    vertices: [[-0.105, -0.105], [-0.105, 0.105], [0.041, 0.105], [0.041, -0.105]]

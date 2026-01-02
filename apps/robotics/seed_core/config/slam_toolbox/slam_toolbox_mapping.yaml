@@ -1,0 +1,150 @@
+# ================================================================================
+# 文件名: slam_toolbox_mapping.yaml
+# 描  述: SLAM Toolbox 建图模式配置参数
+#
+# 功能说明:
+#   此配置文件用于 slam_toolbox 的建图模式 (async_slam_toolbox_node)
+#   机器人通过激光雷达和里程计数据实时构建环境地图
+#
+# 使用场景:
+#   - 新环境的地图创建
+#   - 地图更新和扩展
+#
+# 与定位模式的主要区别:
+#   - mode: mapping（而非 localization）
+#   - 更短的地图更新间隔
+#   - 更小的最小移动距离触发阈值
+#   - 更大的扫描缓冲区
+#
+# 作者: Seed Robotics Team
+# 版本: 2.0.0
+# ================================================================================
+
+# ================================================================================
+# 优化求解器配置
+# ================================================================================
+solver_plugin: solver_plugins::CeresSolver
+ceres_linear_solver: SPARSE_SCHUR
+ceres_preconditioner: SCHUR_JACOBI
+ceres_trust_strategy: LEVENBERG_MARQUARDT
+ceres_dogleg_type: SUBSPACE_DOGLEG
+ceres_loss_function: None
+
+# ================================================================================
+# ROS 话题和坐标系配置
+# ================================================================================
+odom_frame: odom
+map_frame: map
+base_frame: base_footprint
+scan_topic: /scan
+
+# 建图模式
+# 此模式下会不断更新和扩展地图
+mode: mapping
+
+# ================================================================================
+# 调试与日志配置
+# ================================================================================
+debug_logging: false
+
+# 是否启用交互模式
+# 交互模式允许通过 rviz 插件手动调整地图
+enable_interactive_mode: false
+
+# ================================================================================
+# 扫描处理配置
+# ================================================================================
+throttle_scans: 1
+
+# map->odom 变换发布周期
+transform_publish_period: 0.02
+
+# 地图更新间隔（秒）
+# 建图模式下设置较短间隔以实时显示地图更新
+map_update_interval: 2.0
+
+# 地图分辨率（米/像素）
+# 典型值:
+#   - 0.02: 高分辨率，适合小区域
+#   - 0.05: 标准分辨率，平衡精度和性能
+#   - 0.1: 低分辨率，适合大区域
+resolution: 0.05
+
+# 激光最大有效距离
+max_laser_range: 20.0
+
+# 扫描处理最小时间间隔
+minimum_time_interval: 0.5
+
+# TF 查找超时时间
+transform_timeout: 0.2
+
+# TF 缓冲区持续时间
+tf_buffer_duration: 30.0
+
+# 堆栈大小
+stack_size_to_use: 40000000
+
+# ================================================================================
+# 扫描匹配配置（建图优化参数）
+# ================================================================================
+use_scan_matching: true
+use_scan_barycenter: true
+
+# 最小移动距离触发阈值
+# 建图模式下设置较小值，捕获更多细节
+minimum_travel_distance: 0.1
+
+# 最小航向变化触发阈值
+minimum_travel_heading: 0.1
+
+# 扫描缓冲区大小
+# 建图模式下使用更大的缓冲区
+scan_buffer_size: 10
+
+scan_buffer_maximum_scan_distance: 10.0
+link_match_minimum_response_fine: 0.1
+link_scan_maximum_distance: 1.5
+
+# ================================================================================
+# 回环闭合配置（建图关键参数）
+# ================================================================================
+do_loop_closing: true
+
+# 回环搜索最小链长度
+# 建图时设置较大值，避免过早闭环
+loop_match_minimum_chain_size: 10
+
+loop_match_maximum_variance_coarse: 3.0
+loop_match_minimum_response_coarse: 0.35
+loop_match_minimum_response_fine: 0.45
+
+# ================================================================================
+# 相关性搜索参数
+# ================================================================================
+correlation_search_space_dimension: 0.5
+correlation_search_space_resolution: 0.01
+correlation_search_space_smear_deviation: 0.1
+
+# ================================================================================
+# 回环闭合搜索参数
+# ================================================================================
+loop_search_space_dimension: 8.0
+loop_search_space_resolution: 0.05
+loop_search_space_smear_deviation: 0.03
+
+# 回环搜索最大距离
+# 建图时设置较小值，提高回环检测精度
+loop_search_maximum_distance: 3.0
+
+# ================================================================================
+# 扫描匹配器参数
+# ================================================================================
+distance_variance_penalty: 0.5
+angle_variance_penalty: 1.0
+fine_search_angle_offset: 0.00349
+coarse_search_angle_offset: 0.349
+coarse_angle_resolution: 0.0349
+minimum_angle_penalty: 0.9
+minimum_distance_penalty: 0.5
+use_response_expansion: true

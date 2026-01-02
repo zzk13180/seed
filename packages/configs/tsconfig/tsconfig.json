@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // ==================== 编译目标 ====================
+    "target": "esnext", // 编译目标: 使用最新 ECMAScript 特性
+    "module": "esnext", // 模块系统: ES 模块，支持 tree-shaking
+    "lib": ["esnext", "dom", "dom.iterable"], // 运行时库: 最新 ES + 浏览器 DOM API
+
+    // ==================== 模块解析 ====================
+    "moduleResolution": "bundler", // 模块解析策略: 适配 Vite/esbuild 等现代打包工具
+    "resolveJsonModule": true, // 允许导入 JSON 文件作为模块
+    "esModuleInterop": true, // ESM/CJS 互操作: 允许 import 语法导入 CommonJS 模块
+    "allowJs": true, // 允许编译 JavaScript 文件
+    "isolatedModules": true, // 隔离模块: 确保每个文件可独立编译，Vite/esbuild 必需
+
+    // ==================== 类型检查 ====================
+    "strict": true, // 严格模式: 启用所有严格类型检查（包含 strictNullChecks, noImplicitAny 等）
+    "noUnusedLocals": true, // 检测未使用的局部变量
+    "noUnusedParameters": true, // 检测未使用的函数参数
+    "noFallthroughCasesInSwitch": true, // 检测 switch 语句的 case 穿透
+    "noUncheckedIndexedAccess": true, // 索引访问时添加 undefined 类型，提升数组/对象访问安全性
+
+    // ==================== 语法特性 ====================
+    "jsx": "preserve", // JSX 处理: 保留原样，交给 Vue/React 工具链处理
+    "experimentalDecorators": true, // 装饰器支持: NestJS、TypeORM 等框架必需
+
+    // ==================== 输出控制 ====================
+    "noEmit": true, // 不生成编译输出文件，仅做类型检查（打包由 Vite 等工具处理）
+
+    // ==================== 类型声明 ====================
+    "types": ["@seed/types"], // 全局类型声明: 项目自定义类型
+    "skipLibCheck": true, // 跳过 node_modules 中 .d.ts 文件的类型检查，加速编译
+
+    // ==================== 代码质量 ====================
+    "forceConsistentCasingInFileNames": true // 强制文件名大小写一致，避免跨平台问题
+  }
+}

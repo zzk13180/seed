@@ -1,28 +1,127 @@
+# System Files
 **/.DS_Store
 **/.history
-**/.vscode
+*.local
+.idea/
+*.swp
+*.swo
 
+# Dependencies
 **/node_modules/
+
+# Build Outputs
 **/dist/
-*.log
+**/build/
+.output/
 
+# Nx
 .nx/
+.nx/cache
 
-.svelte-kit/
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
 
+# Environment
+.env
+.env.*
+!.env.example
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# Temporary Files
 /tmp/
+*.tmp
+*.temp
 
-.astro/
-
-.venv
-
-# git rm --cached ./auto-import-components.d.ts
+# Vue/Vite (apps/admin, apps/mobile)
 apps/admin/auto-import-components.d.ts
 apps/admin/auto-import-vue.d.ts
 .eslintrc-auto-import.json
 
-gen/
-target/
-coverage/
+# Astro (apps/docs)
+.astro/
 
-.env
+# Tauri/Rust (apps/desktop)
+target/
+gen/
+Cargo.lock
+*.rs.bk
+
+# NestJS (apps/server)
+
+# Python (if any)
+.venv
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+env/
+ENV/
+
+# Python Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+
+# ROS
+devel/
+install/
+.catkin_workspace
+
+# Data & Map files
+*.db
+*.sqlite
+*.sqlite3
+*.pgm
+*.posegraph
+*.data
+
+# Temporary Files backup
+*.bak
+
+# SvelteKit (if any)
+.svelte-kit/
+
+# Drizzle ORM
+drizzle/
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+.turbo
+*.tsbuildinfo
+
+# Python Ruff Cache
+.ruff_cache

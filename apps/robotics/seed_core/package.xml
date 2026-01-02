@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!-- 
+=============================================================================
+Seed Core package.xml
+=============================================================================
+
+包描述:
+    Seed Core 是一个功能完整的 ROS 机器人控制核心包。
+    提供节点管理、地图管理、点位管理和文件操作等服务。
+
+主要功能:
+    1. 服务处理器 (service_handler.py)
+       - 节点生命周期管理
+       - 地图加载/保存/切换
+       - 文件读写操作
+    
+    2. TF 整合器 (topic_handler.py)
+       - TF 消息合并
+       - 超时清理
+       - 高效发布
+    
+    3. 点位管理器 (point_manager.py)
+       - 导航点位 CRUD
+       - SQLite 持久化
+
+依赖说明:
+    - rospy: ROS Python 核心库
+    - rosbridge_suite: WebSocket 通信支持
+    - tf2_msgs: TF 消息类型
+    - 其他标准 ROS 消息包
+
+版本: 2.0.0
+作者: Seed Core Team
+许可证: MIT
+=============================================================================
+-->
+<package format="2">
+  <!-- ===================== 基本信息 ===================== -->
+  <name>seed_core</name>
+  <version>2.0.0</version>
+  <description>
+    Seed Core - ROS 机器人控制核心包
+    提供节点管理、地图管理、点位管理和文件操作等服务
+  </description>
+  
+  <!-- ===================== 维护者信息 ===================== -->
+  <maintainer email="zzk13180@gmail.com">zhangzhankui</maintainer>
+  
+  <!-- ===================== 许可证 ===================== -->
+  <license>MIT</license>
+  
+  <!-- ===================== 构建工具依赖 ===================== -->
+  <!-- catkin 是 ROS 的标准构建系统 -->
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <!-- ===================== 运行时依赖 ===================== -->
+  <!-- 核心 ROS 依赖 -->
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>dynamic_reconfigure</depend>
+  
+  <!-- ===================== 构建依赖 ===================== -->
+  <!-- 消息生成所需 -->
+  <build_depend>message_generation</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>move_base_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  
+  <!-- ===================== 构建导出依赖 ===================== -->
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>actionlib_msgs</build_export_depend>
+  <build_export_depend>move_base_msgs</build_export_depend>
+  <build_export_depend>nav_msgs</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  
+  <!-- ===================== 执行依赖 ===================== -->
+  <!-- 消息运行时 -->
+  <exec_depend>message_runtime</exec_depend>
+  
+  <!-- 标准消息类型 -->
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>move_base_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  
+  <!-- TF 相关 -->
+  <depend>tf</depend>
+  <depend>tf2_ros</depend>
+  <exec_depend>tf2_msgs</exec_depend>
+  
+  <!-- WebSocket 通信支持 -->
+  <exec_depend>rosbridge_suite</exec_depend>
+  
+  <!-- Python 依赖 -->
+  <!-- Flask 和 Waitress 用于可能的 HTTP API 扩展 -->
+  <exec_depend>python3-flask</exec_depend>
+  <exec_depend>python3-waitress</exec_depend>
+  
+  <!-- NumPy 和 PIL 用于图像处理 -->
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-pil</exec_depend>
+  
+</package>

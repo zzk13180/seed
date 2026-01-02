@@ -1,0 +1,7 @@
+{
+  "name": "@seed/eslint-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/configs/eslint",
+  "tags": ["scope:shared", "type:config"]
+}

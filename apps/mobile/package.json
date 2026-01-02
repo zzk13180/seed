@@ -11,7 +11,11 @@
     "preview": "vite preview",
     "prettier": "prettier --write .",
     "pre-commit": "lint-staged",
-    "type-check": "vue-tsc --noEmit --skipLibCheck"
+    "type-check": "vue-tsc --noEmit --skipLibCheck",
+    "docker:build": "./scripts/deploy.sh docker:build",
+    "pm2:start": "./scripts/deploy.sh pm2:start",
+    "pm2:stop": "./scripts/deploy.sh pm2:stop",
+    "pm2:logs": "./scripts/deploy.sh pm2:logs"
   },
   "dependencies": {
     "@ionic/core": "^8.7.9",
@@ -23,5 +27,13 @@
     "pinia": "^3.0.2",
     "quaternion": "^2.0.2",
     "swiper": "^10.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/shared": "^3.5.23",
+    "vite": "^7.0.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1",
+    "vue-tsc": "^2.2.10"
   }
 }
