@@ -1,10 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IsString, IsEmail, IsOptional, MinLength, MaxLength, Matches } from 'class-validator'
+import type { IUserCreateDto } from '@seed/api-types'
 
 /**
  * 用户创建 DTO
+ *
+ * 实现 @seed/api-types 中的 IUserCreateDto 接口
  */
-export class UserCreateDto {
+export class UserCreateDto implements IUserCreateDto {
   @ApiProperty({ description: '用户名', example: 'admin' })
   @IsString()
   @MinLength(3)

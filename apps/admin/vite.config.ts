@@ -15,14 +15,14 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       : env.VITE_NEST_API_URL || 'http://127.0.0.1:3003/api'
 
   const proxy = {
-    [env.VITE_API_BASE_PATH]: {
+    [env['VITE_API_BASE_PATH']!]: {
       target: apiTarget,
       changeOrigin: true,
       ws: true,
 
       rewrite: (path: string) =>
         // eslint-disable-next-line security/detect-non-literal-regexp
-        path.replace(new RegExp(`^${env.VITE_API_BASE_PATH}`), ''),
+        path.replace(new RegExp(`^${env['VITE_API_BASE_PATH']}`), ''),
     },
   }
   return {

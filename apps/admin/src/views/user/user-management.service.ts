@@ -9,30 +9,32 @@ import {
   apiResetUserPassword,
 } from '@/api/user.api'
 import type {
+  UserStatus,
+  IUserVo,
+  IUserQueryDto,
+  IUserCreateDto,
+  IUserUpdateDto,
+  IPageResult,
+} from '@seed/api-types'
+import type {
   UserManagementApiService,
   MessageService,
   ConfirmService,
-  UserQueryParams,
-  UserCreateParams,
-  UserUpdateParams,
-  UserInfo,
-  PageResult,
-  UserStatus,
 } from './user-management.types'
 
 /**
  * HTTP 用户管理 API 服务实现
  */
 export class HttpUserManagementApiService implements UserManagementApiService {
-  async getPage(params: UserQueryParams): Promise<PageResult<UserInfo>> {
+  async getPage(params: IUserQueryDto): Promise<IPageResult<IUserVo>> {
     return apiGetUserPage(params)
   }
 
-  async create(params: UserCreateParams): Promise<UserInfo> {
+  async create(params: IUserCreateDto): Promise<IUserVo> {
     return apiCreateUser(params)
   }
 
-  async update(id: number, params: UserUpdateParams): Promise<UserInfo> {
+  async update(id: number, params: IUserUpdateDto): Promise<IUserVo> {
     return apiUpdateUser(id, params)
   }
 

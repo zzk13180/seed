@@ -273,7 +273,7 @@ export class DefaultErrorHandler implements ErrorHandler {
    * 判断是否应该通知用户
    * 某些错误（如静默刷新失败）可能不需要立即通知
    */
-  private shouldNotifyUser(type: ErrorType): boolean {
+  private shouldNotifyUser(_type: ErrorType): boolean {
     // 所有错误类型默认都应该通知用户
     return true
   }

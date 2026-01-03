@@ -56,7 +56,7 @@
     // Svelte
     "svelte.svelte-vscode",
     // MDX
-    "unifiedjs.vscode-mdx",
+    "unifiedjs.vscode-mdx"
   ],
   "unwantedRecommendations": []
 }

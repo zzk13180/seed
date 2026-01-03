@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Chat from '$lib/CustomUI.svelte'
+  import Chat from '../libs/CustomUI.svelte'
 </script>
 
 <Chat />

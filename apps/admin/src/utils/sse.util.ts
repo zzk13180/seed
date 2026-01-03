@@ -212,7 +212,7 @@ export class SSEConnector {
     this.config.onMessage(event)
   }
 
-  private onError(event: Event): void {
+  private onError(_event: Event): void {
     this.clearTimeoutTimer()
     // 区分是连接关闭还是错误
     const ready = this.eventSource?.readyState

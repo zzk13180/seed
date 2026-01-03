@@ -28,6 +28,10 @@
     "date-fns": "^4.1.0",
     "@date-fns/tz": "^1.2.0"
   },
+  "devDependencies": {
+    "@seed/tsconfig": "workspace:*",
+    "@seed/types": "workspace:*"
+  },
   "files": [
     "index.ts",
     "constants",

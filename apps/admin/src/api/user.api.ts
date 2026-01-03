@@ -1,11 +1,11 @@
 import { $http } from '@seed/http'
 import type {
   ApiResponse,
-  PageResult,
-  UserInfo,
-  UserQueryParams,
-  UserCreateParams,
-  UserUpdateParams,
+  IPageResult,
+  IUserVo,
+  IUserQueryDto,
+  IUserCreateDto,
+  IUserUpdateDto,
   UserStatus,
 } from './types'
 
@@ -16,8 +16,8 @@ import type {
 /**
  * 分页查询用户
  */
-export const apiGetUserPage = async (params?: UserQueryParams): Promise<PageResult<UserInfo>> => {
-  const response = await $http.get<ApiResponse<PageResult<UserInfo>>>(
+export const apiGetUserPage = async (params?: IUserQueryDto): Promise<IPageResult<IUserVo>> => {
+  const response = await $http.get<ApiResponse<IPageResult<IUserVo>>>(
     '/v1/users',
     params as Record<string, unknown>,
   )
@@ -27,32 +27,32 @@ export const apiGetUserPage = async (params?: UserQueryParams): Promise<PageResu
 /**
  * 获取所有用户列表
  */
-export const apiGetUserList = async (): Promise<UserInfo[]> => {
-  const response = await $http.get<ApiResponse<UserInfo[]>>('/v1/users/list')
+export const apiGetUserList = async (): Promise<IUserVo[]> => {
+  const response = await $http.get<ApiResponse<IUserVo[]>>('/v1/users/list')
   return response.data
 }
 
 /**
  * 根据 ID 获取用户
  */
-export const apiGetUserById = async (id: number): Promise<UserInfo> => {
-  const response = await $http.get<ApiResponse<UserInfo>>(`/v1/users/${id}`)
+export const apiGetUserById = async (id: number): Promise<IUserVo> => {
+  const response = await $http.get<ApiResponse<IUserVo>>(`/v1/users/${id}`)
   return response.data
 }
 
 /**
  * 创建用户
  */
-export const apiCreateUser = async (params: UserCreateParams): Promise<UserInfo> => {
-  const response = await $http.post<ApiResponse<UserInfo>>('/v1/users', params)
+export const apiCreateUser = async (params: IUserCreateDto): Promise<IUserVo> => {
+  const response = await $http.post<ApiResponse<IUserVo>>('/v1/users', params)
   return response.data
 }
 
 /**
  * 更新用户
  */
-export const apiUpdateUser = async (id: number, params: UserUpdateParams): Promise<UserInfo> => {
-  const response = await $http.put<ApiResponse<UserInfo>>(`/v1/users/${id}`, params)
+export const apiUpdateUser = async (id: number, params: IUserUpdateDto): Promise<IUserVo> => {
+  const response = await $http.put<ApiResponse<IUserVo>>(`/v1/users/${id}`, params)
   return response.data
 }
 

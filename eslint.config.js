@@ -44,7 +44,12 @@ import astroEslintParser from 'astro-eslint-parser'
 import eslintPluginAstro from 'eslint-plugin-astro'
 
 // ----- 规则配置导入 -----
-import { disabledRules, regexpRules, classMembersOrder, nestjsRules } from './packages/configs/eslint/rules/index.js'
+import {
+  disabledRules,
+  regexpRules,
+  classMembersOrder,
+  nestjsRules,
+} from './packages/configs/eslint/rules/index.js'
 import { noIsolatedComments } from './packages/configs/eslint/custom-rules/index.js'
 
 /**

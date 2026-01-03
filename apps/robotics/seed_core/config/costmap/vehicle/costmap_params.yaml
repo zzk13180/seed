@@ -19,14 +19,14 @@ footprint: [[-0.105, -0.105], [-0.105, 0.105], [0.041, 0.105], [0.041, -0.105]]
 inflation_layer:
   # 是否启用膨胀层
   enabled: true
-  
+
   # 代价缩放因子
   # 控制代价值随距离下降的速率
   # 较大值: 代价下降快，路径更靠近障碍物
   # 较小值: 代价下降慢，路径更保守
   # 计算公式: cost = exp(-cost_scaling_factor * (distance - inscribed_radius))
   cost_scaling_factor: 2.5
-  
+
   # 膨胀半径（米）
   # 障碍物周围的膨胀范围，直接影响路径规划
   # 应大于机器人的最大外接圆半径

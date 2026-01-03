@@ -14,11 +14,12 @@ export default {
 
   // 忽略文件
   ignoreFiles: [
-    '**/dist/',
-    '**/public/',
-    '**/node_modules/',
-    '**/.svelte-kit/',
-    'apps/docs/',
+    '**/dist/**',
+    '**/public/**',
+    '**/node_modules/**',
+    '**/.svelte-kit/**',
+    '**/target/**',
+    'apps/docs/**',
     '*.css',
     '**/*.js',
     '**/*.jsx',
@@ -66,9 +67,13 @@ export default {
           'include',
           'mixin',
           'use',
+          'theme',
+          'custom-variant',
+          'utility',
         ],
       },
     ],
+    'at-rule-no-deprecated': null,
 
     // 导入表示法
     'import-notation': 'string',
@@ -81,7 +86,15 @@ export default {
 
     // CSS 属性排序
     'order/order': [
-      ['dollar-variables', 'custom-properties', 'at-rules', 'declarations', { type: 'at-rule', name: 'supports' }, { type: 'at-rule', name: 'media' }, 'rules'],
+      [
+        'dollar-variables',
+        'custom-properties',
+        'at-rules',
+        'declarations',
+        { type: 'at-rule', name: 'supports' },
+        { type: 'at-rule', name: 'media' },
+        'rules',
+      ],
       { severity: 'warning' },
     ],
 
@@ -99,7 +112,10 @@ export default {
       rules: {
         'keyframes-name-pattern': null,
         'selector-pseudo-class-no-unknown': [true, { ignorePseudoClasses: ['deep', 'global'] }],
-        'selector-pseudo-element-no-unknown': [true, { ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted'] }],
+        'selector-pseudo-element-no-unknown': [
+          true,
+          { ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted'] },
+        ],
         'color-function-notation': 'modern',
         'alpha-value-notation': 'percentage',
       },

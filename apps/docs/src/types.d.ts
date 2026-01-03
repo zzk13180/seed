@@ -1,5 +1,5 @@
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
-import type { HTMLAttributes, ImageMetadata } from 'astro/types'
+import type { HTMLAttributes } from 'astro/types'
 
 export interface Post {
   /** A unique ID number that identifies a post. */
@@ -21,7 +21,7 @@ export interface Post {
   /** Optional summary of post content. */
   excerpt?: string
   /**  */
-  image?: ImageMetadata | string
+  image?: string
 
   /**  */
   category?: Taxonomy
@@ -158,11 +158,11 @@ export interface Testimonial {
   testimonial?: string
   name?: string
   job?: string
-  image?: string | unknown
+  image?: string
 }
 
 export interface Input {
-  type: HTMLInputTypeAttribute
+  type: string
   name: string
   label?: string
   autocomplete?: string
@@ -216,7 +216,7 @@ export interface Form {
 export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' | 'classes'> {
   content?: string
   actions?: string | CallToAction[]
-  image?: string | unknown
+  image?: string
 }
 
 export interface Team extends Omit<Headline, 'classes'>, Widget {
@@ -242,7 +242,7 @@ export interface Brands extends Omit<Headline, 'classes'>, Widget {
 }
 
 export interface Features extends Omit<Headline, 'classes'>, Widget {
-  image?: string | unknown
+  image?: string
   video?: Video
   items?: Array<Item>
   columns?: number
@@ -270,7 +270,7 @@ export interface Steps extends Omit<Headline, 'classes'>, Widget {
 
 export interface Content extends Omit<Headline, 'classes'>, Widget {
   content?: string
-  image?: string | unknown
+  image?: string
   items?: Array<Item>
   columns?: number
   isReversed?: boolean

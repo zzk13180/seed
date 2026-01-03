@@ -23,7 +23,7 @@
       TheMenu,
     },
     setup() {
-      const { state, controller } = useAppStore()
+      const { controller } = useAppStore()
       const dark: Ref<boolean> = ref(false)
 
       const handleDarkModeChanged = (newDarkValue: boolean) => {

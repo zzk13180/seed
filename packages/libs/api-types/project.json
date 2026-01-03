@@ -1,0 +1,16 @@
+{
+  "name": "@seed/api-types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/libs/api-types/src",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint .",
+        "cwd": "packages/libs/api-types"
+      }
+    }
+  },
+  "tags": ["type:types", "scope:shared"]
+}

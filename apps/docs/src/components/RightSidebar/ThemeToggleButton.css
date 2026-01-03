@@ -20,17 +20,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
+  opacity: 50%;
 }
 
 .theme-toggle .checked {
   color: var(--theme-accent);
-  opacity: 1;
+  opacity: 100%;
 }
 
 input[name='theme-toggle'] {
   position: absolute;
-  opacity: 0;
+  opacity: 0%;
   inset: 0;
   z-index: -1;
 }

@@ -207,7 +207,7 @@ export function parseQueryString(queryString: string): Record<string, string | s
     }
 
     if (key in result) {
-      const existing = result[key]
+      const existing = result[key]!
       if (Array.isArray(existing)) {
         existing.push(value || '')
       } else {

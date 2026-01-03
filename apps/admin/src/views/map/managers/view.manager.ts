@@ -443,8 +443,8 @@ export class ViewManager {
     }
 
     // 获取鼠标或触摸点的客户端坐标
-    const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX
-    const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY
+    const clientX = 'touches' in event ? event.touches[0]!.clientX : event.clientX
+    const clientY = 'touches' in event ? event.touches[0]!.clientY : event.clientY
 
     // 记录拖拽开始状态
     this.drag_start = {
@@ -482,8 +482,8 @@ export class ViewManager {
     }
 
     // 获取当前鼠标或触摸点位置
-    const clientX = 'touches' in event ? event.touches[0].clientX : event.clientX
-    const clientY = 'touches' in event ? event.touches[0].clientY : event.clientY
+    const clientX = 'touches' in event ? event.touches[0]!.clientX : event.clientX
+    const clientY = 'touches' in event ? event.touches[0]!.clientY : event.clientY
 
     // 计算拖拽偏移量（像素）
     const delta = {
@@ -538,8 +538,8 @@ export class ViewManager {
     if ('touches' in event) {
       // 双指缩放处理
       if (event.touches.length !== 2) return
-      const touch1 = event.touches[0]
-      const touch2 = event.touches[1]
+      const touch1 = event.touches[0]!
+      const touch2 = event.touches[1]!
 
       // 计算双指中心点
       clientX = (touch1.clientX + touch2.clientX) / 2
@@ -640,12 +640,12 @@ export class ViewManager {
 
       // 记录双指位置和初始距离
       this.touch1 = {
-        clientX: event.touches[0].clientX,
-        clientY: event.touches[0].clientY,
+        clientX: event.touches[0]!.clientX,
+        clientY: event.touches[0]!.clientY,
       }
       this.touch2 = {
-        clientX: event.touches[1].clientX,
-        clientY: event.touches[1].clientY,
+        clientX: event.touches[1]!.clientX,
+        clientY: event.touches[1]!.clientY,
       }
       const dx = this.touch1.clientX - this.touch2.clientX
       const dy = this.touch1.clientY - this.touch2.clientY
@@ -653,8 +653,8 @@ export class ViewManager {
     } else if (event.touches.length === 1) {
       // 单指触摸：准备拖拽
       this.touch1 = {
-        clientX: event.touches[0].clientX,
-        clientY: event.touches[0].clientY,
+        clientX: event.touches[0]!.clientX,
+        clientY: event.touches[0]!.clientY,
       }
       this.touch2 = null
       this.initialTouchDistance = 0

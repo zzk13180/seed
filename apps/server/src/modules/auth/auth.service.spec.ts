@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { Test } from '@nestjs/testing'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
@@ -6,16 +6,12 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { UnauthorizedException } from '../../common/exceptions/business.exception'
 import { UserService } from '../user/user.service'
 import { UserMapper } from '../user/user.mapper'
-import { UserVo } from '../user/vo/user.vo'
 import { UserStatus } from '../../common/enums/user.enum'
 import { AuthService } from './auth.service'
 import type { TestingModule } from '@nestjs/testing'
 
 describe('AuthService', () => {
   let service: AuthService
-  let userService: Mocked<UserService>
-  let jwtService: Mocked<JwtService>
-  let cacheManager: Mocked<any>
 
   const mockUser = {
     id: 1,
@@ -88,9 +84,6 @@ describe('AuthService', () => {
     }).compile()
 
     service = module.get<AuthService>(AuthService)
-    userService = module.get(UserService)
-    jwtService = module.get(JwtService)
-    cacheManager = module.get(CACHE_MANAGER)
 
     vi.clearAllMocks()
   })

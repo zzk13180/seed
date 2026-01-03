@@ -1,7 +1,6 @@
-import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
+import { vi, describe, it, expect, beforeEach, type Mock } from 'vitest'
 import { Test } from '@nestjs/testing'
 import * as bcrypt from 'bcrypt'
-import { UserException } from '../../common/exceptions/business.exception'
 import { UserStatus } from '../../common/enums/user.enum'
 import { DRIZZLE_DB } from '../../common/database/drizzle.constants'
 import { UserService } from './user.service'
@@ -35,20 +34,6 @@ describe('UserService', () => {
 
   // Mock Drizzle DB with chainable methods
   const createMockDb = () => {
-    const mockResult = {
-      select: vi.fn().mockReturnThis(),
-      from: vi.fn().mockReturnThis(),
-      where: vi.fn().mockReturnThis(),
-      orderBy: vi.fn().mockReturnThis(),
-      offset: vi.fn().mockReturnThis(),
-      limit: vi.fn().mockReturnThis(),
-      insert: vi.fn().mockReturnThis(),
-      values: vi.fn().mockResolvedValue([{ insertId: BigInt(1) }]),
-      update: vi.fn().mockReturnThis(),
-      set: vi.fn().mockReturnThis(),
-      execute: vi.fn().mockResolvedValue([]),
-    }
-
     // Make select() return a promise that resolves to an array when awaited
     let selectResult: any[] = []
     let countResult = [{ count: 0 }]

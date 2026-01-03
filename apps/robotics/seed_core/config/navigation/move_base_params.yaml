@@ -25,14 +25,14 @@
 #   - "global_planner/GlobalPlanner": 使用 A* 或 Dijkstra 算法（推荐）
 #   - "navfn/NavfnROS": 经典导航函数规划器
 #   - "carrot_planner/CarrotPlanner": 简单的直线规划器
-base_global_planner: "global_planner/GlobalPlanner"
+base_global_planner: 'global_planner/GlobalPlanner'
 
 # 局部路径规划器
 # 可选值:
 #   - "teb_local_planner/TebLocalPlannerROS": 时间弹性带规划器（推荐）
 #   - "dwa_local_planner/DWAPlannerROS": 动态窗口法规划器
 # 注意: 局部规划器会在 teb_local_planner.launch 中重新设置
-base_local_planner: "teb_local_planner/TebLocalPlannerROS"
+base_local_planner: 'teb_local_planner/TebLocalPlannerROS'
 
 # ================================================================================
 # 规划频率配置
@@ -70,13 +70,13 @@ shutdown_costmaps: false
 recovery_behaviors:
   # 恢复行为 1: 清除代价地图
   # 清除障碍物层中的动态障碍物，保留静态地图
-  - name: "recovery_behavior_1"
-    type: "clear_costmap_recovery/ClearCostmapRecovery"
-  
+  - name: 'recovery_behavior_1'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
   # 恢复行为 2: 缓慢移动并清除
   # 机器人缓慢移动一段距离，同时清除代价地图
-  - name: "recovery_behavior_2"
-    type: "move_slow_and_clear/MoveSlowAndClear"
+  - name: 'recovery_behavior_2'
+    type: 'move_slow_and_clear/MoveSlowAndClear'
 
 # 是否启用恢复行为
 # 建议在实际部署中启用，可以帮助机器人脱困
@@ -132,23 +132,23 @@ recovery_behavior_2:
   # 清除距离（米）
   # 清除以机器人为中心此半径外的障碍物
   clearing_distance: 0.5
-  
+
   # 限制线速度（米/秒）
   # 恢复行为期间的最大线速度
   limited_trans_speed: 0.15
-  
+
   # 限制角速度（弧度/秒）
   # 恢复行为期间的最大角速度
   limited_rot_speed: 0.3
-  
+
   # 限制移动距离（米）
   # 完成恢复行为必须移动的最小距离
   limited_distance: 0.3
-  
+
   # 规划器命名空间
   # 指定使用的局部规划器
   planner_namespace: TebLocalPlannerROS
-  
+
   # 最大速度参数名称
   max_trans_param_name: max_vel_x
   max_rot_param_name: max_vel_theta

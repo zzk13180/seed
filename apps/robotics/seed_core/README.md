@@ -2,9 +2,7 @@
 
 > ROS 机器人控制核心包 - 提供节点管理、地图管理、点位管理和文件操作等服务
 
-[![ROS Version](https://img.shields.io/badge/ROS-Noetic-blue)](http://wiki.ros.org/noetic)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.8+-yellow.svg)](https://www.python.org/)
+[![ROS Version](https://img.shields.io/badge/ROS-Noetic-blue)](http://wiki.ros.org/noetic) [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.8+-yellow.svg)](https://www.python.org/)
 
 ## 📋 目录
 
@@ -25,18 +23,18 @@ Seed Core 是一个功能完整的 ROS 机器人控制核心包，为机器人�
 
 ### 主要功能
 
-| 模块 | 功能 | 说明 |
-|------|------|------|
-| **服务处理器** | 节点管理 | 启动/停止/查询 ROS 节点和 launch 文件 |
-| | 地图管理 | 加载/保存地图，切换导航/建图模式 |
-| | 文件操作 | 读写 PGM、JSON、文本文件 |
-| **TF 整合器** | TF 消息合并 | 将分散的 TF 消息整合为统一话题 |
-| | 超时清理 | 自动清理过期的 TF 变换 |
-| **点位管理器** | 点位 CRUD | 导航点位的增删改查 |
-| | SQLite 持久化 | 使用 SQLite 数据库存储点位数据 |
-| **角度控制器** | PID 控制 | 控制机器人旋转到指定角度 (C++) |
-| **全局重定位** | 位姿搜索 | 在地图中搜索最佳机器人位置 (C++) |
-| **位姿发布器** | TF 监听 | 发布机器人在地图中的实时位姿 (C++) |
+| 模块           | 功能          | 说明                                  |
+| -------------- | ------------- | ------------------------------------- |
+| **服务处理器** | 节点管理      | 启动/停止/查询 ROS 节点和 launch 文件 |
+|                | 地图管理      | 加载/保存地图，切换导航/建图模式      |
+|                | 文件操作      | 读写 PGM、JSON、文本文件              |
+| **TF 整合器**  | TF 消息合并   | 将分散的 TF 消息整合为统一话题        |
+|                | 超时清理      | 自动清理过期的 TF 变换                |
+| **点位管理器** | 点位 CRUD     | 导航点位的增删改查                    |
+|                | SQLite 持久化 | 使用 SQLite 数据库存储点位数据        |
+| **角度控制器** | PID 控制      | 控制机器人旋转到指定角度 (C++)        |
+| **全局重定位** | 位姿搜索      | 在地图中搜索最佳机器人位置 (C++)      |
+| **位姿发布器** | TF 监听       | 发布机器人在地图中的实时位姿 (C++)    |
 
 ## 环境要求
 
@@ -187,42 +185,42 @@ roslaunch seed_core simulation.launch
 
 ### 节点管理服务
 
-| 服务名称 | 类型 | 功能 |
-|---------|------|------|
-| `seed_core/node/start` | ManageNode | 启动节点或 launch 文件 |
-| `seed_core/node/kill` | ManageNode | 终止节点或 launch 文件 |
-| `seed_core/node/info` | ManageNode | 获取节点信息 |
-| `seed_core/list_packages` | ListPackages | 列出所有 ROS 包 |
-| `seed_core/list_executables` | ListExecutables | 列出包中的可执行文件 |
-| `seed_core/roswtf` | Trigger | 运行 roswtf 诊断 |
+| 服务名称                     | 类型            | 功能                   |
+| ---------------------------- | --------------- | ---------------------- |
+| `seed_core/node/start`       | ManageNode      | 启动节点或 launch 文件 |
+| `seed_core/node/kill`        | ManageNode      | 终止节点或 launch 文件 |
+| `seed_core/node/info`        | ManageNode      | 获取节点信息           |
+| `seed_core/list_packages`    | ListPackages    | 列出所有 ROS 包        |
+| `seed_core/list_executables` | ListExecutables | 列出包中的可执行文件   |
+| `seed_core/roswtf`           | Trigger         | 运行 roswtf 诊断       |
 
 ### 地图管理服务
 
-| 服务名称 | 类型 | 功能 |
-|---------|------|------|
-| `seed_core/load_map` | LoadMap | 加载地图文件 |
-| `seed_core/save_map` | SaveMap | 保存当前地图 |
-| `seed_core/list_maps` | ListMaps | 列出可用地图 |
-| `seed_core/switch_to_navigation` | Trigger | 切换到导航模式 |
-| `seed_core/switch_to_mapping` | Trigger | 切换到建图模式 |
+| 服务名称                         | 类型     | 功能           |
+| -------------------------------- | -------- | -------------- |
+| `seed_core/load_map`             | LoadMap  | 加载地图文件   |
+| `seed_core/save_map`             | SaveMap  | 保存当前地图   |
+| `seed_core/list_maps`            | ListMaps | 列出可用地图   |
+| `seed_core/switch_to_navigation` | Trigger  | 切换到导航模式 |
+| `seed_core/switch_to_mapping`    | Trigger  | 切换到建图模式 |
 
 ### 文件操作服务
 
-| 服务名称 | 类型 | 功能 |
-|---------|------|------|
-| `seed_core/read_pgm` | ReadPgm | 读取 PGM 地图文件 |
-| `seed_core/update_pgm` | UpdatePgm | 更新 PGM 地图文件 |
-| `seed_core/update_json` | UpdateJson | 更新 JSON 配置文件 |
-| `seed_core/read_text_file` | ReadTextFile | 读取文本文件 |
+| 服务名称                   | 类型         | 功能               |
+| -------------------------- | ------------ | ------------------ |
+| `seed_core/read_pgm`       | ReadPgm      | 读取 PGM 地图文件  |
+| `seed_core/update_pgm`     | UpdatePgm    | 更新 PGM 地图文件  |
+| `seed_core/update_json`    | UpdateJson   | 更新 JSON 配置文件 |
+| `seed_core/read_text_file` | ReadTextFile | 读取文本文件       |
 
 ### 点位管理服务
 
-| 服务名称 | 类型 | 功能 |
-|---------|------|------|
-| `seed_core/point_manager/add_point` | AddPoint | 添加导航点位 |
-| `seed_core/point_manager/delete_point` | DeletePoint | 删除点位 |
-| `seed_core/point_manager/get_point` | GetPoint | 获取点位信息 |
-| `seed_core/point_manager/list_points` | ListPoints | 列出点位列表 |
+| 服务名称                               | 类型        | 功能         |
+| -------------------------------------- | ----------- | ------------ |
+| `seed_core/point_manager/add_point`    | AddPoint    | 添加导航点位 |
+| `seed_core/point_manager/delete_point` | DeletePoint | 删除点位     |
+| `seed_core/point_manager/get_point`    | GetPoint    | 获取点位信息 |
+| `seed_core/point_manager/list_points`  | ListPoints  | 列出点位列表 |
 
 ### 服务调用示例
 
@@ -260,12 +258,12 @@ rosservice call /seed_core/point_manager/list_points "{
 
 **bringup.launch**
 
-| 参数 | 默认值 | 说明 |
-|------|--------|------|
-| `port_rosbridge` | 5001 | WebSocket 服务端口 |
-| `retry_startup_delay` | 10 | 启动失败重试延迟(秒) |
-| `fragment_timeout` | 30 | 消息分片超时(秒) |
-| `database_dir` | ~/.seed/data | 点位数据库目录 |
+| 参数                  | 默认值       | 说明                 |
+| --------------------- | ------------ | -------------------- |
+| `port_rosbridge`      | 5001         | WebSocket 服务端口   |
+| `retry_startup_delay` | 10           | 启动失败重试延迟(秒) |
+| `fragment_timeout`    | 30           | 消息分片超时(秒)     |
+| `database_dir`        | ~/.seed/data | 点位数据库目录       |
 
 ### 配置文件
 
@@ -364,6 +362,7 @@ mypy scripts/
 ### Q: rosbridge 连接失败？
 
 A: 检查以下项：
+
 - 确认端口 5001 未被占用
 - 检查防火墙设置
 - 查看节点日志：`rosnode info /seed_core_rosbridge`
@@ -371,6 +370,7 @@ A: 检查以下项：
 ### Q: 地图加载失败？
 
 A: 检查以下项：
+
 - 确认地图文件路径正确
 - 检查 map.yaml 和 map.pgm 文件是否存在
 - 确认文件权限
@@ -378,6 +378,7 @@ A: 检查以下项：
 ### Q: 点位数据库错误？
 
 A: 尝试以下操作：
+
 - 确认数据库目录存在且可写
 - 删除损坏的数据库文件重新创建
 - 检查 SQLite 版本兼容性

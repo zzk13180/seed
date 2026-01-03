@@ -5,6 +5,7 @@ import { errorHandler } from '@/core/error.service'
 import { PanelController } from './panel.controller'
 import { MockPanelApiService } from './panel.service'
 import type { PanelState, PanelEnv } from './panel.types'
+import type { PanelController as PanelControllerType } from './panel.controller'
 
 // 组装环境依赖
 const env: PanelEnv = {
@@ -67,11 +68,14 @@ export const usePanelStore = defineStore('panel', () => {
 // 热模块替换支持
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(usePanelStore, import.meta.hot))
-  import.meta.hot.accept('./panel.controller', newModule => {
-    if (newModule?.PanelController && _hotReplaceController) {
-      _hotReplaceController(newModule.PanelController)
-    } else {
-      console.error('HMR update for PanelController failed.')
-    }
-  })
+  import.meta.hot.accept(
+    './panel.controller',
+    (newModule: { PanelController?: typeof PanelControllerType } | undefined) => {
+      if (newModule?.PanelController && _hotReplaceController) {
+        _hotReplaceController(newModule.PanelController)
+      } else {
+        console.error('HMR update for PanelController failed.')
+      }
+    },
+  )
 }

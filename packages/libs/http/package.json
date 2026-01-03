@@ -15,5 +15,9 @@
   "scripts": {
     "test": "vitest run tests",
     "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@seed/tsconfig": "workspace:*",
+    "@seed/types": "workspace:*"
   }
 }

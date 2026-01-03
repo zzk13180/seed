@@ -19,13 +19,16 @@ export interface UpdateResponse {
  */
 @Injectable()
 export class TauriUpdaterService {
-  private readonly logger = new Logger(TauriUpdaterService.name)
   private versions: Record<string, UpdateResponse> = {}
+  private readonly logger = new Logger(TauriUpdaterService.name)
+
   private readonly versionsFile: string
 
   constructor(private readonly configService: ConfigService) {
     // 版本配置文件路径，支持通过环境变量配置
-    const dataDir = this.configService.get<string>('TAURI_UPDATER_DATA_DIR') || path.join(process.cwd(), 'data/tauri-updater')
+    const dataDir =
+      this.configService.get<string>('TAURI_UPDATER_DATA_DIR') ||
+      path.join(process.cwd(), 'data/tauri-updater')
     this.versionsFile = path.join(dataDir, 'versions.json')
   }
 
@@ -37,7 +40,11 @@ export class TauriUpdaterService {
    * @param currentVersion - 当前版本
    * @returns 更新信息或 null
    */
-  async getUpdateInfo(target: string, arch: string, currentVersion: string): Promise<UpdateResponse | null> {
+  async getUpdateInfo(
+    target: string,
+    arch: string,
+    currentVersion: string,
+  ): Promise<UpdateResponse | null> {
     await this.loadVersions()
     const key = `${target}/${arch}`
     const data = this.versions[key]
@@ -64,28 +71,31 @@ export class TauriUpdaterService {
   }
 
   /**
+   * 重新加载版本信息（用于热更新）
+   */
+  async reloadVersions(): Promise<void> {
+    this.versions = {}
+    await this.loadVersions()
+  }
+
+  /**
    * 加载版本配置文件
    */
   private async loadVersions(): Promise<Record<string, UpdateResponse>> {
     if (Object.keys(this.versions).length > 0) return this.versions
 
     try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       const content = await fs.readFile(this.versionsFile, 'utf-8')
       this.versions = JSON.parse(content) || {}
-      this.logger.log(`Loaded ${Object.keys(this.versions).length} version(s) from ${this.versionsFile}`)
+      this.logger.log(
+        `Loaded ${Object.keys(this.versions).length} version(s) from ${this.versionsFile}`,
+      )
     } catch (error) {
       this.logger.warn(`Failed to load versions file: ${(error as Error).message}`)
       this.versions = {}
     }
 
     return this.versions
-  }
-
-  /**
-   * 重新加载版本信息（用于热更新）
-   */
-  async reloadVersions(): Promise<void> {
-    this.versions = {}
-    await this.loadVersions()
   }
 }

@@ -1,24 +1,5 @@
 /**
- * 用户状态枚举
+ * 从 @seed/api-types 重新导出枚举
+ * 统一类型来源，确保前后端类型一致
  */
-export enum UserStatus {
-  DISABLED = 0,
-  ENABLED = 1,
-}
-
-/**
- * 用户权限
- */
-export enum Permission {
-  USER_READ = 'user:read',
-  USER_WRITE = 'user:write',
-  USER_DELETE = 'user:delete',
-}
-
-/**
- * 用户角色
- */
-export enum Role {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
+export { UserStatus, Permission, Role } from '@seed/api-types/enums'

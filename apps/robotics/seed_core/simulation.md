@@ -154,9 +154,9 @@ rosservice list | grep seed_core
 打开浏览器控制台，测试 WebSocket 连接：
 
 ```javascript
-const ws = new WebSocket('ws://localhost:5001');
-ws.onopen = () => console.log('Connected!');
-ws.onerror = (e) => console.error('Error:', e);
+const ws = new WebSocket('ws://localhost:5001')
+ws.onopen = () => console.log('Connected!')
+ws.onerror = e => console.error('Error:', e)
 ```
 
 ## 8. 常见问题

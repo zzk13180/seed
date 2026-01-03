@@ -1,13 +1,11 @@
-import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { Test } from '@nestjs/testing'
-import { ResponseDto } from '../../common/dto/response.dto'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import type { TestingModule } from '@nestjs/testing'
 
 describe('AuthController', () => {
   let controller: AuthController
-  let service: Mocked<AuthService>
 
   const mockLoginResponse = {
     accessToken: 'mock-access-token',
@@ -40,7 +38,6 @@ describe('AuthController', () => {
     }).compile()
 
     controller = module.get<AuthController>(AuthController)
-    service = module.get(AuthService)
 
     vi.clearAllMocks()
   })

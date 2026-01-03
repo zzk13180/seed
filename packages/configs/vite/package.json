@@ -16,5 +16,9 @@
     "@vitejs/plugin-vue-jsx": "^5.0.0",
     "vite-plugin-compression2": "^1.0.0",
     "vite-plugin-svg-icons": "^2.0.1"
+  },
+  "devDependencies": {
+    "@seed/tsconfig": "workspace:*",
+    "@seed/types": "workspace:*"
   }
 }

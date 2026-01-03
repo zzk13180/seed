@@ -1,10 +1,13 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsString, IsEmail, IsOptional, MaxLength, Matches } from 'class-validator'
+import type { IUserUpdateDto } from '@seed/api-types'
 
 /**
  * 用户更新 DTO
+ *
+ * 实现 @seed/api-types 中的 IUserUpdateDto 接口
  */
-export class UserUpdateDto {
+export class UserUpdateDto implements IUserUpdateDto {
   @ApiPropertyOptional({ description: '昵称' })
   @IsOptional()
   @IsString()

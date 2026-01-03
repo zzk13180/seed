@@ -22,12 +22,6 @@
     "deps:update": "pnpm --recursive update",
     "deps:dedupe": "pnpm dedupe"
   },
-  "dependencies": {
-    "@seed/common": "workspace:*",
-    "@seed/http": "workspace:*",
-    "@seed/tsconfig": "workspace:*",
-    "@seed/types": "workspace:*"
-  },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
     "@nx/js": "^22.3.3",

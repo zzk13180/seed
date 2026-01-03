@@ -1,13 +1,14 @@
 import { $http } from '@seed/http'
 import { AccessTokenUtil } from '@/utils/token.util'
-import type { AuthService, StorageService, LoginParams, LoginResult, UserInfo } from './user.types'
+import type { ILoginDto, ILoginVo, IUserVo } from '@seed/api-types'
+import type { AuthService, StorageService } from './user.types'
 
 /**
  * HTTP 认证服务实现
  */
 export class HttpAuthService implements AuthService {
-  async login(params: LoginParams): Promise<LoginResult> {
-    const response = await $http.post<{ data: LoginResult }>('/auth/login', params)
+  async login(params: ILoginDto): Promise<ILoginVo> {
+    const response = await $http.post<{ data: ILoginVo }>('/auth/login', params)
     const { accessToken, refreshToken, expiresIn } = response.data
 
     // 保存令牌
@@ -28,18 +29,18 @@ export class HttpAuthService implements AuthService {
     }
   }
 
-  async getCurrentUser(): Promise<UserInfo> {
-    const response = await $http.get<{ data: UserInfo }>('/auth/me')
+  async getCurrentUser(): Promise<IUserVo> {
+    const response = await $http.get<{ data: IUserVo }>('/auth/me')
     return response.data
   }
 
-  async refreshToken(): Promise<LoginResult> {
+  async refreshToken(): Promise<ILoginVo> {
     const refreshToken = AccessTokenUtil.refreshToken
     if (!refreshToken) {
       throw new Error('No refresh token available')
     }
 
-    const response = await $http.post<{ data: LoginResult }>('/auth/refresh', { refreshToken })
+    const response = await $http.post<{ data: ILoginVo }>('/auth/refresh', { refreshToken })
     const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data
 
     AccessTokenUtil.setTokens(accessToken, newRefreshToken, expiresIn)

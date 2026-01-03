@@ -1,7 +1,6 @@
-import { vi, describe, it, expect, beforeEach, type Mock, type Mocked } from 'vitest'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { Test } from '@nestjs/testing'
 import { UserStatus } from '../../common/enums/user.enum'
-import { ResponseDto } from '../../common/dto/response.dto'
 import { PageResultDto } from '../../common/dto/page-result.dto'
 import { UserService } from './user.service'
 import { UserController } from './user.controller'
@@ -9,7 +8,6 @@ import type { TestingModule } from '@nestjs/testing'
 
 describe('UserController', () => {
   let controller: UserController
-  let service: Mocked<UserService>
 
   const mockUser = {
     id: 1,
@@ -47,7 +45,6 @@ describe('UserController', () => {
     }).compile()
 
     controller = module.get<UserController>(UserController)
-    service = module.get(UserService)
 
     vi.clearAllMocks()
   })

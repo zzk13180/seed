@@ -7,7 +7,6 @@ import type { TestingModule } from '@nestjs/testing'
 
 describe('HealthService', () => {
   let service: HealthService
-  let healthCheckService: HealthCheckService
 
   const mockHealthCheckService = {
     check: vi.fn().mockResolvedValue({
@@ -46,7 +45,6 @@ describe('HealthService', () => {
     }).compile()
 
     service = module.get<HealthService>(HealthService)
-    healthCheckService = module.get<HealthCheckService>(HealthCheckService)
   })
 
   it('should be defined', () => {

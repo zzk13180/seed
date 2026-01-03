@@ -1,11 +1,10 @@
-import { distinctUntilChanged } from 'rxjs'
 import type { Subscription } from 'rxjs'
 import type { State } from './app.store'
 
 export class AppController {
-  private readonly state: State
+  readonly state: State
 
-  private readonly subscriptions: Subscription[] = []
+  readonly subscriptions: Subscription[] = []
 
   constructor(state: State) {
     this.state = state
@@ -16,6 +15,7 @@ export class AppController {
   }
 
   destroy() {
+    this.subscriptions.forEach(s => s.unsubscribe())
     console.log('AppController: 销毁')
   }
 }

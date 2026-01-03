@@ -1,83 +1,39 @@
 /**
  * UserManagement 模块的类型定义
- * 纯 TypeScript 类型，不依赖任何框架
+ *
+ * 使用 @seed/api-types 提供的共享类型，
+ * 本文件仅定义 UI 层特有的状态和接口
  */
 
 import type { Logger } from '@/core/logger.service'
 import type { ErrorHandler } from '@/core/error.service'
+import type {
+  UserStatus,
+  IUserVo,
+  IUserCreateDto,
+  IUserUpdateDto,
+  IUserQueryDto,
+  IPageResult,
+} from '@seed/api-types'
+
+// ============================================================================
+// 重新导出 @seed/api-types 中的类型
+// ============================================================================
+export { UserStatus } from '@seed/api-types/enums'
+export type {
+  IUserVo,
+  IUserCreateDto,
+  IUserUpdateDto,
+  IUserQueryDto,
+  IPageResult,
+} from '@seed/api-types'
+
+// ============================================================================
+// UI 层特有的类型定义
+// ============================================================================
 
 /**
- * 用户状态枚举
- */
-export enum UserStatus {
-  DISABLED = 0,
-  ENABLED = 1,
-}
-
-/**
- * 用户信息
- */
-export interface UserInfo {
-  id: number
-  username: string
-  nickname: string | null
-  email: string | null
-  phone: string | null
-  avatar: string | null
-  status: UserStatus
-  createdAt: string
-  updatedAt: string
-}
-
-/**
- * 用户查询参数
- */
-export interface UserQueryParams {
-  username?: string
-  nickname?: string
-  email?: string
-  phone?: string
-  status?: UserStatus
-  page?: number
-  pageSize?: number
-}
-
-/**
- * 用户创建参数
- */
-export interface UserCreateParams {
-  username: string
-  password: string
-  nickname?: string
-  email?: string
-  phone?: string
-}
-
-/**
- * 用户更新参数
- */
-export interface UserUpdateParams {
-  nickname?: string
-  email?: string
-  phone?: string
-  avatar?: string
-}
-
-/**
- * 分页结果
- */
-export interface PageResult<T> {
-  list: T[]
-  total: number
-  page: number
-  pageSize: number
-  totalPages: number
-  hasNext: boolean
-  hasPrevious: boolean
-}
-
-/**
- * 搜索表单数据
+ * 搜索表单数据（UI 层）
  */
 export interface SearchFormData {
   username: string
@@ -86,7 +42,7 @@ export interface SearchFormData {
 }
 
 /**
- * 用户表单数据
+ * 用户表单数据（UI 层）
  */
 export interface UserFormData {
   username: string
@@ -97,7 +53,7 @@ export interface UserFormData {
 }
 
 /**
- * 重置密码表单数据
+ * 重置密码表单数据（UI 层）
  */
 export interface ResetPasswordFormData {
   password: string
@@ -105,7 +61,7 @@ export interface ResetPasswordFormData {
 }
 
 /**
- * 分页状态
+ * 分页状态（UI 层）
  */
 export interface PaginationState {
   page: number
@@ -118,7 +74,7 @@ export interface PaginationState {
  */
 export interface UserManagementState {
   /** 用户列表 */
-  userList: UserInfo[]
+  userList: IUserVo[]
   /** 是否正在加载 */
   loading: boolean
   /** 选中的用户 ID 列表 */
@@ -149,13 +105,17 @@ export interface UserManagementState {
   errorMessage: string | null
 }
 
+// ============================================================================
+// Service 接口定义（依赖注入用）
+// ============================================================================
+
 /**
  * 用户管理 API 服务接口
  */
 export interface UserManagementApiService {
-  getPage(params: UserQueryParams): Promise<PageResult<UserInfo>>
-  create(params: UserCreateParams): Promise<UserInfo>
-  update(id: number, params: UserUpdateParams): Promise<UserInfo>
+  getPage(params: IUserQueryDto): Promise<IPageResult<IUserVo>>
+  create(params: IUserCreateDto): Promise<IUserVo>
+  update(id: number, params: IUserUpdateDto): Promise<IUserVo>
   delete(id: number): Promise<void>
   deleteBatch(ids: number[]): Promise<void>
   updateStatus(id: number, status: UserStatus): Promise<void>

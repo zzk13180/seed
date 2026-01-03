@@ -35,12 +35,12 @@ topics:
 navigation:
   # 目标到达容差
   goal_tolerance:
-    xy_goal_tolerance: 0.15        # 位置容差（米）
-    yaw_goal_tolerance: 0.1        # 朝向容差（弧度）
-  
+    xy_goal_tolerance: 0.15 # 位置容差（米）
+    yaw_goal_tolerance: 0.1 # 朝向容差（弧度）
+
   # 路径规划超时
-  planner_timeout: 5.0             # 规划器超时时间（秒）
-  
+  planner_timeout: 5.0 # 规划器超时时间（秒）
+
   # 恢复行为
   recovery:
     enabled: true
@@ -52,10 +52,10 @@ navigation:
 slam:
   # 地图更新频率
   update_frequency: 5.0
-  
+
   # 地图分辨率
   resolution: 0.05
-  
+
   # 地图大小（米）
   map_size:
     width: 100.0
@@ -67,7 +67,7 @@ slam:
 point_manager:
   # 数据库存储目录
   database_dir: ~/.seed/data
-  
+
   # 自动保存间隔（秒），0 表示禁用
   auto_save_interval: 0
 

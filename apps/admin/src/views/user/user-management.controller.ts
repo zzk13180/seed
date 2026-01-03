@@ -1,11 +1,6 @@
 import { UserStatus } from './user-management.types'
-import type {
-  UserManagementState,
-  UserManagementEnv,
-  UserInfo,
-  UserCreateParams,
-  UserUpdateParams,
-} from './user-management.types'
+import type { IUserVo, IUserCreateDto, IUserUpdateDto } from '@seed/api-types'
+import type { UserManagementState, UserManagementEnv } from './user-management.types'
 
 /**
  * UserManagementController - 纯 TypeScript 类，不依赖任何框架
@@ -102,7 +97,7 @@ export class UserManagementController {
   /**
    * 选择变化
    */
-  handleSelectionChange(selection: UserInfo[]): void {
+  handleSelectionChange(selection: IUserVo[]): void {
     this.state.selectedIds = selection.map(item => item.id)
   }
 
@@ -119,7 +114,7 @@ export class UserManagementController {
   /**
    * 打开编辑弹窗
    */
-  openEditDialog(user: UserInfo): void {
+  openEditDialog(user: IUserVo): void {
     this.state.isEdit = true
     this.state.currentUserId = user.id
     this.state.userForm.username = user.username
@@ -146,7 +141,7 @@ export class UserManagementController {
 
     try {
       if (this.state.isEdit && this.state.currentUserId) {
-        const updateParams: UserUpdateParams = {
+        const updateParams: IUserUpdateDto = {
           nickname: this.state.userForm.nickname || undefined,
           email: this.state.userForm.email || undefined,
           phone: this.state.userForm.phone || undefined,
@@ -154,7 +149,7 @@ export class UserManagementController {
         await this.env.apiService.update(this.state.currentUserId, updateParams)
         this.env.messageService.success('更新成功')
       } else {
-        const createParams: UserCreateParams = {
+        const createParams: IUserCreateDto = {
           username: this.state.userForm.username,
           password: this.state.userForm.password,
           nickname: this.state.userForm.nickname || undefined,
@@ -180,7 +175,7 @@ export class UserManagementController {
   /**
    * 删除用户
    */
-  async handleDelete(user: UserInfo): Promise<void> {
+  async handleDelete(user: IUserVo): Promise<void> {
     try {
       const confirmed = await this.env.confirmService.confirm(
         `确定要删除用户 "${user.username}" 吗？`,
@@ -223,7 +218,7 @@ export class UserManagementController {
   /**
    * 状态变化
    */
-  async handleStatusChange(user: UserInfo): Promise<void> {
+  async handleStatusChange(user: IUserVo): Promise<void> {
     try {
       await this.env.apiService.updateStatus(user.id, user.status)
       this.env.messageService.success('状态更新成功')
@@ -238,7 +233,7 @@ export class UserManagementController {
   /**
    * 打开重置密码弹窗
    */
-  openResetPasswordDialog(user: UserInfo): void {
+  openResetPasswordDialog(user: IUserVo): void {
     this.state.resetUserId = user.id
     this.state.resetForm.password = ''
     this.state.resetForm.confirmPassword = ''

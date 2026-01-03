@@ -151,7 +151,7 @@ function* patchSteps(
         yield {
           type: AnimatorType.DELETE,
           snap: current,
-          text: text[i],
+          text: text[i]!,
           index,
         }
         index--

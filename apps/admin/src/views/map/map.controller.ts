@@ -27,7 +27,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
   private viewManager: IViewManager | null = null
   private gridManager: IGridManager | null = null
   private subscriptions: Subscription[] = []
-  private containerElement: HTMLElement | null = null
+  private _containerElement: HTMLElement | null = null
 
   /**
    * 获取视图管理器（只读）
@@ -44,6 +44,13 @@ export class MapController extends BaseController<MapState, MapEnv> {
   }
 
   /**
+   * 获取容器元素（只读）
+   */
+  get containerElement(): HTMLElement | null {
+    return this._containerElement
+  }
+
+  /**
    * 初始化视图管理器
    * 需要在 DOM 准备好后调用
    */
@@ -53,7 +60,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
       return
     }
 
-    this.containerElement = container
+    this._containerElement = container
     this.env.logger.debug('Initializing ViewManager via factory')
 
     try {

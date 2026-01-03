@@ -13,6 +13,10 @@
     "docker:build": "./scripts/docker-build.sh"
   },
   "dependencies": {
+    "@seed/api-types": "workspace:*",
+    "@seed/common": "workspace:*",
+    "@seed/http": "workspace:*",
+    "@seed/types": "workspace:*",
     "date-fns": "^4.1.0",
     "decimal.js": "^10.5.0",
     "diff-match-patch": "^1.0.5",
@@ -28,11 +32,14 @@
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
+    "@seed/tsconfig": "workspace:*",
+    "@tailwindcss/vite": "^4.1.10",
     "@types/fabric": "^5.3.10",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vitejs/plugin-vue-jsx": "^5.0.0",
     "@vue/shared": "^3.5.23",
     "@vueuse/core": "^9.1.0",
+    "tailwindcss": "^4.1.10",
     "unplugin-auto-import": "^19.3.0",
     "unplugin-vue-components": "^28.7.0",
     "vite": "^7.0.0",

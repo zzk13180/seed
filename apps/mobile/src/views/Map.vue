@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue'
+  import { onMounted } from 'vue'
   import {
     IonPage,
     IonHeader,
@@ -34,7 +34,7 @@
   } from '@ionic/vue'
   import { useAppStore } from '../stores/app.store'
 
-  const { state, controller } = useAppStore()
+  const { state } = useAppStore()
 
   onMounted(() => {})
 </script>

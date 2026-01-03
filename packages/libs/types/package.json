@@ -13,5 +13,8 @@
     "./vue-global": {
       "types": "./vue-global.d.ts"
     }
+  },
+  "devDependencies": {
+    "@seed/tsconfig": "workspace:*"
   }
 }

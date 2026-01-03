@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsOptional, IsString, IsEnum } from 'class-validator'
 import { PageRequestDto } from '../../../common/dto/page-request.dto'
 import { UserStatus } from '../../../common/enums/user.enum'
+import type { IUserQueryDto } from '@seed/api-types'
 
 /**
  * 用户可排序的字段
@@ -18,8 +19,10 @@ export const USER_SORTABLE_FIELDS = [
 
 /**
  * 用户查询 DTO
+ *
+ * 实现 @seed/api-types 中的 IUserQueryDto 接口
  */
-export class UserQueryDto extends PageRequestDto {
+export class UserQueryDto extends PageRequestDto implements IUserQueryDto {
   @ApiPropertyOptional({ description: '用户名（模糊匹配）' })
   @IsOptional()
   @IsString()

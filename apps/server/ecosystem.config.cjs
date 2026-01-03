@@ -16,7 +16,7 @@ module.exports = {
       merge_logs: true,
       // 平滑重启配置
       wait_ready: true,
-      listen_timeout: 10000,
+      listen_timeout: 10_000,
       kill_timeout: 5000,
       // 内存限制自动重启
       max_memory_restart: '1G',

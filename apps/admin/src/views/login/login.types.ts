@@ -1,12 +1,22 @@
 /**
  * Login 模块的类型定义
- * 纯 TypeScript 类型，不依赖任何框架
+ *
+ * 使用 @seed/api-types 共享类型，本文件定义 UI 层特有类型
  */
 
 import type { Logger } from '@/core/logger.service'
 import type { NavigationService } from '@/core/navigation.service'
 import type { ErrorHandler } from '@/core/error.service'
 import type { AuthService, StorageService } from '@/stores/user/user.types'
+
+// ============================================================================
+// 从 @seed/api-types 重新导出的类型
+// ============================================================================
+export type { ILoginDto, IUserVo } from '@seed/api-types'
+
+// ============================================================================
+// UI 层特有的类型定义
+// ============================================================================
 
 /**
  * 登录表单数据
@@ -61,6 +71,3 @@ export interface LoginEnv {
   messageService: MessageService
   errorHandler: ErrorHandler
 }
-
-// 重新导出用户相关类型
-export type { LoginParams, UserInfo } from '@/stores/user/user.types'

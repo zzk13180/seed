@@ -1,4 +1,4 @@
-import type { LoginState, LoginEnv, ValidationResult, UserInfo } from './login.types'
+import type { LoginState, LoginEnv, ValidationResult, IUserVo } from './login.types'
 
 /**
  * LoginController - 纯 TypeScript 类，不依赖任何框架
@@ -61,7 +61,7 @@ export class LoginController {
   /**
    * 执行登录
    */
-  async login(): Promise<UserInfo | null> {
+  async login(): Promise<IUserVo | null> {
     // 验证表单
     const validation = this.validate()
     if (!validation.valid) {

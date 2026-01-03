@@ -1,6 +1,6 @@
 import { $http } from '@seed/http'
 import { AccessTokenUtil } from '@/utils/token.util'
-import type { ApiResponse, LoginParams, LoginResult, UserInfo } from './types'
+import type { ApiResponse, ILoginDto, ILoginVo, IUserVo } from './types'
 
 /**
  * 认证相关 API
@@ -9,8 +9,8 @@ import type { ApiResponse, LoginParams, LoginResult, UserInfo } from './types'
 /**
  * 用户登录
  */
-export const apiLogin = async (params: LoginParams): Promise<LoginResult> => {
-  const response = await $http.post<ApiResponse<LoginResult>>('/auth/login', params)
+export const apiLogin = async (params: ILoginDto): Promise<ILoginVo> => {
+  const response = await $http.post<ApiResponse<ILoginVo>>('/auth/login', params)
   const { accessToken, refreshToken, expiresIn } = response.data
 
   // 保存令牌
@@ -25,13 +25,13 @@ export const apiLogin = async (params: LoginParams): Promise<LoginResult> => {
 /**
  * 刷新令牌
  */
-export const apiRefreshToken = async (): Promise<LoginResult> => {
+export const apiRefreshToken = async (): Promise<ILoginVo> => {
   const refreshToken = AccessTokenUtil.refreshToken
   if (!refreshToken) {
     throw new Error('No refresh token available')
   }
 
-  const response = await $http.post<ApiResponse<LoginResult>>('/auth/refresh', { refreshToken })
+  const response = await $http.post<ApiResponse<ILoginVo>>('/auth/refresh', { refreshToken })
   const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data
 
   // 更新令牌
@@ -57,8 +57,8 @@ export const apiLogout = async (): Promise<void> => {
 /**
  * 获取当前用户信息
  */
-export const apiGetCurrentUser = async (): Promise<UserInfo> => {
-  const response = await $http.get<ApiResponse<UserInfo>>('/auth/me')
+export const apiGetCurrentUser = async (): Promise<IUserVo> => {
+  const response = await $http.get<ApiResponse<IUserVo>>('/auth/me')
   return response.data
 }
 

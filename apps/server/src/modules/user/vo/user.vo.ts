@@ -1,12 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { UserStatus } from '../../../common/enums/user.enum'
+import type { IUserVo, ISODateString } from '@seed/api-types'
 
 /**
  * 用户响应 VO
  *
+ * 实现 @seed/api-types 中的 IUserVo 接口
  * 注意：不应包含敏感字段（如 password），安全过滤在 UserMapper 中完成
  */
-export class UserVo {
+export class UserVo implements IUserVo {
   @ApiProperty({ description: '用户ID' })
   id!: number
 
@@ -29,8 +31,8 @@ export class UserVo {
   status!: UserStatus
 
   @ApiProperty({ description: '创建时间' })
-  createdAt!: Date
+  createdAt!: ISODateString
 
   @ApiProperty({ description: '更新时间' })
-  updatedAt!: Date
+  updatedAt!: ISODateString
 }

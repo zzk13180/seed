@@ -55,8 +55,8 @@ export class UserMapper {
       phone: user.phone,
       avatar: user.avatar,
       status: user.status,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
     } as UserVo
   }
 }

@@ -1,4 +1,5 @@
-import type { UserState, UserEnv, LoginParams, UserInfo } from './user.types'
+import type { ILoginDto, IUserVo } from '@seed/api-types'
+import type { UserState, UserEnv } from './user.types'
 
 /**
  * UserController - 纯 TypeScript 类，不依赖任何框架
@@ -48,7 +49,7 @@ export class UserController {
   /**
    * 用户登录
    */
-  async login(params: LoginParams): Promise<UserInfo> {
+  async login(params: ILoginDto): Promise<IUserVo> {
     this.state.loading = true
     this.env.logger.info('User login attempt', { username: params.username })
 
@@ -85,7 +86,7 @@ export class UserController {
   /**
    * 获取当前用户信息
    */
-  async fetchUser(): Promise<UserInfo | null> {
+  async fetchUser(): Promise<IUserVo | null> {
     if (!this.env.authService.isAuthenticated()) {
       return null
     }
@@ -120,7 +121,7 @@ export class UserController {
   /**
    * 设置用户信息
    */
-  setUser(user: UserInfo | null): void {
+  setUser(user: IUserVo | null): void {
     this.state.user = user
   }
 

@@ -2,13 +2,15 @@ import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import { IsInt, IsOptional, Min, Max, IsString, IsIn } from 'class-validator'
 import { buildOrderClause, sanitizeIdentifier } from '../utils/sql.utils'
+import type { IPageRequest } from '@seed/api-types'
 
 /**
  * 分页请求 DTO
  *
+ * 实现 @seed/api-types 中的 IPageRequest 接口
  * 提供统一的分页查询参数，支持排序和关键字搜索
  */
-export class PageRequestDto {
+export class PageRequestDto implements IPageRequest {
   @ApiPropertyOptional({ description: '页码（从 1 开始）', minimum: 1, default: 1 })
   @IsOptional()
   @Type(() => Number)
