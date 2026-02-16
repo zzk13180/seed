@@ -6,6 +6,6 @@
     "declarationMap": true,
     "types": ["node"]
   },
-  "include": ["**/*.ts"],
+  "include": ["utils", "plugins", "*.ts"],
   "exclude": ["node_modules", "dist"]
 }

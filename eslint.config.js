@@ -48,7 +48,6 @@ import {
   disabledRules,
   regexpRules,
   classMembersOrder,
-  nestjsRules,
 } from './packages/configs/eslint/rules/index.js'
 import { noIsolatedComments } from './packages/configs/eslint/custom-rules/index.js'
 
@@ -80,6 +79,7 @@ function loadAutoImportGlobals() {
 }
 
 const autoImportGlobals = loadAutoImportGlobals()
+const nxEslintPlugin = await import('@nx/eslint-plugin')
 
 export default defineConfig([
   // ----- 基础配置 -----
@@ -91,10 +91,12 @@ export default defineConfig([
     ignores: [
       '**/dist/', // 构建输出
       '**/public/', // 静态资源
+      '**/.astro/', // Astro 生成目录
       '**/target/', // Rust/Tauri 构建输出
       '**/.svelte-kit/', // SvelteKit 构建缓存
       '**/node_modules/', // 依赖目录
-      'packages/**', // 共享包（独立配置）
+      '**/*.d.ts', // 声明文件
+      '**/drizzle.config.ts',
       'vitest.config.ts', // Vitest 配置文件
       'eslint/**', // ESLint 配置模块
     ],
@@ -397,6 +399,7 @@ export default defineConfig([
       'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+      'unicorn/prefer-module': 'off',
     },
   },
   {
@@ -413,23 +416,35 @@ export default defineConfig([
     },
   },
 
-  // ----- NestJS API 服务器 -----
-  {
-    files: ['apps/api-server/**/*.ts'],
-    rules: { ...nestjsRules, 'unicorn/no-anonymous-default-export': 'off' },
-  },
+  // ----- Server (Hono + Bun) -----
   {
     files: ['apps/server/**/*.ts'],
-    rules: { ...nestjsRules, 'unicorn/no-anonymous-default-export': 'off' },
+    rules: {
+      'unicorn/no-anonymous-default-export': 'off',
+      'unicorn/no-process-exit': 'off',
+      'unicorn/prefer-top-level-await': 'off',
+    },
   },
 
-  // ----- Tauri 更新服务器 -----
-  { files: ['apps/tauri-updater/**/*.ts'], rules: nestjsRules },
-
-  // ----- 代理服务器和静态服务器 -----
   {
-    files: ['apps/server-proxy/**/*.ts', 'apps/server-static/**/*.ts'],
-    rules: { 'unicorn/prefer-top-level-await': 'off', 'unicorn/no-process-exit': 'off' },
+    files: ['apps/api/**/*.ts'],
+    rules: {
+      'unicorn/no-process-exit': 'off',
+    },
+  },
+
+  {
+    files: ['packages/configs/vite/**/*.ts'],
+    rules: {
+      'sonarjs/function-return-type': 'off',
+    },
+  },
+
+  {
+    files: ['packages/services/src/tauri-updater/tauri-updater.service.ts'],
+    rules: {
+      'security/detect-non-literal-fs-filename': 'off',
+    },
   },
 
   // ----- 测试文件配置 -----
@@ -460,6 +475,55 @@ export default defineConfig([
       'unicorn/no-useless-undefined': 'off', // 测试中允许 undefined mock
       '@typescript-eslint/no-floating-promises': 'off', // 测试中放宽 Promise 规则
       '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
+
+  // ----- Nx 模块边界约束 -----
+  {
+    plugins: {
+      '@nx': nxEslintPlugin.default,
+    },
+    rules: {
+      '@nx/enforce-module-boundaries': [
+        'error',
+        {
+          enforceBuildableLibDependency: true,
+          depConstraints: [
+            // Layer 0: 契约层 — 只能依赖自身层级
+            { sourceTag: 'type:contracts', onlyDependOnLibsWithTags: ['type:contracts'] },
+            { sourceTag: 'type:types', onlyDependOnLibsWithTags: ['type:types'] },
+            // Layer 1: 基础设施 — 可依赖契约层
+            {
+              sourceTag: 'type:lib',
+              onlyDependOnLibsWithTags: ['type:lib', 'type:types', 'type:data', 'type:contracts'],
+            },
+            {
+              sourceTag: 'type:data',
+              onlyDependOnLibsWithTags: ['type:lib', 'type:types', 'type:data', 'type:contracts'],
+            },
+            // Layer 2: 业务模块层 — 可依赖基础设施和契约层
+            {
+              sourceTag: 'type:modules',
+              onlyDependOnLibsWithTags: ['type:lib', 'type:types', 'type:data', 'type:contracts'],
+            },
+            // Layer 3: 应用层 — 可依赖所有 packages（禁止 app 间互相依赖）
+            {
+              sourceTag: 'type:app',
+              onlyDependOnLibsWithTags: [
+                'type:lib',
+                'type:data',
+                'type:types',
+                'type:config',
+                'type:contracts',
+                'type:modules',
+              ],
+            },
+          ],
+        },
+      ],
     },
   },
 

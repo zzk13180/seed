@@ -1,11 +1,11 @@
-import type { KNOWN_LANGUAGE_CODES } from './config'
+import { LANGUAGE_CODES as KNOWN_LANGUAGE_CODES } from './config'
+import type { LanguageCode } from './config'
 
-export const langPathRegex = /\/([a-z]{2}_?[A-Z]{0,2})\//
-
-export function getLanguageFromURL(pathname: string) {
-  const langCodeMatch = pathname.match(langPathRegex)
-  const langCode = langCodeMatch ? langCodeMatch[1] : 'zh_CN'
-  return langCode as (typeof KNOWN_LANGUAGE_CODES)[number]
+export function getLanguageFromURL(pathname: string): LanguageCode {
+  const normalizedPath = pathname.toLowerCase()
+  const langCode = normalizedPath.split('/').find(Boolean) ?? 'zh-cn'
+  const matched = KNOWN_LANGUAGE_CODES.find(code => code === langCode)
+  return matched ?? 'zh-cn'
 }
 
-export { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES } from './config'
+export { LANGUAGES as KNOWN_LANGUAGES, LANGUAGE_CODES as KNOWN_LANGUAGE_CODES } from './config'

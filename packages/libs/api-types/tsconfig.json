@@ -1,9 +1,0 @@
-{
-  "extends": "@seed/tsconfig/tsconfig.json",
-  "compilerOptions": {
-    "rootDir": "src",
-    "strict": true,
-    "noEmit": true
-  },
-  "include": ["src"]
-}

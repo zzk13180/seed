@@ -1,7 +1,7 @@
 import { BaseController } from '@/core/base.controller'
 import type {
   MapState,
-  MapEnv,
+  MapDeps,
   GridConfig,
   IViewManager,
   IGridManager,
@@ -14,7 +14,7 @@ import type { Subscription } from 'rxjs'
  * MapController - 继承 BaseController 获得生命周期管理
  *
  * 架构说明：
- * - 通过 Env 注入 ViewManagerFactory 和 GridManagerFactory
+ * - 通过 Deps 注入 ViewManagerFactory 和 GridManagerFactory
  * - 不直接依赖具体的 ViewManager/MapGridManager 实现
  * - 便于测试时替换为 Mock 实现
  *
@@ -23,7 +23,7 @@ import type { Subscription } from 'rxjs'
  * - 管理 RxJS 订阅
  * - 协调 IViewManager 和 IGridManager
  */
-export class MapController extends BaseController<MapState, MapEnv> {
+export class MapController extends BaseController<MapState, MapDeps> {
   private viewManager: IViewManager | null = null
   private gridManager: IGridManager | null = null
   private subscriptions: Subscription[] = []
@@ -56,29 +56,29 @@ export class MapController extends BaseController<MapState, MapEnv> {
    */
   initializeView(container: HTMLElement, options?: ViewManagerOptions): void {
     if (this.viewManager) {
-      this.env.logger.warn('ViewManager already initialized')
+      this.deps.logger.warn('ViewManager already initialized')
       return
     }
 
     this._containerElement = container
-    this.env.logger.debug('Initializing ViewManager via factory')
+    this.deps.logger.debug('Initializing ViewManager via factory')
 
     try {
-      // 使用工厂创建 ViewManager（通过 Env 注入）
-      this.viewManager = this.env.viewManagerFactory.create(container, options)
+      // 使用工厂创建 ViewManager（通过 Deps 注入）
+      this.viewManager = this.deps.viewManagerFactory.create(container, options)
       this.state.viewInitialized = true
 
       // 订阅视图状态变化
       this.subscriptions.push(
         this.viewManager.viewStateChange$.subscribe(() => {
-          this.env.logger.debug('View state changed')
+          this.deps.logger.debug('View state changed')
         }),
       )
 
-      this.env.logger.info('ViewManager initialized')
+      this.deps.logger.info('ViewManager initialized')
     } catch (error) {
       this.state.errorMessage = '视图初始化失败'
-      this.env.logger.error('ViewManager initialization failed', error)
+      this.deps.logger.error('ViewManager initialization failed', error)
       throw error
     }
   }
@@ -93,15 +93,15 @@ export class MapController extends BaseController<MapState, MapEnv> {
 
     if (!this.viewManager) {
       const error = new Error('ViewManager must be initialized before grid')
-      this.env.logger.error(error.message)
+      this.deps.logger.error(error.message)
       throw error
     }
 
-    this.env.logger.debug('Initializing GridManager via factory')
+    this.deps.logger.debug('Initializing GridManager via factory')
 
     try {
-      // 使用工厂创建 GridManager（通过 Env 注入）
-      this.gridManager = this.env.gridManagerFactory.create(
+      // 使用工厂创建 GridManager（通过 Deps 注入）
+      this.gridManager = this.deps.gridManagerFactory.create(
         this.state,
         canvas,
         this.viewManager,
@@ -109,10 +109,10 @@ export class MapController extends BaseController<MapState, MapEnv> {
       )
       this.gridManager.initialize()
       this.state.gridInitialized = true
-      this.env.logger.info('GridManager initialized')
+      this.deps.logger.info('GridManager initialized')
     } catch (error) {
       this.state.errorMessage = '网格初始化失败'
-      this.env.logger.error('GridManager initialization failed', error)
+      this.deps.logger.error('GridManager initialization failed', error)
       throw error
     }
   }
@@ -125,7 +125,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
       this.gridManager.destroy()
       this.gridManager = null
       this.state.gridInitialized = false
-      this.env.logger.debug('GridManager destroyed')
+      this.deps.logger.debug('GridManager destroyed')
     }
   }
 
@@ -134,7 +134,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
    */
   updateGridConfig(config: Partial<GridConfig>): void {
     this.state.gridConfig = { ...this.state.gridConfig, ...config }
-    this.env.logger.debug('Grid config updated', config)
+    this.deps.logger.debug('Grid config updated', config)
 
     // 如果 GridManager 支持 draw 方法，触发重绘
     if (this.gridManager?.draw) {
@@ -148,7 +148,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
   resetView(): void {
     if (this.viewManager) {
       this.viewManager.resetView()
-      this.env.logger.debug('View reset to default')
+      this.deps.logger.debug('View reset to default')
     }
   }
 
@@ -158,7 +158,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
   setInteractionEnabled(enabled: boolean): void {
     if (this.viewManager) {
       this.viewManager.setInputMovementEnabled(enabled)
-      this.env.logger.debug(`Interaction ${enabled ? 'enabled' : 'disabled'}`)
+      this.deps.logger.debug(`Interaction ${enabled ? 'enabled' : 'disabled'}`)
     }
   }
 
@@ -173,10 +173,10 @@ export class MapController extends BaseController<MapState, MapEnv> {
    * 初始化逻辑（由 BaseController.initialize() 调用）
    */
   protected onInit(): Promise<void> {
-    this.env.logger.info('MapController initializing')
+    this.deps.logger.info('MapController initializing')
     // 注意：实际的视图初始化在 initializeView 中进行
     // 因为需要 DOM 容器元素
-    this.env.logger.info('MapController initialized (waiting for container)')
+    this.deps.logger.info('MapController initialized (waiting for container)')
     return Promise.resolve()
   }
 
@@ -184,13 +184,13 @@ export class MapController extends BaseController<MapState, MapEnv> {
    * 销毁逻辑
    */
   protected onDispose(): Promise<void> {
-    this.env.logger.info('MapController disposing')
+    this.deps.logger.info('MapController disposing')
 
     this.destroyGrid()
     this.destroyViewManager()
     this.state.gridInitialized = false
 
-    this.env.logger.info('MapController disposed')
+    this.deps.logger.info('MapController disposed')
     return Promise.resolve()
   }
 
@@ -201,7 +201,7 @@ export class MapController extends BaseController<MapState, MapEnv> {
     if (this.viewManager) {
       this.viewManager.destroy()
       this.viewManager = null
-      this.env.logger.debug('ViewManager destroyed')
+      this.deps.logger.debug('ViewManager destroyed')
     }
 
     for (const sub of this.subscriptions) {

@@ -1,16 +1,16 @@
-import type { AppState, AppEnv, Theme } from './app.types'
+import type { AppState, AppDeps, Theme } from './app.types'
 
 /**
  * AppController - 纯 TypeScript 类，不依赖任何框架
  *
  * 职责：
  * - 管理应用全局状态（侧边栏、主题等）
- * - 通过 Env 注入执行副作用（DOM 操作等）
+ * - 通过 Deps 注入执行副作用（DOM 操作等）
  */
 export class AppController {
   constructor(
     private readonly state: AppState,
-    private readonly env: AppEnv,
+    private readonly deps: AppDeps,
   ) {}
 
   /**
@@ -39,7 +39,7 @@ export class AppController {
    */
   setSidebarIsHidden(isHidden: boolean): void {
     this.state.sidebarIsHidden = isHidden
-    this.env.logger.debug('Sidebar visibility changed', { isHidden })
+    this.deps.logger.debug('Sidebar visibility changed', { isHidden })
   }
 
   /**
@@ -47,7 +47,7 @@ export class AppController {
    */
   toggleSidebar(): void {
     this.state.sidebarIsHidden = !this.state.sidebarIsHidden
-    this.env.logger.debug('Sidebar toggled', { isHidden: this.state.sidebarIsHidden })
+    this.deps.logger.debug('Sidebar toggled', { isHidden: this.state.sidebarIsHidden })
   }
 
   /**
@@ -55,7 +55,7 @@ export class AppController {
    */
   setSidebarCollapsed(collapsed: boolean): void {
     this.state.sidebarCollapsed = collapsed
-    this.env.logger.debug('Sidebar collapsed changed', { collapsed })
+    this.deps.logger.debug('Sidebar collapsed changed', { collapsed })
   }
 
   /**
@@ -63,7 +63,7 @@ export class AppController {
    */
   toggleSidebarCollapsed(): void {
     this.state.sidebarCollapsed = !this.state.sidebarCollapsed
-    this.env.logger.debug('Sidebar collapsed toggled', { collapsed: this.state.sidebarCollapsed })
+    this.deps.logger.debug('Sidebar collapsed toggled', { collapsed: this.state.sidebarCollapsed })
   }
 
   /**
@@ -71,8 +71,8 @@ export class AppController {
    */
   setTitle(title: string): void {
     this.state.title = title
-    this.env.themeService.setDocumentTitle(title)
-    this.env.logger.debug('Title changed', { title })
+    this.deps.themeService.setDocumentTitle(title)
+    this.deps.logger.debug('Title changed', { title })
   }
 
   /**
@@ -80,7 +80,7 @@ export class AppController {
    */
   setTheme(theme: Theme): void {
     this.state.theme = theme
-    this.env.themeService.applyTheme(theme)
-    this.env.logger.debug('Theme changed', { theme })
+    this.deps.themeService.applyTheme(theme)
+    this.deps.logger.debug('Theme changed', { theme })
   }
 }

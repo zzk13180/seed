@@ -54,8 +54,6 @@ gen/
 Cargo.lock
 *.rs.bk
 
-# NestJS (apps/server)
-
 # Python (if any)
 .venv
 __pycache__/

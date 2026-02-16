@@ -2,9 +2,11 @@
  * @file 错误处理服务
  * @description 提供统一的错误处理和用户友好提示
  * @module core/error.service
+ *
+ * 迁移说明：
+ * - 旧方案: 依赖 @seed/http 的 HttpError 类
+ * - 新方案: 基于原生 Error + HTTP Response 的错误处理
  */
-
-import { HttpError } from '@seed/http'
 
 /**
  * 错误类型枚举
@@ -137,8 +139,16 @@ export class DefaultErrorHandler implements ErrorHandler {
    * 获取错误类型
    */
   getErrorType(error: unknown): ErrorType {
-    if (error instanceof HttpError) {
-      return this.mapStatusToErrorType(error.status, error.message)
+    // 处理 Response 对象（来自 fetch/Hono RPC）
+    if (error instanceof Response) {
+      return this.mapStatusToErrorType(error.status)
+    }
+
+    // 处理包含 status 属性的错误对象
+    if (error && typeof error === 'object' && 'status' in error) {
+      const status = (error as { status: number }).status
+      const message = error instanceof Error ? error.message : undefined
+      return this.mapStatusToErrorType(status, message)
     }
 
     if (error instanceof Error) {
@@ -229,24 +239,21 @@ export class DefaultErrorHandler implements ErrorHandler {
    * 从后端响应中提取错误信息
    */
   private extractServerMessage(error: unknown): string | null {
-    if (!(error instanceof HttpError) || !error.data) {
-      return null
+    // 处理包含 data 属性的错误对象
+    if (error && typeof error === 'object' && 'data' in error) {
+      const data = (error as { data: unknown }).data
+      if (data && typeof data === 'object') {
+        const d = data as Record<string, unknown>
+        if (typeof d.message === 'string') return d.message
+        if (typeof d.msg === 'string') return d.msg
+        if (typeof d.error === 'string') return d.error
+        if (typeof d.errorMessage === 'string') return d.errorMessage
+      }
     }
 
-    const data = error.data as Record<string, unknown>
-
-    // 尝试多种常见的后端响应格式
-    if (typeof data.message === 'string') {
-      return data.message
-    }
-    if (typeof data.msg === 'string') {
-      return data.msg
-    }
-    if (typeof data.error === 'string') {
-      return data.error
-    }
-    if (typeof data.errorMessage === 'string') {
-      return data.errorMessage
+    // 处理普通 Error 对象
+    if (error instanceof Error && error.message) {
+      return error.message
     }
 
     return null
@@ -256,8 +263,11 @@ export class DefaultErrorHandler implements ErrorHandler {
    * 获取 HTTP 状态码
    */
   private getStatusCode(error: unknown): number {
-    if (error instanceof HttpError) {
+    if (error instanceof Response) {
       return error.status
+    }
+    if (error && typeof error === 'object' && 'status' in error) {
+      return (error as { status: number }).status
     }
     return 0
   }

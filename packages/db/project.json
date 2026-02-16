@@ -1,0 +1,16 @@
+{
+  "name": "@seed/db",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/db/src",
+  "projectType": "library",
+  "targets": {
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit --skipLibCheck",
+        "cwd": "packages/db"
+      }
+    }
+  },
+  "tags": ["scope:shared", "type:data"]
+}

@@ -6,8 +6,6 @@
 
 import seedPreset from './preset.js'
 
-export { seedPreset }
-
 // 导出工具函数
 export function withSeedPreset(config) {
   return {
@@ -15,3 +13,4 @@ export function withSeedPreset(config) {
     presets: [...(config.presets || []), seedPreset],
   }
 }
+export { default as seedPreset } from './preset.js'

@@ -1,0 +1,54 @@
+{
+  "name": "@seed/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./schema": {
+      "types": "./src/schema/index.ts",
+      "import": "./src/schema/index.ts"
+    },
+    "./provider": {
+      "types": "./src/provider.ts",
+      "import": "./src/provider.ts"
+    },
+    "./types": {
+      "types": "./src/types.ts",
+      "import": "./src/types.ts"
+    }
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit --skipLibCheck",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "catalog:default"
+  },
+  "peerDependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  },
+  "peerDependenciesMeta": {
+    "@neondatabase/serverless": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@neondatabase/serverless": "catalog:default",
+    "@seed/tsconfig": "workspace:*",
+    "@seed/types": "workspace:*",
+    "drizzle-kit": "catalog:default"
+  },
+  "files": [
+    "src"
+  ]
+}

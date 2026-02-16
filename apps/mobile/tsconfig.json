@@ -5,6 +5,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["."],
+  "include": ["src", "*.ts", "vite"],
   "exclude": ["ecosystem.config.cjs", "dist", "public", "build", "node_modules", "tmp"]
 }

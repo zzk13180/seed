@@ -1,14 +1,17 @@
-import { $http } from '@seed/http'
 import type { PanelApiService, PanelWsService, RobotInfo } from './panel.types'
 
 /**
  * HTTP Panel API 服务实现
+ *
+ * 使用原生 fetch（待后端 robot 路由迁移到 Hono 后切换为 RPC）
  */
 export class HttpPanelApiService implements PanelApiService {
   async fetchRobotInfo(): Promise<RobotInfo> {
     try {
-      const response = await $http.get<{ data: RobotInfo }>('/robot/info')
-      return response.data
+      const res = await fetch('/api/robot/info', { credentials: 'include' })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const json = (await res.json()) as { data: RobotInfo }
+      return json.data
     } catch {
       // 返回模拟数据（开发阶段）
       return {
@@ -22,8 +25,15 @@ export class HttpPanelApiService implements PanelApiService {
   }
 
   async updateRobotInfo(info: Partial<RobotInfo>): Promise<RobotInfo> {
-    const response = await $http.patch<{ data: RobotInfo }>('/robot/info', info)
-    return response.data
+    const res = await fetch('/api/robot/info', {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(info),
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const json = (await res.json()) as { data: RobotInfo }
+    return json.data
   }
 }
 

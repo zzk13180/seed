@@ -1,12 +1,16 @@
 /**
- * @file HTTP 拦截器配置
- * @description 配置全局请求/响应/错误拦截器，提供统一的错误处理和用户提示
+ * @file HTTP 错误处理
+ * @description 全局 fetch 错误处理，配合 Hono RPC 客户端使用
  * @module core/http.interceptor
+ *
+ * 迁移说明：
+ * - 旧方案: @seed/http 的 HttpClient 拦截器
+ * - 新方案: Hono RPC 的 hc() 客户端 + Better Auth cookie-session
+ * - Hono RPC 使用原生 fetch，无拦截器机制
+ * - 错误处理通过 onError 回调或在 API 调用处 try/catch
  */
 
 import { ElMessage, ElNotification } from 'element-plus'
-import { $http, type HttpError } from '@seed/http'
-import { errorHandler, ErrorType, type ErrorInfo } from './error.service'
 import { createLogger } from './logger.service'
 
 const logger = createLogger('HTTP')
@@ -15,197 +19,135 @@ const logger = createLogger('HTTP')
  * 记录最后一次错误通知的时间戳，用于防止重复提示
  */
 let lastErrorNotificationTime = 0
-const ERROR_NOTIFICATION_COOLDOWN = 3000 // 3秒内不重复提示相同类型错误
+const ERROR_NOTIFICATION_COOLDOWN = 3000
 
 /**
- * 记录最后一次错误类型
+ * 记录最后一次错误状态码
  */
-let lastErrorType: ErrorType | null = null
+let lastErrorStatus = 0
 
 /**
- * 显示错误通知给用户
+ * 处理 HTTP 响应错误
+ *
+ * 供 API 调用层在 catch 中使用
  */
-function showErrorNotification(errorInfo: ErrorInfo): void {
+export function handleHttpError(error: unknown): void {
   const now = Date.now()
 
-  // 防止短时间内重复显示相同类型的错误
-  if (
-    lastErrorType === errorInfo.type &&
-    now - lastErrorNotificationTime < ERROR_NOTIFICATION_COOLDOWN
-  ) {
-    logger.debug('Skipping duplicate error notification', { type: errorInfo.type })
-    return
-  }
-
-  lastErrorNotificationTime = now
-  lastErrorType = errorInfo.type
-
-  // 根据错误类型选择不同的通知方式
-  switch (errorInfo.type) {
-    case ErrorType.NETWORK_ERROR:
-    case ErrorType.SERVICE_UNAVAILABLE:
-    case ErrorType.TIMEOUT_ERROR: {
-      // 网络/服务相关错误使用 Notification（右上角持久通知）
+  // 网络错误
+  if (error instanceof TypeError && error.message.includes('fetch')) {
+    if (now - lastErrorNotificationTime > ERROR_NOTIFICATION_COOLDOWN || lastErrorStatus !== 0) {
+      lastErrorNotificationTime = now
+      lastErrorStatus = 0
       ElNotification({
-        title: errorInfo.title,
-        message: errorInfo.message,
+        title: '网络错误',
+        message: '无法连接到服务器，请检查网络连接',
         type: 'error',
         duration: 5000,
         position: 'top-right',
       })
-      break
+    }
+    return
+  }
+
+  // 解析 Response 错误
+  if (error instanceof Response) {
+    const status = error.status
+
+    if (
+      lastErrorStatus === status &&
+      now - lastErrorNotificationTime < ERROR_NOTIFICATION_COOLDOWN
+    ) {
+      return
     }
 
-    case ErrorType.UNAUTHORIZED: {
-      // 登录过期使用警告通知
-      ElNotification({
-        title: errorInfo.title,
-        message: errorInfo.message,
-        type: 'warning',
-        duration: 4000,
-        position: 'top-right',
-      })
-      break
-    }
+    lastErrorNotificationTime = now
+    lastErrorStatus = status
 
-    case ErrorType.FORBIDDEN:
-    case ErrorType.NOT_FOUND:
-    case ErrorType.CLIENT_ERROR: {
-      // 客户端错误使用 Message（顶部短暂提示）
-      ElMessage.error(errorInfo.message)
-      break
+    switch (status) {
+      case 401: {
+        ElNotification({
+          title: '登录已过期',
+          message: '请重新登录',
+          type: 'warning',
+          duration: 4000,
+          position: 'top-right',
+        })
+        // 延迟导入避免循环依赖
+        void (async () => {
+          const { useUserStore } = await import('@/stores/user/user.store')
+          const userStore = useUserStore()
+          await userStore.controller.logout()
+          await userStore.controller.navigateToLogin()
+        })().catch(() => {
+          globalThis.location.href = '/login'
+        })
+        break
+      }
+      case 403: {
+        ElMessage.error('没有权限执行此操作')
+        break
+      }
+      case 404: {
+        ElMessage.error('请求的资源不存在')
+        break
+      }
+      case 429: {
+        ElMessage.warning('请求过于频繁，请稍后重试')
+        break
+      }
+      default: {
+        if (status >= 500) {
+          ElNotification({
+            title: '服务器错误',
+            message: '服务器内部错误，请稍后重试',
+            type: 'error',
+            duration: 4000,
+            position: 'top-right',
+          })
+        } else {
+          ElMessage.error(`请求失败 (${status})`)
+        }
+      }
     }
+    return
+  }
 
-    case ErrorType.SERVER_ERROR: {
-      // 服务器错误使用 Notification
-      ElNotification({
-        title: errorInfo.title,
-        message: errorInfo.message,
-        type: 'error',
-        duration: 4000,
-        position: 'top-right',
-      })
-      break
-    }
-
-    default: {
-      ElMessage.error(errorInfo.message)
-    }
+  // 其他错误
+  if (error instanceof Error) {
+    logger.error('Unexpected error', error)
+    ElMessage.error(error.message || '未知错误')
   }
 }
 
 /**
- * 处理需要重新登录的错误
- */
-async function handleAuthError(): Promise<void> {
-  // 延迟导入以避免循环依赖
-  const { useUserStore } = await import('@/stores/user/user.store')
-
-  try {
-    const userStore = useUserStore()
-    // 清除用户状态并跳转到登录页
-    await userStore.controller.logout()
-  } catch (error) {
-    logger.error('Failed to handle auth error', error)
-    // 如果登出失败，强制跳转到登录页
-    globalThis.location.href = '/login'
-  }
-}
-
-/**
- * 全局错误拦截器
- */
-function setupErrorInterceptor(): () => void {
-  return $http.addErrorInterceptor(async (error: HttpError) => {
-    const errorInfo = errorHandler.parseError(error)
-
-    // 记录错误日志
-    logger.error('HTTP Error', {
-      type: errorInfo.type,
-      status: errorInfo.status,
-      message: errorInfo.message,
-      endpoint: error.config?.endpoint,
-    })
-
-    // 显示用户通知
-    if (errorInfo.shouldNotify) {
-      showErrorNotification(errorInfo)
-    }
-
-    // 处理需要重新登录的情况
-    if (errorInfo.requiresReLogin) {
-      await handleAuthError()
-    }
-
-    // 继续抛出错误，让调用方可以进行额外处理
-    throw error
-  })
-}
-
-/**
- * 请求拦截器 - 添加通用请求头等
- */
-function setupRequestInterceptor(): () => void {
-  return $http.addRequestInterceptor(config => {
-    logger.debug('Request', { endpoint: config.endpoint, method: config.method })
-    return config
-  })
-}
-
-/**
- * 响应拦截器 - 处理统一响应格式
- */
-function setupResponseInterceptor(): () => void {
-  return $http.addResponseInterceptor((response, config) => {
-    logger.debug('Response', { endpoint: config.endpoint })
-    return response
-  })
-}
-
-/**
- * 初始化所有 HTTP 拦截器
- * @returns 清理函数，调用后会移除所有拦截器
+ * 初始化全局错误处理
+ *
+ * Better Auth + Hono RPC 模式下，不再需要 $http 拦截器
+ * 此函数保持空实现以兼容现有启动流程
  */
 export function setupHttpInterceptors(): () => void {
-  const cleanupFunctions = [
-    setupRequestInterceptor(),
-    setupResponseInterceptor(),
-    setupErrorInterceptor(),
-  ]
-
-  logger.info('HTTP interceptors initialized')
-
+  logger.info('HTTP error handlers initialized (Hono RPC + Better Auth mode)')
   return () => {
-    cleanupFunctions.forEach(cleanup => cleanup())
-    logger.info('HTTP interceptors cleaned up')
+    logger.info('HTTP error handlers cleaned up')
   }
 }
 
 /**
  * 检查服务是否可用
- * 用于应用启动时的健康检查
  */
 export async function checkServiceHealth(): Promise<boolean> {
   try {
-    // 尝试请求健康检查接口
-    await $http.get('/health')
-    return true
-  } catch (error) {
-    const errorInfo = errorHandler.parseError(error)
-
-    if (
-      errorInfo.type === ErrorType.NETWORK_ERROR ||
-      errorInfo.type === ErrorType.SERVICE_UNAVAILABLE
-    ) {
-      ElNotification({
-        title: '服务连接失败',
-        message: '无法连接到后端服务，部分功能可能无法使用',
-        type: 'warning',
-        duration: 0, // 不自动关闭
-        position: 'top-right',
-      })
-    }
-
+    const res = await fetch('/api/health/liveness', { credentials: 'include' })
+    return res.ok
+  } catch {
+    ElNotification({
+      title: '服务连接失败',
+      message: '无法连接到后端服务，部分功能可能无法使用',
+      type: 'warning',
+      duration: 0,
+      position: 'top-right',
+    })
     return false
   }
 }

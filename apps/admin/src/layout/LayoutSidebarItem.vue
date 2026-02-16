@@ -78,7 +78,11 @@
 
     // 当只有一个子菜单项时，显示该子菜单项
     if (visibleChildren.length === 1) {
-      singleChild.value = visibleChildren[0]
+      const onlyChild = visibleChildren[0]
+      if (!onlyChild) {
+        return false
+      }
+      singleChild.value = onlyChild
       return true
     }
 

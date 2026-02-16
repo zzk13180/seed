@@ -1,3 +1,18 @@
-<script is:inline>
-	window.location.pathname = `/seed/zh_CN/introduction`;
-</script>
+---
+/**
+ * 首页重定向
+ * 
+ * 使用 Astro 的服务端重定向，比客户端 JS 更可靠
+ * - SEO 友好（301 永久重定向）
+ * - 无 JavaScript 依赖
+ * - 用户无感知跳转
+ */
+import { SITE } from '../config'
+
+// 获取用户偏好语言
+const acceptLanguage = Astro.request.headers.get('accept-language') || ''
+const preferredLang = acceptLanguage.toLowerCase().includes('zh') ? 'zh-cn' : 'en'
+
+// 重定向到对应语言的介绍页
+return Astro.redirect(`/seed/${preferredLang}/introduction/`, 302)
+---

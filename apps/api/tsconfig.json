@@ -1,0 +1,16 @@
+{
+  "extends": "@seed/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["bun", "@seed/types"],
+    "strict": true,
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

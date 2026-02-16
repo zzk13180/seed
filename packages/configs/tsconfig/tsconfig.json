@@ -22,7 +22,7 @@
 
     // ==================== 语法特性 ====================
     "jsx": "preserve", // JSX 处理: 保留原样，交给 Vue/React 工具链处理
-    "experimentalDecorators": true, // 装饰器支持: NestJS、TypeORM 等框架必需
+    "experimentalDecorators": true, // 装饰器支持: Tauri 插件等需要
 
     // ==================== 输出控制 ====================
     "noEmit": true, // 不生成编译输出文件，仅做类型检查（打包由 Vite 等工具处理）

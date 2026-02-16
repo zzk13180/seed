@@ -12,7 +12,7 @@
       "cache": false
     },
     "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/vitest.workspace.yaml"],
+      "inputs": ["default", "^production", "{workspaceRoot}/vitest.config.ts"],
       "outputs": ["{projectRoot}/coverage"],
       "cache": true
     },
@@ -57,21 +57,23 @@
       "{workspaceRoot}/pnpm-lock.yaml",
       "{workspaceRoot}/nx.json",
       "{workspaceRoot}/tsconfig.json"
-    ]
+    ],
+    "serverSource": [
+      "{projectRoot}/src/**/*.ts",
+      "{workspaceRoot}/packages/contracts/src/**",
+      "{workspaceRoot}/packages/kit/src/hono/**",
+      "{workspaceRoot}/packages/kit/src/auth/**",
+      "{workspaceRoot}/packages/kit/src/utils/**",
+      "{workspaceRoot}/packages/db/**",
+      "{workspaceRoot}/packages/services/**"
+    ],
+    "frontendSource": [
+      "{projectRoot}/src/**/*.{ts,vue,tsx,svelte}",
+      "{workspaceRoot}/packages/contracts/src/**",
+      "{workspaceRoot}/packages/kit/src/frontend/**"
+    ],
+    "rustSource": ["{projectRoot}/**/*.rs", "{projectRoot}/Cargo.toml"]
   },
   "parallel": 5,
-  "defaultBase": "main",
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "test", "lint", "type-check"]
-      }
-    }
-  },
-  "workspaceLayout": {
-    "appsDir": "apps",
-    "libsDir": "packages"
-  },
-  "plugins": []
+  "defaultBase": "main"
 }

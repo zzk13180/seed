@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { AccessTokenUtil } from '@/utils/token.util'
 import TheLayout from '@/layout/TheLayout.vue'
 import type { RouteRecordRaw, NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
@@ -126,9 +125,17 @@ export const router = createRouter({
 
 /**
  * 路由前置守卫
+ *
+ * Better Auth 使用 cookie-session 模式:
+ * - 通过 user store 的 isLoggedIn 判断认证状态
+ * - session cookie 由浏览器自动管理，无需手动检查 token
  */
 router.beforeEach(
-  (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
+  async (
+    to: RouteLocationNormalized,
+    _from: RouteLocationNormalized,
+    next: NavigationGuardNext,
+  ) => {
     // 设置页面标题
     if (to.meta?.title) {
       document.title = `${to.meta.title as string} - Seed Admin`
@@ -141,12 +148,20 @@ router.beforeEach(
     }
 
     // 检查认证状态
-    const hasToken = AccessTokenUtil.token
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
     if (requiresAuth) {
-      if (!hasToken) {
-        // 未登录，重定向到登录页
+      // 延迟导入避免循环依赖
+      const { useUserStore } = await import('@/stores/user/user.store')
+      const userStore = useUserStore()
+
+      // 如果 store 中没有用户信息，尝试从 session 获取
+      if (!userStore.isLoggedIn) {
+        await userStore.controller.init()
+      }
+
+      // 仍然未登录，跳转到登录页
+      if (!userStore.isLoggedIn) {
         next({
           path: '/login',
           query: { redirect: to.fullPath },
@@ -154,15 +169,10 @@ router.beforeEach(
         return
       }
 
-      // 检查 token 是否过期
-      if (AccessTokenUtil.isExpired && AccessTokenUtil.refreshToken) {
-        // TODO: 可在此处添加刷新 token 的逻辑
-        // 目前先重定向到登录页
-        AccessTokenUtil.clear()
-        next({
-          path: '/login',
-          query: { redirect: to.fullPath },
-        })
+      // Admin 后台要求管理员角色
+      if (!userStore.isAdmin) {
+        await userStore.controller.logout()
+        next({ path: '/401' })
         return
       }
     }

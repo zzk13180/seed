@@ -1,7 +1,7 @@
 /**
  * Login 模块的类型定义
  *
- * 使用 @seed/api-types 共享类型，本文件定义 UI 层特有类型
+ * 使用 @seed/kit 共享类型，本文件定义 UI 层特有类型
  */
 
 import type { Logger } from '@/core/logger.service'
@@ -10,9 +10,9 @@ import type { ErrorHandler } from '@/core/error.service'
 import type { AuthService, StorageService } from '@/stores/user/user.types'
 
 // ============================================================================
-// 从 @seed/api-types 重新导出的类型
+// 从 @seed/kit 重新导出的类型
 // ============================================================================
-export type { ILoginDto, IUserVo } from '@seed/api-types'
+export type { UserVO } from '@seed/contracts'
 
 // ============================================================================
 // UI 层特有的类型定义
@@ -22,7 +22,7 @@ export type { ILoginDto, IUserVo } from '@seed/api-types'
  * 登录表单数据
  */
 export interface LoginFormData {
-  username: string
+  email: string
   password: string
   rememberMe: boolean
 }
@@ -45,7 +45,7 @@ export interface LoginState {
 export interface ValidationResult {
   valid: boolean
   errors: {
-    username?: string
+    email?: string
     password?: string
   }
 }
@@ -61,9 +61,9 @@ export interface MessageService {
 }
 
 /**
- * Login 模块环境依赖
+ * Login 模块依赖
  */
-export interface LoginEnv {
+export interface LoginDeps {
   logger: Logger
   authService: AuthService
   storageService: StorageService

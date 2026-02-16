@@ -9,14 +9,14 @@
       <el-form ref="loginFormRef" :model="state.form" :rules="loginRules" class="login-form">
         <div class="login-form-welcome">欢迎登录</div>
 
-        <el-form-item prop="username">
+        <el-form-item prop="email">
           <el-input
-            v-model="state.form.username"
+            v-model="state.form.email"
             type="text"
             size="large"
             clearable
             auto-complete="off"
-            placeholder="请输入账号（必填）"
+            placeholder="请输入邮箱（必填）"
           />
         </el-form-item>
 
@@ -65,7 +65,10 @@
 
   // 表单验证规则
   const loginRules: FormRules = {
-    username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
+    email: [
+      { required: true, trigger: 'blur', message: '请输入您的邮箱' },
+      { type: 'email', trigger: 'blur', message: '请输入有效的邮箱地址' },
+    ],
     password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
   }
 

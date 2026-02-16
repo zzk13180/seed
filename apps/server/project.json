@@ -8,7 +8,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["^build"],
       "options": {
-        "command": "nest build",
+        "command": "bun build src/main.ts --outdir dist --target bun",
         "cwd": "apps/server"
       },
       "outputs": ["{projectRoot}/dist"]
@@ -16,7 +16,7 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "nest start --watch",
+        "command": "bun run --hot src/main.ts",
         "cwd": "apps/server"
       }
     },
@@ -24,26 +24,32 @@
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "options": {
-        "command": "node dist/main",
+        "command": "bun run src/main.ts",
         "cwd": "apps/server"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "jest",
+        "command": "vitest run",
         "cwd": "apps/server"
       },
       "outputs": ["{projectRoot}/coverage"]
     },
-    "test:e2e": {
+    "type-check": {
       "executor": "nx:run-commands",
-      "dependsOn": ["build"],
       "options": {
-        "command": "jest --config ./test/jest-e2e.json",
+        "command": "tsc --noEmit",
+        "cwd": "apps/server"
+      }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run src/seed.ts",
         "cwd": "apps/server"
       }
     }
   },
-  "tags": ["type:app", "platform:node", "framework:nestjs"]
+  "tags": ["type:app", "platform:bun", "framework:hono"]
 }

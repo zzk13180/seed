@@ -1,12 +1,11 @@
 # Server 开发环境 Docker Compose
 # 使用: docker compose up -d
-# 文档: ./README.md
 
 services:
-  # NestJS 后端 API
+  # Hono + Bun 后端 API
   server:
     build:
-      context: ../..
+      context: ../../..
       dockerfile: apps/server/Dockerfile
     container_name: seed-server
     restart: unless-stopped
@@ -20,7 +19,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3003
-      - JWT_SECRET=${JWT_SECRET}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3003}
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USERNAME=postgres
@@ -31,7 +31,12 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     healthcheck:
       test:
-        ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3003/api/health']
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://localhost:3003/api/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))",
+        ]
       interval: 30s
       timeout: 3s
       retries: 3

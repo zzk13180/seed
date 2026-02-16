@@ -1,0 +1,32 @@
+#:schema node_modules/wrangler/config-schema.json
+
+name = "seed-api"
+main = "src/worker.entry.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ===========================================
+# 环境变量 (通过 wrangler secret 设置敏感值)
+# ===========================================
+# wrangler secret put DATABASE_URL
+# wrangler secret put BETTER_AUTH_SECRET
+# wrangler secret put BETTER_AUTH_URL
+
+[vars]
+NODE_ENV = "production"
+
+# ===========================================
+# 开发环境
+# ===========================================
+[env.dev]
+name = "seed-api-dev"
+[env.dev.vars]
+NODE_ENV = "development"
+
+# ===========================================
+# 预发布环境
+# ===========================================
+[env.staging]
+name = "seed-api-staging"
+[env.staging.vars]
+NODE_ENV = "staging"

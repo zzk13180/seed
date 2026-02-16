@@ -1,0 +1,53 @@
+---
+title: Introduction
+description: Welcome to Seed - Enterprise Full-Stack Multi-Platform Starter
+order: 1
+category: Getting Started
+tags:
+  - intro
+  - overview
+---
+
+import { Icon } from 'astro-icon/components'
+
+## Welcome to Seed 🌱
+
+Seed is an **enterprise-grade full-stack multi-platform development template**, providing a production-ready architectural blueprint for modern applications.
+
+### Why Choose Seed?
+
+| Feature                   | Description                                                    |
+| ------------------------- | -------------------------------------------------------------- |
+| 🔌 **Framework Agnostic** | Controller pattern decouples business logic from UI frameworks |
+| 📝 **Type Safe**          | Shared type definitions between frontend and backend           |
+| ⚡ **Fast Development**   | Nx caching for intelligent incremental builds                  |
+| 🌐 **Multi-Platform**     | Web, Mobile, Desktop from one codebase                         |
+
+### Technology Stack Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      User Interface Layer                   │
+├──────────────┬──────────────┬──────────────┬───────────────┤
+│  @seed/admin │ @seed/mobile │ @seed/desktop│  @seed/docs   │
+│  Web Console │  Mobile App  │  Desktop App │ Documentation │
+└──────┬───────┴──────┬───────┴──────┬───────┴───────────────┘
+       │              │              │
+       └──────────────┼──────────────┘
+                      │ HTTP/WebSocket
+              ┌───────▼───────┐
+              │ @seed/server  │  Hono + Bun API
+              │  Auth/Update  │
+              └───────┬───────┘
+                      │ rosbridge / native protocol
+              ┌───────▼───────┐
+              │ @seed/robotics│  ROS Robotics Core
+              │  Nav/Map/Ctrl │
+              └───────────────┘
+```
+
+### Next Steps
+
+- [Quick Start](/seed/en/getting-started/) - Get up and running in minutes
+- [Architecture Guide](/seed/en/architecture/) - Deep dive into system design
+- [Conventions](/seed/en/conventions/) - Team collaboration best practices

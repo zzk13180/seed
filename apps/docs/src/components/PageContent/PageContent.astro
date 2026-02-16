@@ -1,17 +1,24 @@
 ---
+/**
+ * 页面内容组件
+ * 
+ * 负责渲染文档正文，包括：
+ * - 页面标题
+ * - 移动端目录
+ * - MDX 内容插槽
+ * - 底部操作菜单
+ */
 import MoreMenu from '../RightSidebar/MoreMenu.astro';
 import TableOfContents from '../RightSidebar/TableOfContents';
-import type { Frontmatter } from '../../config';
 import type { MarkdownHeading } from 'astro';
 
-type Props = {
-	frontmatter: Frontmatter;
+interface Props {
+	title: string;
 	headings: MarkdownHeading[];
 	githubEditUrl: string;
-};
+}
 
-const { frontmatter, headings, githubEditUrl } = Astro.props as Props;
-const title = frontmatter.title;
+const { title, headings, githubEditUrl } = Astro.props;
 ---
 
 <article id="article" class="content">
@@ -39,6 +46,13 @@ const title = frontmatter.title;
 
 	.content > section {
 		margin-bottom: 4rem;
+	}
+
+	.content-title {
+		font-size: 2.5rem;
+		font-weight: 800;
+		line-height: 1.2;
+		margin-bottom: 1.5rem;
 	}
 
 	.block {

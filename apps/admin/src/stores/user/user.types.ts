@@ -1,43 +1,52 @@
 /**
  * User 模块的类型定义
  *
- * 使用 @seed/api-types 共享类型，本文件定义 UI 层特有类型
+ * 使用 @seed/kit 共享类型，本文件定义 UI 层特有类型
  */
 
 import type { Logger } from '@/core/logger.service'
 import type { NavigationService } from '@/core/navigation.service'
-import type { IUserVo, ILoginDto, ILoginVo } from '@seed/api-types'
+import type { UserVO } from '@seed/contracts'
 
 // ============================================================================
-// 从 @seed/api-types 重新导出的类型
+// 从 @seed/contracts 重新导出的类型
 // ============================================================================
-export { UserStatus } from '@seed/api-types/enums'
-export type { IUserVo, ILoginDto, ILoginVo } from '@seed/api-types'
+export { UserStatus, type UserVO } from '@seed/contracts'
 
 // ============================================================================
 // UI 层特有的类型定义
 // ============================================================================
 
 /**
+ * 登录参数
+ */
+export interface LoginParams {
+  email: string
+  password: string
+}
+
+/**
  * 用户状态接口
  */
 export interface UserState {
   /** 当前用户信息 */
-  user: IUserVo | null
+  user: UserVO | null
   /** 是否正在加载 */
   loading: boolean
 }
 
 /**
  * 认证服务接口 - 抽象 API 调用
+ *
+ * Better Auth 使用 cookie-session 模式:
+ * - 登录成功后浏览器自动携带 session cookie
+ * - 无需手动管理 token
  */
 export interface AuthService {
-  login(params: ILoginDto): Promise<ILoginVo>
+  login(params: LoginParams): Promise<UserVO>
   logout(): Promise<void>
-  getCurrentUser(): Promise<IUserVo>
-  refreshToken(): Promise<ILoginVo>
-  isAuthenticated(): boolean
-  initAuth(): boolean
+  getCurrentUser(): Promise<UserVO | null>
+  isAuthenticated(): Promise<boolean>
 }
 
 /**
@@ -50,9 +59,9 @@ export interface StorageService {
 }
 
 /**
- * User 模块环境依赖
+ * User 模块依赖
  */
-export interface UserEnv {
+export interface UserDeps {
   logger: Logger
   authService: AuthService
   storageService: StorageService

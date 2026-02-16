@@ -19,18 +19,18 @@ export function createBaseConfig(options: ViteConfigOptions = {}): UserConfig {
     server: {
       host: '0.0.0.0',
       port,
-      proxy: Object.entries(proxy).reduce(
-        (acc, [key, value]) => {
-          acc[key] = {
+      proxy: (() => {
+        const resolvedProxy: Record<string, any> = {}
+        for (const [key, value] of Object.entries(proxy)) {
+          resolvedProxy[key] = {
             target: value.target,
             changeOrigin: value.changeOrigin ?? true,
             ws: value.ws ?? false,
             rewrite: value.rewrite,
           }
-          return acc
-        },
-        {} as Record<string, any>,
-      ),
+        }
+        return resolvedProxy
+      })(),
     },
     css: {
       postcss: {

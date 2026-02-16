@@ -35,5 +35,5 @@
       }
     }
   },
-  "tags": ["type:app", "framework:astro"]
+  "tags": ["type:app", "platform:web", "framework:astro"]
 }

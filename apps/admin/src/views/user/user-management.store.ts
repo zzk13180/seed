@@ -8,10 +8,10 @@ import {
   ElementMessageService,
   ElementConfirmService,
 } from './user-management.service'
-import type { UserManagementState, UserManagementEnv } from './user-management.types'
+import type { UserManagementState, UserManagementDeps } from './user-management.types'
 
-// 组装环境依赖
-const env: UserManagementEnv = {
+// 组装依赖
+const deps: UserManagementDeps = {
   logger: createLogger('UserManagement'),
   apiService: new HttpUserManagementApiService(),
   messageService: new ElementMessageService(),
@@ -64,7 +64,7 @@ export const useUserManagementStore = defineStore('userManagement', () => {
   })
 
   // Controller（使用 markRaw 避免响应式包装）
-  const controller = markRaw(new UserManagementController(state, env))
+  const controller = markRaw(new UserManagementController(state, deps))
 
   // 计算属性
   const dialogTitle = computed(() => controller.dialogTitle)

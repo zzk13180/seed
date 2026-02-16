@@ -3,10 +3,10 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { createLogger } from '@/core/logger.service'
 import { MapController } from './map.controller'
 import { DefaultViewManagerFactory, DefaultGridManagerFactory } from './map.service'
-import type { MapState, MapEnv } from './map.types'
+import type { MapState, MapDeps } from './map.types'
 
 /**
- * 创建 Map 模块的环境依赖
+ * 创建 Map 模块的依赖
  *
  * 所有外部依赖在此组装：
  * - logger: 日志服务
@@ -14,7 +14,7 @@ import type { MapState, MapEnv } from './map.types'
  * - gridManagerFactory: GridManager 工厂
  * - apiService: API 服务（可选）
  */
-function createMapEnv(): MapEnv {
+function createMapDeps(): MapDeps {
   return {
     logger: createLogger('Map'),
     viewManagerFactory: new DefaultViewManagerFactory(),
@@ -31,12 +31,12 @@ function createMapEnv(): MapEnv {
  * - Controller: 负责核心业务逻辑（继承 BaseController）
  *
  * 依赖注入：
- * - 通过 Env 注入 ViewManagerFactory 和 GridManagerFactory
+ * - 通过 Deps 注入 ViewManagerFactory 和 GridManagerFactory
  * - 便于测试时替换为 Mock 实现
  */
 export const useMapStore = defineStore('map', () => {
-  // 环境依赖
-  const env = createMapEnv()
+  // 依赖
+  const deps = createMapDeps()
 
   // 状态（响应式）
   const state = reactive<MapState>({
@@ -58,7 +58,7 @@ export const useMapStore = defineStore('map', () => {
   })
 
   // Controller（使用 markRaw 避免响应式包装）
-  const controller = markRaw(new MapController(state, env))
+  const controller = markRaw(new MapController(state, deps))
 
   // 计算属性
   const isViewReady = computed(() => state.viewInitialized)

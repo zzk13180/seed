@@ -51,9 +51,9 @@ export interface PanelWsService {
 }
 
 /**
- * Panel 模块环境依赖
+ * Panel 模块依赖
  */
-export interface PanelEnv {
+export interface PanelDeps {
   logger: Logger
   apiService: PanelApiService
   wsService?: PanelWsService

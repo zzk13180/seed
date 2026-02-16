@@ -52,7 +52,7 @@ export function createCompressionPlugin(
     compression({
       algorithm: 'gzip',
       exclude: [/\.(br)$/, /\.(gz)$/],
-      threshold: 10240, // 10KB
+      threshold: 10_240, // 10KB
     }),
   )
 
@@ -62,7 +62,7 @@ export function createCompressionPlugin(
       compression({
         algorithm: 'brotliCompress',
         exclude: [/\.(br)$/, /\.(gz)$/],
-        threshold: 10240,
+        threshold: 10_240,
       }),
     )
   }
@@ -87,7 +87,7 @@ export function createSvgIconsPlugin(iconDirs: string[], isBuild = false): Plugi
 export function createOptimizeDeps(
   additionalIncludes: string[] = [],
   additionalExcludes: string[] = [],
-) {
+): { include: string[]; exclude: string[] } {
   return {
     include: [
       // Vue 生态

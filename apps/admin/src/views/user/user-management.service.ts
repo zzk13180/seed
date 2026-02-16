@@ -9,13 +9,13 @@ import {
   apiResetUserPassword,
 } from '@/api/user.api'
 import type {
-  UserStatus,
-  IUserVo,
-  IUserQueryDto,
-  IUserCreateDto,
-  IUserUpdateDto,
-  IPageResult,
-} from '@seed/api-types'
+  UserVO,
+  UserQuery as UserQueryDto,
+  UserCreateDto,
+  UserUpdateDto,
+  PageResult,
+} from '@seed/contracts'
+import type { UserStatus } from '@seed/contracts'
 import type {
   UserManagementApiService,
   MessageService,
@@ -26,31 +26,31 @@ import type {
  * HTTP 用户管理 API 服务实现
  */
 export class HttpUserManagementApiService implements UserManagementApiService {
-  async getPage(params: IUserQueryDto): Promise<IPageResult<IUserVo>> {
+  async getPage(params: UserQueryDto): Promise<PageResult<UserVO>> {
     return apiGetUserPage(params)
   }
 
-  async create(params: IUserCreateDto): Promise<IUserVo> {
+  async create(params: UserCreateDto): Promise<UserVO> {
     return apiCreateUser(params)
   }
 
-  async update(id: number, params: IUserUpdateDto): Promise<IUserVo> {
+  async update(id: string, params: UserUpdateDto): Promise<UserVO> {
     return apiUpdateUser(id, params)
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await apiDeleteUser(id)
   }
 
-  async deleteBatch(ids: number[]): Promise<void> {
+  async deleteBatch(ids: string[]): Promise<void> {
     await apiDeleteUserBatch(ids)
   }
 
-  async updateStatus(id: number, status: UserStatus): Promise<void> {
+  async updateStatus(id: string, status: UserStatus): Promise<void> {
     await apiUpdateUserStatus(id, status)
   }
 
-  async resetPassword(id: number, password: string): Promise<void> {
+  async resetPassword(id: string, password: string): Promise<void> {
     await apiResetUserPassword(id, password)
   }
 }

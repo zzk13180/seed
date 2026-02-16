@@ -80,6 +80,7 @@ export default {
 
     // 规则空行
     'rule-empty-line-before': ['always', { ignore: ['after-comment', 'first-nested'] }],
+    'at-rule-empty-line-before': null,
 
     // 单位
     'unit-no-unknown': [true, { ignoreUnits: ['rpx'] }],

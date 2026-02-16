@@ -4,7 +4,7 @@
  *
  * 架构说明：
  * - 使用工厂模式创建 ViewManager 和 GridManager
- * - 通过 Env 依赖注入，支持测试时替换实现
+ * - 通过 Deps 依赖注入，支持测试时替换实现
  * - ViewManager/GridManager 提供抽象接口，隐藏实现细节
  */
 
@@ -179,11 +179,11 @@ export interface MapApiService {
 }
 
 /**
- * Map 模块环境依赖
+ * Map 模块依赖
  *
- * 所有外部依赖通过 Env 注入，便于测试和替换实现
+ * 所有外部依赖通过 Deps 注入，便于测试和替换实现
  */
-export interface MapEnv {
+export interface MapDeps {
   /** 日志服务 */
   logger: Logger
 

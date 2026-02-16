@@ -16,8 +16,8 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { createLogger } from '@/core/logger.service'
 import { LazyRouterNavigationService } from '@/core/navigation.service'
 import { UserController } from './user.controller'
-import { HttpAuthService, LocalStorageService } from './user.service'
-import type { UserState, UserEnv } from './user.types'
+import { BetterAuthService, LocalStorageService } from './user.service'
+import type { UserState, UserDeps } from './user.types'
 import type { Router } from 'vue-router'
 
 // router 实例引用（由 main.ts 注入）
@@ -41,12 +41,12 @@ function getRouter(): Router {
 }
 
 /**
- * 创建环境依赖（使用懒加载导航服务避免循环依赖）
+ * 创建依赖（使用懒加载导航服务避免循环依赖）
  */
-function createEnv(): UserEnv {
+function createDeps(): UserDeps {
   return {
     logger: createLogger('User'),
-    authService: new HttpAuthService(),
+    authService: new BetterAuthService(),
     storageService: new LocalStorageService(),
     // 使用懒加载导航服务，router 在首次导航时才获取
     navigation: new LazyRouterNavigationService(() => getRouter()),
@@ -67,17 +67,19 @@ export const useUserStore = defineStore('user', () => {
     loading: false,
   })
 
-  // 延迟创建环境依赖，避免循环引用问题
-  const env = createEnv()
+  // 延迟创建依赖，避免循环引用问题
+  const deps = createDeps()
 
   // Controller（使用 markRaw 避免响应式包装）
-  const controller = markRaw(new UserController(state, env))
+  const controller = markRaw(new UserController(state, deps))
 
   // 计算属性（便于模板绑定）
   const isLoggedIn = computed(() => controller.isLoggedIn)
   const username = computed(() => controller.username)
   const nickname = computed(() => controller.nickname)
   const avatar = computed(() => controller.avatar)
+  const role = computed(() => controller.role)
+  const isAdmin = computed(() => controller.isAdmin)
 
   return {
     state,
@@ -87,6 +89,8 @@ export const useUserStore = defineStore('user', () => {
     username,
     nickname,
     avatar,
+    role,
+    isAdmin,
   }
 })
 

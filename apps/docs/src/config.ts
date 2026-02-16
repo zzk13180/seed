@@ -2,51 +2,89 @@ export const BASE = 'seed'
 
 export const SITE = {
   title: 'Seed Docs',
-  description: 'Documentation template for your project.',
-  defaultLanguage: 'zh_CN',
+  description: '企业级全栈多平台开发模板文档',
+  defaultLanguage: 'zh-cn',
+  author: 'Seed Team',
+  repo: 'https://github.com/your-org/seed',
 }
 
-// This is the type of the frontmatter you put in the docs markdown files.
-export type Frontmatter = {
-  title: string
-  description: string
-  layout: string
-  image?: { src: string; alt: string }
-  dir?: 'ltr' | 'rtl'
-  ogLocale?: string
-  lang?: string
-}
-
-export const KNOWN_LANGUAGES = {
-  中文: 'zh_CN',
-  English: 'en',
+// 支持的语言配置
+export const LANGUAGES = {
+  'zh-cn': {
+    label: '中文',
+    lang: 'zh-CN',
+  },
+  en: {
+    label: 'English',
+    lang: 'en-US',
+  },
 } as const
-export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES)
 
-export const GITHUB_EDIT_URL = 'https://github.com/your-org/your-repo/tree/main/apps/docs'
+export type LanguageCode = keyof typeof LANGUAGES
+export const LANGUAGE_CODES = Object.keys(LANGUAGES) as LanguageCode[]
 
-// See "Algolia" section of the README for more information.
+// 文档编辑链接
+export const GITHUB_EDIT_URL = 'https://github.com/your-org/seed/tree/main/apps/docs'
+
+// Algolia DocSearch 配置（需要申请）
 export const ALGOLIA = {
-  indexName: 'XXXXXXXXXX',
+  indexName: 'seed-docs',
   appId: 'XXXXXXXXXX',
   apiKey: 'XXXXXXXXXX',
 }
 
-export type Sidebar = Record<
-  (typeof KNOWN_LANGUAGE_CODES)[number],
-  Record<string, { text: string; link: string }[]>
->
-export const SIDEBAR: Sidebar = {
-  zh_CN: {
+// 侧边栏配置
+export type SidebarItem = {
+  text: string
+  link?: string
+  items?: SidebarItem[]
+}
+
+export type SidebarConfig = Record<LanguageCode, Record<string, SidebarItem[]>>
+
+export const SIDEBAR: SidebarConfig = {
+  'zh-cn': {
     快速开始: [
-      { text: '介绍', link: 'zh_CN/introduction' },
-      { text: '快速开始', link: 'zh_CN/getting-started' },
+      { text: '介绍', link: '/zh-cn/introduction/' },
+      { text: '快速开始', link: '/zh-cn/getting-started/' },
+    ],
+    开发指南: [
+      { text: '项目结构', link: '/zh-cn/project-structure/' },
+      { text: '前端开发', link: '/zh-cn/frontend/' },
+      { text: '后端开发', link: '/zh-cn/backend/' },
+    ],
+    进阶: [
+      { text: '架构设计', link: '/zh-cn/architecture/' },
+      { text: '编码规范', link: '/zh-cn/conventions/' },
+      { text: '部署指南', link: '/zh-cn/deployment/' },
     ],
   },
   en: {
     'Getting Started': [
-      { text: 'Introduction', link: 'en/introduction' },
-      { text: 'Quick Start', link: 'en/getting-started' },
+      { text: 'Introduction', link: '/en/introduction/' },
+      { text: 'Quick Start', link: '/en/getting-started/' },
+    ],
+    Development: [
+      { text: 'Project Structure', link: '/en/project-structure/' },
+      { text: 'Frontend', link: '/en/frontend/' },
+      { text: 'Backend', link: '/en/backend/' },
+    ],
+    Advanced: [
+      { text: 'Architecture', link: '/en/architecture/' },
+      { text: 'Conventions', link: '/en/conventions/' },
+      { text: 'Deployment', link: '/en/deployment/' },
     ],
   },
+}
+
+// 导航栏配置
+export const NAV_LINKS = {
+  'zh-cn': [
+    { text: '文档', link: '/zh-cn/introduction/' },
+    { text: 'GitHub', link: SITE.repo, external: true },
+  ],
+  en: [
+    { text: 'Docs', link: '/en/introduction/' },
+    { text: 'GitHub', link: SITE.repo, external: true },
+  ],
 }

@@ -44,5 +44,5 @@
       }
     }
   },
-  "tags": ["type:app", "platform:web"]
+  "tags": ["type:app", "platform:web", "framework:vue"]
 }

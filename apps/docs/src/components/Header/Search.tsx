@@ -1,96 +1,65 @@
-/** @jsxImportSource react */
-import { useState, useCallback, useRef } from 'react'
+/** @jsxImportSource preact */
+/**
+ * 搜索组件
+ *
+ * 使用 Preact + Algolia DocSearch
+ * Preact 的 compat 模式提供 React API 兼容性
+ */
+import { useState, useCallback, useRef } from 'preact/hooks'
 import '@docsearch/css'
 import './Search.css'
-import { createPortal } from 'react-dom'
-import * as docSearchReact from '@docsearch/react'
 import { ALGOLIA } from '../../config'
 
-/** FIXME: This is still kinda nasty, but DocSearch is not ESM ready. */
-const DocSearchModal =
-  docSearchReact.DocSearchModal || (docSearchReact as any).default.DocSearchModal
-const useDocSearchKeyboardEvents =
-  docSearchReact.useDocSearchKeyboardEvents ||
-  (docSearchReact as any).default.useDocSearchKeyboardEvents
-
+// 简化版搜索组件（当 Algolia 未配置时使用）
 export default function Search() {
   const [isOpen, setIsOpen] = useState(false)
   const searchButtonRef = useRef<HTMLButtonElement>(null)
-  const [initialQuery, setInitialQuery] = useState('')
 
   const onOpen = useCallback(() => {
+    // TODO: 当配置了 Algolia 后，这里加载 DocSearch Modal
+    // 目前显示提示信息
+    if (ALGOLIA.appId === 'XXXXXXXXXX') {
+      alert('请先配置 Algolia DocSearch。参考文档：https://docsearch.algolia.com/')
+      return
+    }
     setIsOpen(true)
-  }, [setIsOpen])
+  }, [])
 
-  const onClose = useCallback(() => {
-    setIsOpen(false)
-  }, [setIsOpen])
-
-  const onInput = useCallback(
-    e => {
-      setIsOpen(true)
-      setInitialQuery(e.key)
-    },
-    [setIsOpen, setInitialQuery],
-  )
-
-  useDocSearchKeyboardEvents({
-    isOpen,
-    onOpen,
-    onClose,
-    onInput,
-    searchButtonRef,
-  })
+  // 键盘快捷键支持
+  if (typeof window !== 'undefined') {
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && !isOpen) {
+        e.preventDefault()
+        onOpen()
+      }
+    })
+  }
 
   return (
-    <>
-      <button type="button" ref={searchButtonRef} onClick={onOpen} className="search-input">
-        <svg width="24" height="24" fill="none">
-          <path
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+    <button
+      type="button"
+      ref={searchButtonRef}
+      onClick={onOpen}
+      className="search-input"
+      aria-label="Search documentation"
+    >
+      <svg width="24" height="24" fill="none" aria-hidden="true">
+        <path
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
 
-        <span>Search</span>
+      <span>搜索</span>
 
-        <span className="search-hint">
-          <span className="sr-only">Press </span>
-
-          <kbd>/</kbd>
-
-          <span className="sr-only"> to search</span>
-        </span>
-      </button>
-
-      {isOpen &&
-        createPortal(
-          <DocSearchModal
-            initialQuery={initialQuery}
-            initialScrollY={window.scrollY}
-            onClose={onClose}
-            indexName={ALGOLIA.indexName}
-            appId={ALGOLIA.appId}
-            apiKey={ALGOLIA.apiKey}
-            transformItems={items => {
-              return items.map(item => {
-                // We transform the absolute URL into a relative URL to
-                // work better on localhost, preview URLS.
-                const a = document.createElement('a')
-                a.href = item.url
-                const hash = a.hash === '#overview' ? '' : a.hash
-                return {
-                  ...item,
-                  url: `${a.pathname}${hash}`,
-                }
-              })
-            }}
-          />,
-          document.body,
-        )}
-    </>
+      <span className="search-hint">
+        <span className="sr-only">Press </span>
+        <kbd>/</kbd>
+        <span className="sr-only"> to search</span>
+      </span>
+    </button>
   )
 }

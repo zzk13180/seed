@@ -1,0 +1,90 @@
+---
+title: 快速开始
+description: 在几分钟内启动 Seed 项目
+order: 2
+category: 快速开始
+tags:
+  - 安装
+  - 配置
+---
+
+## 环境要求
+
+在开始之前，请确保您的开发环境满足以下要求：
+
+| 工具        | 版本要求     | 说明                     |
+| ----------- | ------------ | ------------------------ |
+| **Node.js** | `>= 22.x`    | 推荐使用 LTS 版本        |
+| **pnpm**    | `>= 10.10.0` | 高效的包管理器           |
+| **Rust**    | `>= 1.75`    | Desktop 应用开发（可选） |
+| **Docker**  | `>= 24.x`    | 本地开发数据库（可选）   |
+
+## 安装步骤
+
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/your-org/seed.git
+cd seed
+```
+
+### 2. 安装依赖
+
+```bash
+# 使用 pnpm 安装所有依赖
+pnpm install
+```
+
+### 3. 配置环境变量
+
+```bash
+# 复制环境配置模板
+cp apps/server/.env.example apps/server/.env
+
+# 编辑配置文件，填写必要的配置项
+# 如：数据库连接、JWT 密钥等
+```
+
+### 4. 启动开发服务器
+
+```bash
+# 启动 Admin 控制台
+nx dev @seed/admin
+
+# 启动 Server API（另一个终端）
+nx dev @seed/server
+```
+
+🎉 访问 [http://localhost:5173](http://localhost:5173) 查看 Admin 控制台！
+
+## 常用命令
+
+```bash
+# Nx 命令 (推荐)
+nx dev @seed/admin          # 开发 admin
+nx dev @seed/server         # 开发 server
+nx build @seed/admin        # 构建单个项目
+nx run-many -t build        # 构建所有项目
+nx graph                    # 查看依赖图
+
+# 测试
+pnpm test                   # 运行所有测试
+nx test @seed/server        # 运行单项目测试
+
+# 代码质量
+pnpm lint                   # ESLint + Stylelint + Prettier
+pnpm type-check             # 全量类型检查
+
+# 数据库管理
+cd apps/server
+pnpm db:generate            # 生成迁移
+pnpm db:migrate             # 执行迁移
+pnpm db:studio              # Drizzle Studio
+pnpm docker:db              # 启动本地 PostgreSQL
+```
+
+## 下一步
+
+- [项目结构](/seed/zh-cn/project-structure/) - 了解代码组织方式
+- [前端开发](/seed/zh-cn/frontend/) - 学习 Controller + Store 模式
+- [后端开发](/seed/zh-cn/backend/) - 探索 Hono 模块化架构

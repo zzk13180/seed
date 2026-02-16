@@ -10,6 +10,7 @@ declare module 'diff-match-patch' {
       text2?: string | Array<[number, string]>,
       diffs?: Array<[number, string]>,
     ): Array<patch_obj>
+
     patch_apply(patches: Array<patch_obj>, text: string): [string, boolean[]]
     patch_toText(patches: Array<patch_obj>): string
     patch_fromText(text: string): Array<patch_obj>

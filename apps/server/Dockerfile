@@ -1,40 +1,42 @@
-FROM node:lts-alpine AS builder
+# ========================================
+# Build Stage
+# ========================================
+FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
-# Enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Copy workspace root files
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
-# Copy source
-COPY . .
+# Copy workspace packages needed by server
+COPY packages/contracts/ ./packages/contracts/
+COPY packages/kit/ ./packages/kit/
+COPY packages/db/ ./packages/db/
+COPY packages/services/ ./packages/services/
+COPY packages/libs/types/ ./packages/libs/types/
+COPY packages/configs/ ./packages/configs/
+COPY apps/server/ ./apps/server/
 
-# Install dependencies and build
-RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @seed/server build
-
-# Use pnpm deploy to generate a pruned production package
-# This converts symlinked monorepo packages into physical files in node_modules
-RUN pnpm --filter @seed/server --prod deploy pruned
+# Install dependencies
+RUN bun install --frozen-lockfile
 
 # ========================================
 # Production Stage
 # ========================================
-FROM node:lts-alpine AS runner
+FROM oven/bun:latest AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy the pruned lockfile and install prod dependencies (if deploy didn't fully install)
-# Or simply copy the deployed folder which includes node_modules
-COPY --from=builder /app/pruned .
+# Copy everything from builder (Bun runs TS directly, no build step needed)
+COPY --from=builder /app .
 
-# Copy the built dist artifacts (overlaying the source code)
-COPY --from=builder /app/apps/server/dist ./dist
+WORKDIR /app/apps/server
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3003/api/health || exit 1
+  CMD bun -e "fetch('http://localhost:3003/api/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"
 
 EXPOSE 3003
-CMD ["node", "dist/main"]
+CMD ["bun", "run", "src/main.ts"]
 

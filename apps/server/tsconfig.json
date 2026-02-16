@@ -1,22 +1,15 @@
 {
   "extends": "@seed/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "noEmit": false,
     "moduleResolution": "bundler",
     "module": "esnext",
-    "declaration": true,
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
     "target": "ES2023",
-    "outDir": "./dist",
-    "incremental": true,
-    "strictNullChecks": true,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
+    "strict": true,
     "esModuleInterop": true,
-    "types": ["node"],
+    "types": ["bun", "@seed/types"],
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src", "*.ts"]
 }

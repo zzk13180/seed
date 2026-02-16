@@ -1,21 +1,17 @@
 /**
  * API 类型定义
  *
- * 从 @seed/api-types 重新导出共享类型
+ * 从 @seed/kit 重新导出共享类型
  */
 
-export { UserStatus } from '@seed/api-types/enums'
+export { UserStatus } from '@seed/contracts'
 export type {
-  ApiResponse,
-  IPageRequest,
-  IPageResult,
-  IUserVo,
-  IUserQueryDto,
-  IUserCreateDto,
-  IUserUpdateDto,
-  ILoginDto,
-  ILoginVo,
-} from '@seed/api-types'
+  PageResult,
+  UserVO,
+  UserQuery as UserQueryDto,
+  UserCreateDto,
+  UserUpdateDto,
+} from '@seed/contracts'
 
 // ============================================================================
 // Admin 特有的类型定义

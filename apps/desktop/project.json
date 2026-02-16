@@ -18,7 +18,7 @@
         "command": "cargo tauri build",
         "cwd": "apps/desktop/crates/seed"
       },
-      "outputs": ["{projectRoot}/crates/seed/target"]
+      "outputs": ["{workspaceRoot}/target"]
     }
   },
   "tags": ["type:app", "platform:desktop", "framework:tauri"]

@@ -31,9 +31,9 @@ export interface ThemeService {
 }
 
 /**
- * App 模块环境依赖
+ * App 模块依赖
  */
-export interface AppEnv {
+export interface AppDeps {
   logger: Logger
   themeService: ThemeService
 }

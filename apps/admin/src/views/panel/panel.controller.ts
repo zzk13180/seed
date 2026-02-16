@@ -1,5 +1,5 @@
 import { BaseController } from '@/core/base.controller'
-import type { PanelState, PanelEnv, RobotInfo } from './panel.types'
+import type { PanelState, PanelDeps, RobotInfo } from './panel.types'
 
 /**
  * PanelController - 继承 BaseController 获得生命周期管理
@@ -12,7 +12,7 @@ import type { PanelState, PanelEnv, RobotInfo } from './panel.types'
  * 如果未来迁移到 React/Svelte，只需要重写 Store 适配层，
  * 这个 Controller 可以完全复用。
  */
-export class PanelController extends BaseController<PanelState, PanelEnv> {
+export class PanelController extends BaseController<PanelState, PanelDeps> {
   private refreshTimer: ReturnType<typeof setInterval> | null = null
 
   /**
@@ -37,14 +37,14 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
     this.state.errorMessage = null
 
     try {
-      const info = await this.env.apiService.fetchRobotInfo()
+      const info = await this.deps.apiService.fetchRobotInfo()
       this.state.robotInfo = info
-      this.env.logger.debug('Robot info loaded', info)
+      this.deps.logger.debug('Robot info loaded', info)
     } catch (error) {
       // 使用统一的错误处理服务获取用户友好的错误消息
-      const message = this.env.errorHandler.getUserMessage(error)
+      const message = this.deps.errorHandler.getUserMessage(error)
       this.state.errorMessage = message
-      this.env.logger.error('Failed to load robot info', error)
+      this.deps.logger.error('Failed to load robot info', error)
     } finally {
       this.state.loading = false
     }
@@ -57,14 +57,14 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
     this.state.loading = true
 
     try {
-      const updated = await this.env.apiService.updateRobotInfo(info)
+      const updated = await this.deps.apiService.updateRobotInfo(info)
       this.state.robotInfo = updated
-      this.env.logger.info('Robot info updated', updated)
+      this.deps.logger.info('Robot info updated', updated)
     } catch (error) {
       // 使用统一的错误处理服务获取用户友好的错误消息
-      const message = this.env.errorHandler.getUserMessage(error)
+      const message = this.deps.errorHandler.getUserMessage(error)
       this.state.errorMessage = message
-      this.env.logger.error('Failed to update robot info', error)
+      this.deps.logger.error('Failed to update robot info', error)
       throw error
     } finally {
       this.state.loading = false
@@ -82,7 +82,7 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
    * 初始化逻辑
    */
   protected async onInit(): Promise<void> {
-    this.env.logger.info('PanelController initializing')
+    this.deps.logger.info('PanelController initializing')
 
     // 加载机器人信息
     await this.loadRobotInfo()
@@ -91,29 +91,29 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
     this.startAutoRefresh(30_000)
 
     // 连接 WebSocket（如果有服务）
-    if (this.env.wsService) {
+    if (this.deps.wsService) {
       this.connectWebSocket()
     }
 
-    this.env.logger.info('PanelController initialized')
+    this.deps.logger.info('PanelController initialized')
   }
 
   /**
    * 销毁逻辑
    */
   protected onDispose(): Promise<void> {
-    this.env.logger.info('PanelController disposing')
+    this.deps.logger.info('PanelController disposing')
 
     // 停止定时刷新
     this.stopAutoRefresh()
 
     // 断开 WebSocket
-    if (this.env.wsService) {
-      this.env.wsService.disconnect()
+    if (this.deps.wsService) {
+      this.deps.wsService.disconnect()
       this.state.wsConnected = false
     }
 
-    this.env.logger.info('PanelController disposed')
+    this.deps.logger.info('PanelController disposed')
     return Promise.resolve()
   }
 
@@ -124,10 +124,10 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
     this.stopAutoRefresh()
     this.refreshTimer = setInterval(() => {
       this.loadRobotInfo().catch(error => {
-        this.env.logger.warn('Auto refresh failed', error)
+        this.deps.logger.warn('Auto refresh failed', error)
       })
     }, interval)
-    this.env.logger.debug('Auto refresh started', { interval })
+    this.deps.logger.debug('Auto refresh started', { interval })
   }
 
   /**
@@ -137,7 +137,7 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)
       this.refreshTimer = null
-      this.env.logger.debug('Auto refresh stopped')
+      this.deps.logger.debug('Auto refresh stopped')
     }
   }
 
@@ -145,22 +145,22 @@ export class PanelController extends BaseController<PanelState, PanelEnv> {
    * 连接 WebSocket
    */
   private connectWebSocket(): void {
-    if (!this.env.wsService) return
+    if (!this.deps.wsService) return
 
-    this.env.wsService.onMessage(data => {
+    this.deps.wsService.onMessage(data => {
       this.handleWsMessage(data)
     })
 
     // 实际连接逻辑可以根据需要添加
     this.state.wsConnected = true
-    this.env.logger.info('WebSocket connected')
+    this.deps.logger.info('WebSocket connected')
   }
 
   /**
    * 处理 WebSocket 消息
    */
   private handleWsMessage(data: unknown): void {
-    this.env.logger.debug('WebSocket message received', data)
+    this.deps.logger.debug('WebSocket message received', data)
     // 根据消息类型处理
     if (typeof data === 'object' && data !== null && 'robotInfo' in data) {
       this.state.robotInfo = {

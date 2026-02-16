@@ -4,11 +4,11 @@ import { createLogger } from '@/core/logger.service'
 import { errorHandler } from '@/core/error.service'
 import { PanelController } from './panel.controller'
 import { MockPanelApiService } from './panel.service'
-import type { PanelState, PanelEnv } from './panel.types'
+import type { PanelState, PanelDeps } from './panel.types'
 import type { PanelController as PanelControllerType } from './panel.controller'
 
-// 组装环境依赖
-const env: PanelEnv = {
+// 组装依赖
+const deps: PanelDeps = {
   logger: createLogger('Panel'),
   apiService: new MockPanelApiService(),
   // wsService: new WebSocketPanelService(), // 可选
@@ -37,7 +37,7 @@ export const usePanelStore = defineStore('panel', () => {
   })
 
   // Controller（使用 shallowRef 支持 HMR 替换）
-  const controllerRef = shallowRef(new PanelController(state, env))
+  const controllerRef = shallowRef(new PanelController(state, deps))
 
   // 计算属性（便于模板绑定）
   const robotId = computed(() => controllerRef.value.robotId)
@@ -49,8 +49,8 @@ export const usePanelStore = defineStore('panel', () => {
   if (import.meta.hot) {
     _hotReplaceController = (NewControllerClass: typeof PanelController) => {
       void controllerRef.value.dispose() // 清理旧实例
-      controllerRef.value = new NewControllerClass(state, env) // 注入相同的 state 和 env
-      env.logger.info('PanelController instance has been updated via HMR.')
+      controllerRef.value = new NewControllerClass(state, deps) // 注入相同的 state 和 deps
+      deps.logger.info('PanelController instance has been updated via HMR.')
     }
   }
 

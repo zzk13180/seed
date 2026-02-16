@@ -1,65 +1,41 @@
-import { $http } from '@seed/http'
-import { AccessTokenUtil } from '@/utils/token.util'
-import type { ILoginDto, ILoginVo, IUserVo } from '@seed/api-types'
-import type { AuthService, StorageService } from './user.types'
+import { authClient } from '@/api/auth-client'
+import type { UserVO } from '@seed/contracts'
+import type { AuthService, LoginParams, StorageService } from './user.types'
 
 /**
- * HTTP 认证服务实现
+ * Better Auth 认证服务实现
+ *
+ * 使用 cookie-session 模式:
+ * - 登录后浏览器自动携带 session cookie
+ * - 无需手动管理 token
  */
-export class HttpAuthService implements AuthService {
-  async login(params: ILoginDto): Promise<ILoginVo> {
-    const response = await $http.post<{ data: ILoginVo }>('/auth/login', params)
-    const { accessToken, refreshToken, expiresIn } = response.data
+export class BetterAuthService implements AuthService {
+  async login(params: LoginParams): Promise<UserVO> {
+    const { data, error } = await authClient.signIn.email({
+      email: params.email,
+      password: params.password,
+    })
 
-    // 保存令牌
-    AccessTokenUtil.setTokens(accessToken, refreshToken, expiresIn)
+    if (error) {
+      throw new Error(error.message ?? '登录失败')
+    }
 
-    // 设置 HTTP 客户端 Authorization 头
-    $http.setAuthorization(accessToken)
-
-    return response.data
+    return data.user as unknown as UserVO
   }
 
   async logout(): Promise<void> {
-    try {
-      await $http.post('/auth/logout')
-    } finally {
-      AccessTokenUtil.clear()
-      $http.clearAuthorization()
-    }
+    await authClient.signOut()
   }
 
-  async getCurrentUser(): Promise<IUserVo> {
-    const response = await $http.get<{ data: IUserVo }>('/auth/me')
-    return response.data
+  async getCurrentUser(): Promise<UserVO | null> {
+    const { data } = await authClient.getSession()
+    if (!data?.user) return null
+    return data.user as unknown as UserVO
   }
 
-  async refreshToken(): Promise<ILoginVo> {
-    const refreshToken = AccessTokenUtil.refreshToken
-    if (!refreshToken) {
-      throw new Error('No refresh token available')
-    }
-
-    const response = await $http.post<{ data: ILoginVo }>('/auth/refresh', { refreshToken })
-    const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data
-
-    AccessTokenUtil.setTokens(accessToken, newRefreshToken, expiresIn)
-    $http.setAuthorization(accessToken)
-
-    return response.data
-  }
-
-  isAuthenticated(): boolean {
-    return AccessTokenUtil.isAuthenticated
-  }
-
-  initAuth(): boolean {
-    const token = AccessTokenUtil.token
-    if (token && !AccessTokenUtil.isExpired) {
-      $http.setAuthorization(token)
-      return true
-    }
-    return false
+  async isAuthenticated(): Promise<boolean> {
+    const { data } = await authClient.getSession()
+    return !!data?.session
   }
 }
 

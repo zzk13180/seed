@@ -1,47 +1,83 @@
 ---
+/**
+ * 主布局组件
+ * 
+ * Astro 5.x 最佳实践：
+ * - 使用 Props 接口定义类型
+ * - 响应式侧边栏设计
+ * - CSS Grid 现代布局
+ */
 import HeadCommon from "../components/HeadCommon.astro";
 import Header from "../components/Header/Header.astro";
 import PageContent from "../components/PageContent/PageContent.astro";
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
-import * as CONFIG from "../config";
 import Footer from "../components/Footer/Footer.astro";
+import { SITE, GITHUB_EDIT_URL } from "../config";
 import Meta from "./Meta.astro";
 import type { MarkdownHeading } from "astro";
 
-type Props = {
-  frontmatter: CONFIG.Frontmatter;
+interface Props {
+  title: string;
+  description: string;
   headings: MarkdownHeading[];
-};
+  lang?: string;
+  dir?: 'ltr' | 'rtl';
+}
 
-const { frontmatter, headings } = Astro.props as Props;
+const { 
+  title, 
+  description, 
+  headings, 
+  lang = 'zh-CN',
+  dir = 'ltr' 
+} = Astro.props;
+
 const currentPage = Astro.url.pathname;
-const currentFile = `src/pages${currentPage.replace(/\/$/, "")}.md`;
-const githubEditUrl = `${CONFIG.GITHUB_EDIT_URL}/${currentFile}`;
+const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
+
+// 生成 GitHub 编辑链接
+const contentPath = currentPage.replace('/seed/', '').replace(/\/$/, '');
+const githubEditUrl = `${GITHUB_EDIT_URL}/src/content/docs/${contentPath}.mdx`;
 ---
 
-<html
-  dir={frontmatter.dir ?? "ltr"}
-  lang={frontmatter.lang ?? "en-us"}
-  class="initial"
->
+<html dir={dir} lang={lang} class="initial">
   <head>
     <HeadCommon />
     <Meta />
-    <title>
-      {
-        frontmatter.title
-          ? `${frontmatter.title} · ${CONFIG.SITE.title}`
-          : CONFIG.SITE.title
-      }
-    </title>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+  </head>
+
+  <body>
+    <Header currentPage={currentPage} />
+    <main class="layout">
+      <aside id="grid-left" class="grid-sidebar" title="Site Navigation">
+        <LeftSidebar currentPage={currentPage} />
+      </aside>
+      <div id="grid-main">
+        <PageContent
+          title={title}
+          headings={headings}
+          githubEditUrl={githubEditUrl}
+        >
+          <slot />
+        </PageContent>
+      </div>
+      <aside id="grid-right" class="grid-sidebar" title="Table of Contents">
+        <RightSidebar headings={headings} githubEditUrl={githubEditUrl} />
+      </aside>
+    </main>
+    <Footer />
+
     <style>
       body {
         width: 100%;
         display: grid;
-        grid-template-rows: var(--theme-navbar-height) 1fr;
+        grid-template-rows: var(--theme-navbar-height) 1fr auto;
         --gutter: 0.5rem;
         --doc-padding: 2rem;
+        min-height: 100vh;
       }
 
       .layout {
@@ -108,6 +144,7 @@ const githubEditUrl = `${CONFIG.GITHUB_EDIT_URL}/${currentFile}`;
         }
       }
     </style>
+
     <style is:global>
       .layout > * {
         width: 100%;
@@ -123,31 +160,10 @@ const githubEditUrl = `${CONFIG.GITHUB_EDIT_URL}/${currentFile}`;
         top: 2rem;
       }
     </style>
+
     <script>
       import "@scripts/lenisSmoothScroll.js";
       import "@scripts/fonts.js";
     </script>
-  </head>
-
-  <body>
-    <Header currentPage={currentPage} />
-    <main class="layout">
-      <aside id="grid-left" class="grid-sidebar" title="Site Navigation">
-        <LeftSidebar currentPage={currentPage} />
-      </aside>
-      <div id="grid-main">
-        <PageContent
-          frontmatter={frontmatter}
-          headings={headings}
-          githubEditUrl={githubEditUrl}
-        >
-          <slot />
-        </PageContent>
-      </div>
-      <aside id="grid-right" class="grid-sidebar" title="Table of Contents">
-        <RightSidebar headings={headings} githubEditUrl={githubEditUrl} />
-      </aside>
-    </main>
-    <Footer path={currentFile} />
   </body>
 </html>

@@ -5,6 +5,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [".", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "*.d.ts"],
+  "include": ["src", "*.ts", "vite-config"],
   "exclude": ["dist", "build", "node_modules"]
 }

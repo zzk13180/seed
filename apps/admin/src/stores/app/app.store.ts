@@ -15,10 +15,10 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { createLogger } from '@/core/logger.service'
 import { AppController } from './app.controller'
 import { BrowserThemeService } from './app.service'
-import type { AppState, AppEnv } from './app.types'
+import type { AppState, AppDeps } from './app.types'
 
-// 组装环境依赖
-const env: AppEnv = {
+// 组装依赖
+const deps: AppDeps = {
   logger: createLogger('App'),
   themeService: new BrowserThemeService('Seed Admin'),
 }
@@ -40,7 +40,7 @@ export const useAppStore = defineStore('app', () => {
   })
 
   // Controller（使用 markRaw 避免响应式包装）
-  const controller = markRaw(new AppController(state, env))
+  const controller = markRaw(new AppController(state, deps))
 
   return {
     state,

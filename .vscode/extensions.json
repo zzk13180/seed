@@ -20,9 +20,6 @@
     "esbenp.prettier-vscode",
     "stylelint.vscode-stylelint",
 
-    // NestJS
-    "ashinzekene.nestjs",
-
     // Rust (Tauri)
     "rust-lang.rust-analyzer",
     "tauri-apps.tauri-vscode",

@@ -1,3 +1,1 @@
-import Chat from './libs/CustomUI.svelte'
-
-export default Chat
+export { default } from './libs/CustomUI.svelte'

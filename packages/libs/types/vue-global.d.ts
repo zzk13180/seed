@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/unused-import */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type {
   App,

@@ -4,15 +4,15 @@ import { createLogger } from '@/core/logger.service'
 import { RouterNavigationService } from '@/core/navigation.service'
 import { errorHandler } from '@/core/error.service'
 import { router } from '@/pages/router'
-import { HttpAuthService, LocalStorageService } from '@/stores/user/user.service'
+import { BetterAuthService, LocalStorageService } from '@/stores/user/user.service'
 import { LoginController } from './login.controller'
 import { ElementMessageService } from './login.service'
-import type { LoginState, LoginEnv } from './login.types'
+import type { LoginState, LoginDeps } from './login.types'
 
-// 组装环境依赖
-const env: LoginEnv = {
+// 组装依赖
+const deps: LoginDeps = {
   logger: createLogger('Login'),
-  authService: new HttpAuthService(),
+  authService: new BetterAuthService(),
   storageService: new LocalStorageService(),
   navigation: new RouterNavigationService(router),
   messageService: new ElementMessageService(),
@@ -30,7 +30,7 @@ export const useLoginStore = defineStore('login', () => {
   // 状态（响应式）
   const state = reactive<LoginState>({
     form: {
-      username: 'admin',
+      email: 'admin@seed.dev',
       password: 'admin123',
       rememberMe: false,
     },
@@ -39,7 +39,7 @@ export const useLoginStore = defineStore('login', () => {
   })
 
   // Controller（使用 markRaw 避免响应式包装）
-  const controller = markRaw(new LoginController(state, env))
+  const controller = markRaw(new LoginController(state, deps))
 
   return {
     state,

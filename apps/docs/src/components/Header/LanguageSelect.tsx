@@ -1,10 +1,17 @@
-/** @jsxImportSource react */
-import { KNOWN_LANGUAGES, langPathRegex } from '../../languages'
+/** @jsxImportSource preact */
+/**
+ * 语言切换组件
+ *
+ * 使用 Preact 以减少打包体积
+ */
+import { LANGUAGES, BASE } from '../../config'
 import './LanguageSelect.css'
-import { BASE } from '../../config'
-import type { FunctionComponent } from 'react'
+import type { FunctionalComponent } from 'preact'
 
-const LanguageSelect: FunctionComponent<{ lang: string }> = ({ lang }) => {
+// 语言路径正则
+const langPathRegex = /\/(?:zh-cn|en)\//
+
+const LanguageSelect: FunctionalComponent<{ lang: string }> = ({ lang }) => {
   return (
     <div className="language-select-wrapper">
       <svg
@@ -22,30 +29,29 @@ const LanguageSelect: FunctionComponent<{ lang: string }> = ({ lang }) => {
         />
         <path
           fill="currentColor"
-          d="M53.6,60.6c-10-4-16-9-22-14c0,0,1.3,1.3,0,0c-6,5-20,13-20,13l-4-6c8-5,10-6,19-13c-2.1-1.9-12-13-13-19h8          c4,9,10,14,10,14c10-8,10-19,10-19h8c0,0-1,13-12,24l0,0c5,5,10,9,19,13L53.6,60.6z M1.6,16.6h56v-8h-23v-7h-9v7h-24V16.6z"
+          d="M53.6,60.6c-10-4-16-9-22-14c0,0,1.3,1.3,0,0c-6,5-20,13-20,13l-4-6c8-5,10-6,19-13c-2.1-1.9-12-13-13-19h8c4,9,10,14,10,14c10-8,10-19,10-19h8c0,0-1,13-12,24l0,0c5,5,10,9,19,13L53.6,60.6z M1.6,16.6h56v-8h-23v-7h-9v7h-24V16.6z"
         />
       </svg>
       <select
         className="language-select"
         value={lang}
         onChange={e => {
-          const newLang = e.target.value
+          const target = e.target as HTMLSelectElement
+          const newLang = target.value
           let actualDest = window.location.pathname
             .replace(langPathRegex, '/')
             .replace(`/${BASE}`, '')
           if (actualDest === '/') {
-            actualDest = '/introduction'
+            actualDest = '/introduction/'
           }
           window.location.pathname = `${BASE}/${newLang}${actualDest}`
         }}
       >
-        {Object.entries(KNOWN_LANGUAGES).map(([key, value]) => {
-          return (
-            <option value={value} key={value}>
-              {key}
-            </option>
-          )
-        })}
+        {Object.entries(LANGUAGES).map(([code, config]) => (
+          <option value={code} key={code}>
+            {config.label}
+          </option>
+        ))}
       </select>
     </div>
   )

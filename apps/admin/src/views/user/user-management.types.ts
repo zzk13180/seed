@@ -1,32 +1,24 @@
 /**
  * UserManagement 模块的类型定义
  *
- * 使用 @seed/api-types 提供的共享类型，
+ * 使用 @seed/kit 提供的共享类型，
  * 本文件仅定义 UI 层特有的状态和接口
  */
 
+import type { UserStatus } from '@seed/contracts'
 import type { Logger } from '@/core/logger.service'
 import type { ErrorHandler } from '@/core/error.service'
 import type {
-  UserStatus,
-  IUserVo,
-  IUserCreateDto,
-  IUserUpdateDto,
-  IUserQueryDto,
-  IPageResult,
-} from '@seed/api-types'
+  UserVO,
+  UserCreateDto,
+  UserUpdateDto,
+  UserQuery as UserQueryDto,
+  PageResult,
+} from '@seed/contracts'
 
 // ============================================================================
-// 重新导出 @seed/api-types 中的类型
+// 重新导出 @seed/kit 中的类型
 // ============================================================================
-export { UserStatus } from '@seed/api-types/enums'
-export type {
-  IUserVo,
-  IUserCreateDto,
-  IUserUpdateDto,
-  IUserQueryDto,
-  IPageResult,
-} from '@seed/api-types'
 
 // ============================================================================
 // UI 层特有的类型定义
@@ -74,11 +66,11 @@ export interface PaginationState {
  */
 export interface UserManagementState {
   /** 用户列表 */
-  userList: IUserVo[]
+  userList: UserVO[]
   /** 是否正在加载 */
   loading: boolean
   /** 选中的用户 ID 列表 */
-  selectedIds: number[]
+  selectedIds: string[]
   /** 分页状态 */
   pagination: PaginationState
   /** 搜索表单 */
@@ -92,13 +84,13 @@ export interface UserManagementState {
   /** 是否为编辑模式 */
   isEdit: boolean
   /** 当前编辑的用户 ID */
-  currentUserId: number | null
+  currentUserId: string | null
   /** 表单提交中 */
   submitLoading: boolean
   /** 是否显示重置密码弹窗 */
   resetPasswordVisible: boolean
   /** 重置密码的用户 ID */
-  resetUserId: number | null
+  resetUserId: string | null
   /** 重置密码提交中 */
   resetLoading: boolean
   /** 错误信息 */
@@ -113,13 +105,13 @@ export interface UserManagementState {
  * 用户管理 API 服务接口
  */
 export interface UserManagementApiService {
-  getPage(params: IUserQueryDto): Promise<IPageResult<IUserVo>>
-  create(params: IUserCreateDto): Promise<IUserVo>
-  update(id: number, params: IUserUpdateDto): Promise<IUserVo>
-  delete(id: number): Promise<void>
-  deleteBatch(ids: number[]): Promise<void>
-  updateStatus(id: number, status: UserStatus): Promise<void>
-  resetPassword(id: number, password: string): Promise<void>
+  getPage(params: UserQueryDto): Promise<PageResult<UserVO>>
+  create(params: UserCreateDto): Promise<UserVO>
+  update(id: string, params: UserUpdateDto): Promise<UserVO>
+  delete(id: string): Promise<void>
+  deleteBatch(ids: string[]): Promise<void>
+  updateStatus(id: string, status: UserStatus): Promise<void>
+  resetPassword(id: string, password: string): Promise<void>
 }
 
 /**
@@ -140,12 +132,21 @@ export interface ConfirmService {
 }
 
 /**
- * UserManagement 模块环境依赖
+ * UserManagement 模块依赖
  */
-export interface UserManagementEnv {
+export interface UserManagementDeps {
   logger: Logger
   apiService: UserManagementApiService
   messageService: MessageService
   confirmService: ConfirmService
   errorHandler: ErrorHandler
 }
+
+export {
+  UserStatus,
+  type UserVO,
+  type UserCreateDto,
+  type UserUpdateDto,
+  type UserQuery as UserQueryDto,
+  type PageResult,
+} from '@seed/contracts'

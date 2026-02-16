@@ -1,6 +1,6 @@
 import { UserStatus } from './user-management.types'
-import type { IUserVo, IUserCreateDto, IUserUpdateDto } from '@seed/api-types'
-import type { UserManagementState, UserManagementEnv } from './user-management.types'
+import type { UserVO, UserCreateDto, UserUpdateDto } from '@seed/contracts'
+import type { UserManagementState, UserManagementDeps } from './user-management.types'
 
 /**
  * UserManagementController - 纯 TypeScript 类，不依赖任何框架
@@ -9,15 +9,15 @@ import type { UserManagementState, UserManagementEnv } from './user-management.t
  * - 管理用户列表 CRUD 操作
  * - 处理分页、搜索逻辑
  * - 表单状态管理
- * - 通过 Env 注入执行副作用
+ * - 通过 Deps 注入执行副作用
  */
 export class UserManagementController {
   private readonly state: UserManagementState
-  private readonly env: UserManagementEnv
+  private readonly deps: UserManagementDeps
 
-  constructor(state: UserManagementState, env: UserManagementEnv) {
+  constructor(state: UserManagementState, deps: UserManagementDeps) {
     this.state = state
-    this.env = env
+    this.deps = deps
   }
 
   /**
@@ -39,21 +39,22 @@ export class UserManagementController {
    */
   async fetchUserList(): Promise<void> {
     this.state.loading = true
-    this.env.logger.debug('Fetching user list')
+    this.deps.logger.debug('Fetching user list')
 
     try {
-      const result = await this.env.apiService.getPage({
+      const result = await this.deps.apiService.getPage({
         ...this.state.searchForm,
         page: this.state.pagination.page,
         pageSize: this.state.pagination.pageSize,
+        orderDirection: 'DESC' as const,
       })
 
       this.state.userList = result.list
       this.state.pagination.total = result.total
-      this.env.logger.debug('User list fetched', { total: result.total })
+      this.deps.logger.debug('User list fetched', { total: result.total })
     } catch (error) {
-      this.env.logger.error('Failed to fetch user list', error)
-      this.env.messageService.error('获取用户列表失败')
+      this.deps.logger.error('Failed to fetch user list', error)
+      this.deps.messageService.error('获取用户列表失败')
     } finally {
       this.state.loading = false
     }
@@ -97,7 +98,7 @@ export class UserManagementController {
   /**
    * 选择变化
    */
-  handleSelectionChange(selection: IUserVo[]): void {
+  handleSelectionChange(selection: UserVO[]): void {
     this.state.selectedIds = selection.map(item => item.id)
   }
 
@@ -114,12 +115,12 @@ export class UserManagementController {
   /**
    * 打开编辑弹窗
    */
-  openEditDialog(user: IUserVo): void {
+  openEditDialog(user: UserVO): void {
     this.state.isEdit = true
     this.state.currentUserId = user.id
-    this.state.userForm.username = user.username
+    this.state.userForm.username = user.name
     this.state.userForm.password = ''
-    this.state.userForm.nickname = user.nickname || ''
+    this.state.userForm.nickname = ''
     this.state.userForm.email = user.email || ''
     this.state.userForm.phone = user.phone || ''
     this.state.dialogVisible = true
@@ -137,35 +138,35 @@ export class UserManagementController {
    */
   async handleSubmit(): Promise<boolean> {
     this.state.submitLoading = true
-    this.env.logger.debug('Submitting user form', { isEdit: this.state.isEdit })
+    this.deps.logger.debug('Submitting user form', { isEdit: this.state.isEdit })
 
     try {
       if (this.state.isEdit && this.state.currentUserId) {
-        const updateParams: IUserUpdateDto = {
+        const updateParams: UserUpdateDto = {
           nickname: this.state.userForm.nickname || undefined,
           email: this.state.userForm.email || undefined,
           phone: this.state.userForm.phone || undefined,
         }
-        await this.env.apiService.update(this.state.currentUserId, updateParams)
-        this.env.messageService.success('更新成功')
+        await this.deps.apiService.update(this.state.currentUserId, updateParams)
+        this.deps.messageService.success('更新成功')
       } else {
-        const createParams: IUserCreateDto = {
+        const createParams: UserCreateDto = {
           username: this.state.userForm.username,
           password: this.state.userForm.password,
           nickname: this.state.userForm.nickname || undefined,
           email: this.state.userForm.email || undefined,
           phone: this.state.userForm.phone || undefined,
         }
-        await this.env.apiService.create(createParams)
-        this.env.messageService.success('创建成功')
+        await this.deps.apiService.create(createParams)
+        this.deps.messageService.success('创建成功')
       }
 
       this.state.dialogVisible = false
       await this.fetchUserList()
       return true
     } catch (error) {
-      this.env.logger.error('Submit failed', error)
-      this.env.messageService.error(error instanceof Error ? error.message : '操作失败')
+      this.deps.logger.error('Submit failed', error)
+      this.deps.messageService.error(error instanceof Error ? error.message : '操作失败')
       return false
     } finally {
       this.state.submitLoading = false
@@ -175,20 +176,20 @@ export class UserManagementController {
   /**
    * 删除用户
    */
-  async handleDelete(user: IUserVo): Promise<void> {
+  async handleDelete(user: UserVO): Promise<void> {
     try {
-      const confirmed = await this.env.confirmService.confirm(
-        `确定要删除用户 "${user.username}" 吗？`,
+      const confirmed = await this.deps.confirmService.confirm(
+        `确定要删除用户 "${user.name}" 吗？`,
         '提示',
       )
       if (!confirmed) return
 
-      await this.env.apiService.delete(user.id)
-      this.env.messageService.success('删除成功')
+      await this.deps.apiService.delete(user.id)
+      this.deps.messageService.success('删除成功')
       await this.fetchUserList()
     } catch (error) {
-      this.env.logger.error('Delete failed', error)
-      this.env.messageService.error('删除失败')
+      this.deps.logger.error('Delete failed', error)
+      this.deps.messageService.error('删除失败')
     }
   }
 
@@ -199,41 +200,42 @@ export class UserManagementController {
     if (this.state.selectedIds.length === 0) return
 
     try {
-      const confirmed = await this.env.confirmService.confirm(
+      const confirmed = await this.deps.confirmService.confirm(
         `确定要删除选中的 ${this.state.selectedIds.length} 个用户吗？`,
         '提示',
       )
       if (!confirmed) return
 
-      await this.env.apiService.deleteBatch(this.state.selectedIds)
-      this.env.messageService.success('删除成功')
+      await this.deps.apiService.deleteBatch(this.state.selectedIds)
+      this.deps.messageService.success('删除成功')
       this.state.selectedIds = []
       await this.fetchUserList()
     } catch (error) {
-      this.env.logger.error('Batch delete failed', error)
-      this.env.messageService.error('批量删除失败')
+      this.deps.logger.error('Batch delete failed', error)
+      this.deps.messageService.error('批量删除失败')
     }
   }
 
   /**
    * 状态变化
    */
-  async handleStatusChange(user: IUserVo): Promise<void> {
+  async handleStatusChange(user: UserVO): Promise<void> {
     try {
-      await this.env.apiService.updateStatus(user.id, user.status)
-      this.env.messageService.success('状态更新成功')
+      await this.deps.apiService.updateStatus(user.id, user.status)
+      this.deps.messageService.success('状态更新成功')
     } catch (error) {
-      this.env.logger.error('Status update failed', error)
-      this.env.messageService.error('状态更新失败')
+      this.deps.logger.error('Status update failed', error)
+      this.deps.messageService.error('状态更新失败')
       // 恢复原状态
-      user.status = user.status === UserStatus.ENABLED ? UserStatus.DISABLED : UserStatus.ENABLED
+      const currentStatus = Number(user.status) as UserStatus
+      user.status = currentStatus === UserStatus.ENABLED ? UserStatus.DISABLED : UserStatus.ENABLED
     }
   }
 
   /**
    * 打开重置密码弹窗
    */
-  openResetPasswordDialog(user: IUserVo): void {
+  openResetPasswordDialog(user: UserVO): void {
     this.state.resetUserId = user.id
     this.state.resetForm.password = ''
     this.state.resetForm.confirmPassword = ''
@@ -256,13 +258,16 @@ export class UserManagementController {
     this.state.resetLoading = true
 
     try {
-      await this.env.apiService.resetPassword(this.state.resetUserId, this.state.resetForm.password)
-      this.env.messageService.success('密码重置成功')
+      await this.deps.apiService.resetPassword(
+        this.state.resetUserId,
+        this.state.resetForm.password,
+      )
+      this.deps.messageService.success('密码重置成功')
       this.state.resetPasswordVisible = false
       return true
     } catch (error) {
-      this.env.logger.error('Reset password failed', error)
-      this.env.messageService.error('密码重置失败')
+      this.deps.logger.error('Reset password failed', error)
+      this.deps.messageService.error('密码重置失败')
       return false
     } finally {
       this.state.resetLoading = false

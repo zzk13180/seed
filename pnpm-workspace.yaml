@@ -1,11 +1,31 @@
 packages:
   - apps/**
+  - packages/contracts
+  - packages/kit
+  - packages/db
+  - packages/services
   - packages/configs/**
-  - packages/libs/**
+  - packages/libs/types
   - packages/ui
   - '!apps/robotics'
+catalogs:
+  default:
+    hono: ^4.7.6
+    drizzle-orm: ^0.43.1
+    drizzle-kit: ^0.31.1
+    zod: ^3.24.2
+    better-auth: ^1.2.8
+    hono-rate-limiter: ^0.4.2
+    semver: ^7.7.2
+    '@hono/zod-validator': ^0.4.3
+    pg: ^8.13.0
+    '@neondatabase/serverless': ^0.10.4
+    date-fns: ^4.1.0
+    '@date-fns/tz': ^1.2.0
+    dotenv: ^17.2.3
+    '@tanstack/vue-query': ^5.92.9
+    '@types/bun': ^1.2.4
+    '@types/pg': ^8.11.0
 ignoredBuiltDependencies:
   - ssh2
   - cpu-features
-onlyBuiltDependencies:
-  - bcrypt

@@ -1,22 +1,23 @@
-import { $http } from '@seed/http'
-import type { ApiResponse, HealthCheckResult } from './types'
-
 /**
- * 健康检查 API
+ * @file 健康检查 API
+ * @description 基于 Hono RPC 的健康检查接口
+ * @module api/health.api
  */
 
+import { api } from './client'
+
 /**
- * 检查服务健康状态
+ * 检查服务就绪状态
  */
-export const apiHealthCheck = async (): Promise<HealthCheckResult> => {
-  const response = await $http.get<ApiResponse<HealthCheckResult>>('/health')
-  return response.data
+export const apiHealthCheck = async () => {
+  const res = await api.api.health.$get()
+  return res.json()
 }
 
 /**
  * 检查服务存活状态
  */
-export const apiLivenessCheck = async (): Promise<HealthCheckResult> => {
-  const response = await $http.get<ApiResponse<HealthCheckResult>>('/health/liveness')
-  return response.data
+export const apiLivenessCheck = async () => {
+  const res = await api.api.health.liveness.$get()
+  return res.json()
 }

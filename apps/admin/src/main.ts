@@ -3,6 +3,7 @@ import '@/assets/styles/index.scss'
 import 'virtual:svg-icons-register'
 import { createApp, type Component } from 'vue'
 import { createPinia } from 'pinia'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 
 import SvgIcon from '@/components/SvgIcon.vue'
 import App from './App.vue'
@@ -44,6 +45,7 @@ function bootstrap(): void {
   // 注册插件
   app.use(store)
   app.use(router)
+  app.use(VueQueryPlugin)
 
   // 注册全局组件
   app.component('SvgIcon', SvgIcon)
