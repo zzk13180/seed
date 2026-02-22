@@ -1,4 +1,6 @@
-/// <reference types=\"element-plus/global\" />\n\n// 图片模块类型声明
+/// <reference types="element-plus/global" />
+
+// 图片模块类型声明
 declare module '@/assets/images/*.png' {
   const src: string
   export default src

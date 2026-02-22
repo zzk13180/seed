@@ -9,10 +9,10 @@ description: Controller + Store 分层与 DI 模式
 
 ## 前端应用分类
 
-| 目录 | 框架 | 定位 |
-|------|------|------|
-| `apps/spa/admin/` | Vue + Element Plus | 平台管理后台 |
-| `apps/spa/console/` | Vue + Ionic | 通用 Web 控制台 |
+| 目录                | 框架                    | 定位              |
+| ------------------- | ----------------------- | ----------------- |
+| `apps/spa/admin/`   | Vue + Element Plus      | 平台管理后台      |
+| `apps/spa/console/` | Vue + Ionic             | 通用 Web 控制台   |
 | `apps/native/seed/` | Tauri 2（嵌入 WebView） | 原生桌面 + 移动端 |
 
 所有前端应用共享 `@seed/kit/frontend`（BaseController）和 `@seed/contracts`（类型）。认证使用 Bearer Token。
@@ -44,22 +44,23 @@ Service ──HTTP──→ 后端 API
 
 ### 复杂度分级
 
-| 级别 | 文件 | 场景 |
-|------|------|------|
-| 简单 CRUD | 四件套（无 controller） | 字典管理 |
-| 标准业务 | 五件套 | 用户管理 |
-| 复杂交互 | 六件套（+ query.ts） | 地图轮询、乐观更新 |
+| 级别      | 文件                    | 场景               |
+| --------- | ----------------------- | ------------------ |
+| 简单 CRUD | 四件套（无 controller） | 字典管理           |
+| 标准业务  | 五件套                  | 用户管理           |
+| 复杂交互  | 六件套（+ query.ts）    | 地图轮询、乐观更新 |
 
 ## BaseController
 
 `@seed/kit/frontend` 提供 `BaseController<State, Deps>`，用于需要异步生命周期的场景：
 
-| 场景 | 是否继承 | 示例 |
-|------|---------|------|
-| 有异步初始化/销毁（WebSocket、RxJS） | ✅ extends BaseController | AppController |
-| 纯同步 CRUD | ❌ 普通类即可 | UserManagementController |
+| 场景                                 | 是否继承                  | 示例                     |
+| ------------------------------------ | ------------------------- | ------------------------ |
+| 有异步初始化/销毁（WebSocket、RxJS） | ✅ extends BaseController | AppController            |
+| 纯同步 CRUD                          | ❌ 普通类即可             | UserManagementController |
 
 BaseController 提供：
+
 - `initialize()` / `dispose()` 竞态保护
 - 自动重试机制
 - 生命周期状态管理

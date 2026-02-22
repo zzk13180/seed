@@ -28,6 +28,7 @@ apps/spa/
 ## 共享基础
 
 所有 SPA 共享：
+
 - `@seed/kit/frontend`：BaseController + Logger
 - `@seed/contracts`：Zod schemas + 类型
 - **Controller + Store** 分层架构模式

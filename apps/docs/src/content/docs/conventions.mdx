@@ -7,25 +7,25 @@ description: 命名、导入、错误处理与测试规范
 
 ### 文件
 
-| 类型 | 格式 | 示例 |
-|------|------|------|
-| 模块文件 | `kebab-case.{role}.ts` | `user.controller.ts` |
-| Zod Schema | `{name}.schema.ts` | `user.schema.ts` |
-| 中间件 | `{name}.middleware.ts` | `auth-guard.middleware.ts` |
-| 工具函数 | `{name}.util.ts` | `sql.util.ts` |
-| Vue 组件 | `PascalCase.vue` | `UserManagement.vue` |
-| 配置 | `{name}.config.ts` | `env.config.ts` |
+| 类型       | 格式                   | 示例                       |
+| ---------- | ---------------------- | -------------------------- |
+| 模块文件   | `kebab-case.{role}.ts` | `user.controller.ts`       |
+| Zod Schema | `{name}.schema.ts`     | `user.schema.ts`           |
+| 中间件     | `{name}.middleware.ts` | `auth-guard.middleware.ts` |
+| 工具函数   | `{name}.util.ts`       | `sql.util.ts`              |
+| Vue 组件   | `PascalCase.vue`       | `UserManagement.vue`       |
+| 配置       | `{name}.config.ts`     | `env.config.ts`            |
 
 ### 标识符
 
-| 类型 | 格式 | 示例 |
-|------|------|------|
-| 类 | PascalCase | `UserService` |
-| 函数 | camelCase | `findPage()` |
-| 常量 | UPPER_SNAKE_CASE | `RESPONSE_CODE` |
-| 枚举值 | UPPER_SNAKE_CASE | `UserStatus.ENABLED` |
-| 接口 | PascalCase，无 `I` 前缀 | `UserVO` |
-| Zod Schema | camelCase + Schema | `userCreateSchema` |
+| 类型       | 格式                    | 示例                 |
+| ---------- | ----------------------- | -------------------- |
+| 类         | PascalCase              | `UserService`        |
+| 函数       | camelCase               | `findPage()`         |
+| 常量       | UPPER_SNAKE_CASE        | `RESPONSE_CODE`      |
+| 枚举值     | UPPER_SNAKE_CASE        | `UserStatus.ENABLED` |
+| 接口       | PascalCase，无 `I` 前缀 | `UserVO`             |
+| Zod Schema | camelCase + Schema      | `userCreateSchema`   |
 
 ## 导入顺序
 
@@ -75,10 +75,10 @@ Service 与 Repository 层仅负责抛出语义化异常，由 `errorHandlerMidd
 
 ## Zod Schema
 
-| 位置 | 类型 |
-|------|------|
-| `packages/contracts/src/schemas/` | 跨模块共享（分页、用户、认证） |
-| `packages/services/src/{name}/{name}.schema.ts` | 模块专用 |
+| 位置                                            | 类型                           |
+| ----------------------------------------------- | ------------------------------ |
+| `packages/contracts/src/schemas/`               | 跨模块共享（分页、用户、认证） |
+| `packages/services/src/{name}/{name}.schema.ts` | 模块专用                       |
 
 Schema 作为单一数据源（SSOT），系统类型直接基于 schema 静态推导，禁止重复声明 interface：
 
@@ -89,28 +89,28 @@ export type UserCreateDto = z.infer<typeof userCreateSchema>
 
 ## 后端层级规则
 
-| 层 | 职责 | 禁止 |
-|---|---|---|
-| Controller | 路由 + Zod 验证 + 编排 | 不含业务逻辑，不直接操作 ORM |
-| Service | 业务逻辑 + 抛异常 + 返回 VO | 不引用 Hono Context |
-| Repository | Drizzle 数据访问 | 不含业务逻辑 |
+| 层         | 职责                        | 禁止                         |
+| ---------- | --------------------------- | ---------------------------- |
+| Controller | 路由 + Zod 验证 + 编排      | 不含业务逻辑，不直接操作 ORM |
+| Service    | 业务逻辑 + 抛异常 + 返回 VO | 不引用 Hono Context          |
+| Repository | Drizzle 数据访问            | 不含业务逻辑                 |
 
 ## 前端层级规则
 
-| 层 | 职责 | 禁止 |
-|---|---|---|
-| View (.vue) | 渲染 + 绑定 store | 不含逻辑 |
-| Controller | 纯 TS 业务逻辑 | 不导入 Vue / Pinia |
-| Store | DI 组装 + reactive 桥接 | 不含业务逻辑 |
-| Service | HTTP 调用 | 不持有状态 |
+| 层          | 职责                    | 禁止               |
+| ----------- | ----------------------- | ------------------ |
+| View (.vue) | 渲染 + 绑定 store       | 不含逻辑           |
+| Controller  | 纯 TS 业务逻辑          | 不导入 Vue / Pinia |
+| Store       | DI 组装 + reactive 桥接 | 不含业务逻辑       |
+| Service     | HTTP 调用               | 不持有状态         |
 
 ## 测试
 
-| 对象 | 方式 | 位置 |
-|------|------|------|
-| 后端 Controller | 集成（`app.request`） | `services/src/{name}/__tests__/` |
-| Service | 单元（mock Repository） | 同上 |
-| 前端 Controller | 单元（mock deps） | `views/{module}/__tests__/` |
+| 对象            | 方式                    | 位置                             |
+| --------------- | ----------------------- | -------------------------------- |
+| 后端 Controller | 集成（`app.request`）   | `services/src/{name}/__tests__/` |
+| Service         | 单元（mock Repository） | 同上                             |
+| 前端 Controller | 单元（mock deps）       | `views/{module}/__tests__/`      |
 
 ## Git 提交
 

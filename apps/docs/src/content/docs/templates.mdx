@@ -9,14 +9,14 @@ description: 新增模块的标准操作步骤
 
 ### 文件清单
 
-| 文件 | 职责 | 必需 |
-|------|------|------|
-| `{name}.controller.ts` | `createXxxRoutes(db)` 工厂函数 | ✅ |
-| `{name}.service.ts` | 业务逻辑 | ✅ |
-| `{name}.repository.ts` | Drizzle 数据访问 | 有 DB 时 |
-| `{name}.schema.ts` | Zod 验证 | 有验证时 |
-| `{name}.vo.ts` | Entity → VO | 有转换时 |
-| `index.ts` | 公开导出 | ✅ |
+| 文件                   | 职责                           | 必需     |
+| ---------------------- | ------------------------------ | -------- |
+| `{name}.controller.ts` | `createXxxRoutes(db)` 工厂函数 | ✅       |
+| `{name}.service.ts`    | 业务逻辑                       | ✅       |
+| `{name}.repository.ts` | Drizzle 数据访问               | 有 DB 时 |
+| `{name}.schema.ts`     | Zod 验证                       | 有验证时 |
+| `{name}.vo.ts`         | Entity → VO                    | 有转换时 |
+| `index.ts`             | 公开导出                       | ✅       |
 
 ### 注册步骤
 
@@ -33,11 +33,10 @@ import type { AnyDatabase } from '@seed/db'
 export function createXxxRoutes(db: AnyDatabase) {
   const repo = new XxxRepository(db)
   const service = new XxxService(repo)
-  return new Hono()
-    .get('/', zValidator('query', xxxQuerySchema), async (c) => {
-      const result = await service.findPage(c.req.valid('query'))
-      return c.json(result)
-    })
+  return new Hono().get('/', zValidator('query', xxxQuerySchema), async c => {
+    const result = await service.findPage(c.req.valid('query'))
+    return c.json(result)
+  })
 }
 ```
 
@@ -49,13 +48,13 @@ export function createXxxRoutes(db: AnyDatabase) {
 
 ### 文件清单（五件套）
 
-| 文件 | 职责 |
-|------|------|
-| `{Name}.vue` | UI 渲染 |
-| `{name}.types.ts` | State + Deps 接口 |
-| `{name}.controller.ts` | 纯 TS 逻辑 |
-| `{name}.service.ts` | HTTP 调用 |
-| `{name}.store.ts` | Pinia 胶水 |
+| 文件                   | 职责              |
+| ---------------------- | ----------------- |
+| `{Name}.vue`           | UI 渲染           |
+| `{name}.types.ts`      | State + Deps 接口 |
+| `{name}.controller.ts` | 纯 TS 逻辑        |
+| `{name}.service.ts`    | HTTP 调用         |
+| `{name}.store.ts`      | Pinia 胶水        |
 
 ### 步骤
 
@@ -94,6 +93,7 @@ export function createXxxRoutes(db: AnyDatabase) {
    ```
 
 约定：
+
 - 主键 `text('id').primaryKey()`（UUID）
 - 时间 `timestamp(..., { mode: 'date' })`
 - 软删除 `deleted: integer('deleted').notNull().default(0)`
@@ -109,6 +109,7 @@ export function createXxxRoutes(db: AnyDatabase) {
 3. `app.ts` 中注册
 
 插入位置参考链顺序：
+
 ```
 TraceId → SecureHeaders → CORS → RateLimiter → Logger → Transform → Session → [路由] → ErrorHandler
 ```

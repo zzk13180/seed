@@ -1,6 +1,7 @@
 {
   "extends": "@seed/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "types": ["vite/client", "@seed/types"],
     "paths": {
       "@/*": ["./src/*"]
     }

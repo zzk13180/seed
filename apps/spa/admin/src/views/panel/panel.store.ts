@@ -70,9 +70,10 @@ if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(usePanelStore, import.meta.hot))
   import.meta.hot.accept(
     './panel.controller',
-    (newModule: { PanelController?: typeof PanelControllerType } | undefined) => {
-      if (newModule?.PanelController && _hotReplaceController) {
-        _hotReplaceController(newModule.PanelController)
+    (newModule) => {
+      const mod = newModule as { PanelController?: typeof PanelControllerType } | undefined
+      if (mod?.PanelController && _hotReplaceController) {
+        _hotReplaceController(mod.PanelController)
       } else {
         console.error('HMR update for PanelController failed.')
       }

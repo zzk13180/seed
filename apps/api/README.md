@@ -26,10 +26,10 @@ apps/api/
 
 ## edge vs bun
 
-| 维度   | edge                          | bun               |
-| ------ | ----------------------------- | ------------------ |
-| 定位   | 80% 无状态请求                | 20% 有状态/长连接  |
-| 数据库 | Neon HTTP（无连接池）         | pg TCP（连接池）   |
-| 部署   | Cloudflare Workers            | Docker             |
-| 特有   | wrangler, worker.entry.ts     | WebSocket, Cron    |
-| 认证   | Bearer Token                  | Bearer Token       |
+| 维度   | edge                      | bun               |
+| ------ | ------------------------- | ----------------- |
+| 定位   | 80% 无状态请求            | 20% 有状态/长连接 |
+| 数据库 | Neon HTTP（无连接池）     | pg TCP（连接池）  |
+| 部署   | Cloudflare Workers        | Docker            |
+| 特有   | wrangler, worker.entry.ts | WebSocket, Cron   |
+| 认证   | Bearer Token              | Bearer Token      |

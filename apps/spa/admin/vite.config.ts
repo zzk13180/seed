@@ -39,15 +39,22 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       vue({
         template: {
           compilerOptions: {
-            isCustomElement: tag =>
-              ['custom-', 'ion-', 'swiper-'].some(p => tag.startsWith(p)),
+            isCustomElement: tag => ['custom-', 'ion-', 'swiper-'].some(p => tag.startsWith(p)),
           },
         },
       }),
       ...tailwindcss(),
     ],
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', 'element-plus/es', 'lodash-es', '@vueuse/core', 'echarts'],
+      include: [
+        'vue',
+        'vue-router',
+        'pinia',
+        'element-plus/es',
+        'lodash-es',
+        '@vueuse/core',
+        'echarts',
+      ],
     },
   }
 })

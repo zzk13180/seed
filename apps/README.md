@@ -27,12 +27,12 @@ apps/
 
 ## Nx 项目命名
 
-| 目录 | Nx 项目名 |
-|------|-----------|
-| `api/edge` | `@seed/api-edge` |
-| `api/bun` | `@seed/api-bun` |
-| `spa/admin` | `@seed/spa-admin` |
+| 目录          | Nx 项目名           |
+| ------------- | ------------------- |
+| `api/edge`    | `@seed/api-edge`    |
+| `api/bun`     | `@seed/api-bun`     |
+| `spa/admin`   | `@seed/spa-admin`   |
 | `spa/console` | `@seed/spa-console` |
 | `native/seed` | `@seed/native-seed` |
-| `docs` | `@seed/docs` |
-| `robotics` | `@seed/robotics` |
+| `docs`        | `@seed/docs`        |
+| `robotics`    | `@seed/robotics`    |

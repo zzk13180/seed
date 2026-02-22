@@ -11,12 +11,12 @@
 
 ## 导出入口
 
-| 路径                | 内容                              | 使用方      |
-| ------------------- | --------------------------------- | ----------- |
+| 路径                | 内容                              | 使用方            |
+| ------------------- | --------------------------------- | ----------------- |
 | `@seed/db`          | 主入口                            | api/edge, api/bun |
 | `@seed/db/schema`   | 全部 Drizzle 表定义               | api/edge, api/bun |
-| `@seed/db/provider` | Neon HTTP 连接 + Drizzle 实例工厂 | api/edge           |
-| `@seed/db/types`    | `AnyDatabase` 类型定义            | services           |
+| `@seed/db/provider` | Neon HTTP 连接 + Drizzle 实例工厂 | api/edge          |
+| `@seed/db/types`    | `AnyDatabase` 类型定义            | services          |
 
 ## 目录结构
 
@@ -54,7 +54,7 @@ pnpm nx db:push @seed/api-edge       # 推送 schema（开发用）
 pnpm nx db:studio @seed/api-edge     # Drizzle Studio GUI
 ```
 
-> **注意**: db:* 任务定义在 `apps/api/edge/project.json`，`api/bun` 仅有 `db:seed`。
+> **注意**: db:\* 任务定义在 `apps/api/edge/project.json`，`api/bun` 仅有 `db:seed`。
 
 ## 添加新表的规范
 

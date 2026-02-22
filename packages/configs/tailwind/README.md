@@ -22,9 +22,9 @@ export default {
 
 ## 导出入口
 
-| 路径 | 内容 |
-|------|------|
-| `@seed/tailwind-config` | `withSeedPreset()` 工具函数 + `seedPreset` |
+| 路径                           | 内容                                           |
+| ------------------------------ | ---------------------------------------------- |
+| `@seed/tailwind-config`        | `withSeedPreset()` 工具函数 + `seedPreset`     |
 | `@seed/tailwind-config/preset` | Tailwind 预设对象（颜色 / 字体 / 间距 / 动画） |
 
 ## 文件

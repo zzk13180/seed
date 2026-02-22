@@ -16,19 +16,19 @@
 
 ## 技术栈
 
-| 层级 | 技术 |
-|------|------|
-| 编排 | Nx 22 + pnpm 10（TS + Rust + Python monorepo） |
-| Serverless API | Hono → Cloudflare Workers |
-| 重型任务 | Hono on Bun (Docker)：WebSocket / Cron / 文件 |
-| 认证 | Better Auth（Bearer Token，全端统一） |
-| 数据库 | Neon PostgreSQL + Drizzle ORM |
-| 验证 | Zod（SSOT：API 契约 + DB schema + 表单） |
-| Web SPA | Vue 3.5 + Vite 7 + Element Plus / Ionic 8 |
-| 原生端 | Tauri 2 (Rust)（桌面 + Android + iOS） |
-| 文档 | Astro 5 (SSG) |
-| UI 组件库 | Svelte 5 Web Components |
-| 测试 | Vitest 3.2 |
+| 层级           | 技术                                           |
+| -------------- | ---------------------------------------------- |
+| 编排           | Nx 22 + pnpm 10（TS + Rust + Python monorepo） |
+| Serverless API | Hono → Cloudflare Workers                      |
+| 重型任务       | Hono on Bun (Docker)：WebSocket / Cron / 文件  |
+| 认证           | Better Auth（Bearer Token，全端统一）          |
+| 数据库         | Neon PostgreSQL + Drizzle ORM                  |
+| 验证           | Zod（SSOT：API 契约 + DB schema + 表单）       |
+| Web SPA        | Vue 3.5 + Vite 7 + Element Plus / Ionic 8      |
+| 原生端         | Tauri 2 (Rust)（桌面 + Android + iOS）         |
+| 文档           | Astro 5 (SSG)                                  |
+| UI 组件库      | Svelte 5 Web Components                        |
+| 测试           | Vitest 3.2                                     |
 
 ---
 
@@ -46,14 +46,14 @@ Layer 3 (apps) → Layer 2 (services) → Layer 1 (kit/db) → Layer 0 (contract
 
 ## 命名约定
 
-| 类型 | 格式 | 示例 |
-|------|------|------|
-| 模块文件 | `kebab-case.{role}.ts` | `user.controller.ts` |
-| Vue 组件 | `PascalCase.vue` | `UserManagement.vue` |
-| 类 | PascalCase | `UserService` |
-| 函数/方法 | camelCase | `findPage()` |
-| 常量 | UPPER_SNAKE_CASE | `RESPONSE_CODE` |
-| Zod Schema | camelCase + Schema 后缀 | `userCreateSchema` |
+| 类型       | 格式                    | 示例                 |
+| ---------- | ----------------------- | -------------------- |
+| 模块文件   | `kebab-case.{role}.ts`  | `user.controller.ts` |
+| Vue 组件   | `PascalCase.vue`        | `UserManagement.vue` |
+| 类         | PascalCase              | `UserService`        |
+| 函数/方法  | camelCase               | `findPage()`         |
+| 常量       | UPPER_SNAKE_CASE        | `RESPONSE_CODE`      |
+| Zod Schema | camelCase + Schema 后缀 | `userCreateSchema`   |
 
 ---
 
@@ -117,10 +117,10 @@ BusinessError (base)
 
 ## Zod Schema 位置
 
-| 类型 | 位置 |
-|------|------|
-| 跨模块共享 | `packages/contracts/src/schemas/` |
-| 模块专用 | `packages/services/src/{name}/{name}.schema.ts` |
+| 类型       | 位置                                            |
+| ---------- | ----------------------------------------------- |
+| 跨模块共享 | `packages/contracts/src/schemas/`               |
+| 模块专用   | `packages/services/src/{name}/{name}.schema.ts` |
 
 Schema 作为 SSOT，类型从 schema 推导：`type XxxDto = z.infer<typeof xxxSchema>`
 

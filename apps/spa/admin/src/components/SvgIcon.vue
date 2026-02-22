@@ -1,5 +1,11 @@
 <template>
-  <span class="svg-icon-wrapper" :style="iconStyle" role="img" aria-hidden="true" v-html="svgContent" />
+  <span
+    class="svg-icon-wrapper"
+    :style="iconStyle"
+    role="img"
+    aria-hidden="true"
+    v-html="svgContent"
+  />
 </template>
 
 <script setup lang="ts">
@@ -68,12 +74,7 @@
     :deep(svg) {
       width: 100%;
       height: 100%;
-      fill: currentColor;
+      fill: currentcolor;
     }
-  }
-</style>
-    height: 100%;
-    fill: currentcolor;
-    overflow: hidden;
   }
 </style>

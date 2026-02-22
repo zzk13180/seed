@@ -11,7 +11,7 @@
 ## 子包
 
 | 包 | Npm 名 | 作用 |
-|----|--------|------|
+| --- | --- | --- |
 | `eslint/` | `@seed/eslint-config` | ESLint 规则模块（disabled-rules、regexp-rules、class-members-order） + 自定义规则 |
 | `tailwind/` | `@seed/tailwind-config` | Tailwind CSS 共享预设（颜色/字体/间距/动画 token） |
 | `tsconfig/` | `@seed/tsconfig` | 基础 TypeScript 编译选项（strict 模式、bundler 解析） |

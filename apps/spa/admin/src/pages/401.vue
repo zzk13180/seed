@@ -21,8 +21,8 @@
 
 <script setup lang="ts">
   import { getCurrentInstance, ref } from 'vue'
-  import type { ComponentInternalInstance } from 'vue'
   import errImage from '@/assets/images/401.gif'
+  import type { ComponentInternalInstance } from 'vue'
 
   const { proxy } = getCurrentInstance() as ComponentInternalInstance
 

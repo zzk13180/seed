@@ -1,5 +1,3 @@
-import type { Subscription } from 'rxjs'
-
 export interface AppState {
   rosBridgeConnected: boolean
   colorTypes: string[]
@@ -8,4 +6,4 @@ export interface AppState {
 
 export interface AppDeps {}
 
-export type { Subscription }
+export { type Subscription } from 'rxjs'

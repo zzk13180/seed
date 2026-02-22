@@ -69,6 +69,7 @@ export default defineConfig([
       '**/drizzle.config.ts',
       'vitest.config.ts', // Vitest 配置文件
       'eslint/**', // ESLint 配置模块
+      'tmp/**', // 临时实验目录
     ],
   },
 

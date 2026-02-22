@@ -12,15 +12,15 @@
 
 ## 导出入口
 
-| 路径 | 内容 |
-|------|------|
-| `@seed/contracts` | 主入口（全部 re-export） |
-| `@seed/contracts/schemas` | 全部 Zod schemas |
-| `@seed/contracts/schemas/user` | 用户相关 schema |
-| `@seed/contracts/schemas/auth` | 认证相关 schema |
-| `@seed/contracts/schemas/common` | 通用 schema（分页、排序等） |
-| `@seed/contracts/enums` | 全部枚举（UserStatus 等） |
-| `@seed/contracts/errors` | BusinessError 及其子类 |
+| 路径                                   | 内容                                |
+| -------------------------------------- | ----------------------------------- |
+| `@seed/contracts`                      | 主入口（全部 re-export）            |
+| `@seed/contracts/schemas`              | 全部 Zod schemas                    |
+| `@seed/contracts/schemas/user`         | 用户相关 schema                     |
+| `@seed/contracts/schemas/auth`         | 认证相关 schema                     |
+| `@seed/contracts/schemas/common`       | 通用 schema（分页、排序等）         |
+| `@seed/contracts/enums`                | 全部枚举（UserStatus 等）           |
+| `@seed/contracts/errors`               | BusinessError 及其子类              |
 | `@seed/contracts/errors/response-code` | ResponseCode 枚举 + HTTP 状态码映射 |
 
 ## 目录结构

@@ -10,10 +10,10 @@
 
 ## 导出入口
 
-| 路径 | 内容 |
-|------|------|
-| `@seed/eslint-config/rules` | `disabledRules` + `regexpRules` + `classMembersOrder` |
-| `@seed/eslint-config/custom-rules` | `noIsolatedComments` 自定义规则 |
+| 路径                               | 内容                                                  |
+| ---------------------------------- | ----------------------------------------------------- |
+| `@seed/eslint-config/rules`        | `disabledRules` + `regexpRules` + `classMembersOrder` |
+| `@seed/eslint-config/custom-rules` | `noIsolatedComments` 自定义规则                       |
 
 ## 目录结构
 

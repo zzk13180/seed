@@ -20,6 +20,7 @@ export default {
     '**/.svelte-kit/**',
     '**/target/**',
     'apps/docs/**',
+    'tmp/**',
     '*.css',
     '**/*.js',
     '**/*.jsx',

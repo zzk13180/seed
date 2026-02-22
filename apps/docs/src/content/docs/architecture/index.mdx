@@ -37,18 +37,17 @@ Layer 0  packages/contracts 契约层（Zod schemas / 枚举 / 错误类）
 
 ## 共享包职责
 
-| 包 | 层级 | 职责 | 依赖 |
-|---|---|---|---|
-| `@seed/contracts` | 0 | Zod schemas、枚举、错误类 | 仅 zod |
-| `@seed/kit` | 1 | Hono 中间件工厂、前端 BaseController、工具函数 | contracts |
-| `@seed/db` | 1 | Drizzle schema、AnyDatabase 类型、连接工厂 | drizzle-orm |
-| `@seed/services` | 2 | 业务模块（Controller → Service → Repository） | kit + db + contracts |
-| `@seed/ui` | — | Svelte 5 Web Components | 无 |
+| 包                | 层级 | 职责                                           | 依赖                 |
+| ----------------- | ---- | ---------------------------------------------- | -------------------- |
+| `@seed/contracts` | 0    | Zod schemas、枚举、错误类                      | 仅 zod               |
+| `@seed/kit`       | 1    | Hono 中间件工厂、前端 BaseController、工具函数 | contracts            |
+| `@seed/db`        | 1    | Drizzle schema、AnyDatabase 类型、连接工厂     | drizzle-orm          |
+| `@seed/services`  | 2    | 业务模块（Controller → Service → Repository）  | kit + db + contracts |
+| `@seed/ui`        | —    | Svelte 5 Web Components                        | 无                   |
 
 ## Nx 缓存策略
 
-可缓存任务：`build` / `test` / `lint` / `type-check`
-不缓存任务：`dev` / `preview`
+可缓存任务：`build` / `test` / `lint` / `type-check` 不缓存任务：`dev` / `preview`
 
 `namedInputs` 根据依赖链路确立边界关系：服务端变更仅使 Server 按需失效，前端域缓存维持独立稳定。
 
@@ -59,12 +58,12 @@ Layer 0  packages/contracts 契约层（Zod schemas / 枚举 / 错误类）
     "packages/contracts/src/**",
     "packages/kit/src/hono/**",
     "packages/db/**",
-    "packages/services/**"
+    "packages/services/**",
   ],
   "frontendSource": [
     "{projectRoot}/src/**/*.{ts,vue}",
     "packages/contracts/src/**",
-    "packages/kit/src/frontend/**"
-  ]
+    "packages/kit/src/frontend/**",
+  ],
 }
 ```
