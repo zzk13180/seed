@@ -8,9 +8,9 @@ export default defineConfig({
       'packages/kit',
       'packages/db',
       'packages/services',
-      'apps/admin',
-      'apps/server',
-      'apps/api',
+      'apps/spa/admin',
+      'apps/api/bun',
+      'apps/api/edge',
     ],
   },
 })

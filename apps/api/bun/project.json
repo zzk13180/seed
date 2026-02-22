@@ -1,0 +1,55 @@
+{
+  "name": "@seed/api-bun",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/api/bun/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "bun build src/main.ts --outdir dist --target bun",
+        "cwd": "apps/api/bun"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run --hot src/main.ts",
+        "cwd": "apps/api/bun"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun run src/main.ts",
+        "cwd": "apps/api/bun"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run",
+        "cwd": "apps/api/bun"
+      },
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit",
+        "cwd": "apps/api/bun"
+      }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run src/seed.ts",
+        "cwd": "apps/api/bun"
+      }
+    }
+  },
+  "tags": ["type:app", "platform:bun", "framework:hono"]
+}

@@ -1,0 +1,54 @@
+---
+title: 快速开始
+description: 环境准备与项目启动
+---
+
+## 环境要求
+
+| 工具 | 版本 | 说明 |
+|------|------|------|
+| Node.js | ≥ 22 | LTS |
+| pnpm | ≥ 10 | 包管理 |
+| Rust | ≥ 1.75 | 桌面端开发（可选） |
+| Docker | ≥ 24 | server 本地开发（可选） |
+
+## 启动
+
+```bash
+git clone https://github.com/zzk13180/seed.git
+cd seed
+pnpm install
+
+# 启动管理后台
+pnpm nx dev @seed/spa-admin
+
+# 启动 Edge API 服务
+pnpm nx dev @seed/api-edge
+
+# 启动 Bun Docker 后端
+pnpm nx dev @seed/api-bun
+```
+
+访问 `http://localhost:5173` 查看 admin。
+
+## 常用命令
+
+```bash
+pnpm nx dev <project>           # 开发模式
+pnpm nx build <project>         # 构建单个项目
+pnpm nx run-many -t build       # 构建全部
+pnpm nx run-many -t test        # 运行测试
+pnpm nx run-many -t lint        # Lint 全部
+pnpm nx graph                   # 可视化依赖图
+```
+
+## 项目列表
+
+| 项目 | 类型 | 说明 |
+|------|------|------|
+| `@seed/spa-admin` | 前端 | Vue 3 管理后台（Element Plus） |
+| `@seed/spa-console` | 前端 | Vue 3 + Ionic 控制台 |
+| `@seed/native-seed` | 桌面 | Tauri 2 原生应用 |
+| `@seed/api-edge` | 后端 | Hono → Cloudflare Workers |
+| `@seed/api-bun` | 后端 | Hono on Bun → Docker |
+| `@seed/docs` | 文档 | Astro 文档站 |

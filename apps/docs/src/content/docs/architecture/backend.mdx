@@ -1,0 +1,66 @@
+---
+title: 后端架构
+description: 双后端、请求生命周期与模块结构
+---
+
+## 双后端设计
+
+同一份业务代码（`@seed/services`）部署到两种运行时：
+
+| | Serverless (`api/edge/`) | Docker (`api/bun/`) |
+|---|---|---|
+| **运行时** | Cloudflare Workers (V8) | Bun |
+| **流量** | 80% — 无状态 CRUD | 20% — WebSocket / Cron / 文件 |
+| **DB 驱动** | Neon HTTP | Neon TCP |
+| **适用** | 低延迟、自动扩缩容 | 长连接、定时任务、大文件 |
+
+约束：`AnyDatabase` 类型需兼容 HTTP（Serverless）与 TCP（Docker）两种 Neon 驱动。
+
+## 请求生命周期
+
+```
+Client → CDN → Cloudflare Worker → Hono 中间件链 → Controller → Service → Repository → Drizzle → Neon
+```
+
+### 中间件链
+
+中间件按以下顺序执行，各层生命周期职责完全隔离：
+
+```
+TraceId → SecureHeaders → CORS → RateLimiter → Logger → Transform → Session → [路由] → ErrorHandler
+```
+
+| 中间件 | 职责 |
+|--------|------|
+| TraceId | 生成请求追踪 ID |
+| SecureHeaders | CSP / HSTS / X-Frame-Options |
+| CORS | 生产环境白名单，禁止反射来源 |
+| RateLimiter | 按 IP 限流 |
+| Logger | 请求日志，敏感字段脱敏（递归 3 层） |
+| Transform | 成功响应统一包装为 `{ code, data, message, traceId }` |
+| Session | Better Auth session 注入 |
+| ErrorHandler | 全局异常处理 |
+
+## 模块结构
+
+每个业务模块 3 层，职责边界清晰：
+
+```
+packages/services/src/{name}/
+├── {name}.controller.ts    # 路由 + Zod 验证 → 只编排，不含逻辑
+├── {name}.service.ts       # 业务逻辑 → 抛语义化错误，返回 VO
+├── {name}.repository.ts    # 数据访问 → 仅操作 ORM
+├── {name}.schema.ts        # 模块专用 Zod schemas
+└── {name}.vo.ts            # Entity → VO 转换
+```
+
+**单向调用**：Controller → Service → Repository，禁止反向。
+
+## 认证
+
+全端 Session-based 认证，Bearer Token 传输。服务端通过 `@seed/kit/auth/server` 的 `createAuth()` 校验。
+
+| 端 | Token 存储 |
+|---|---|
+| SPA (Web) | localStorage |
+| Native (Tauri) | secure storage |

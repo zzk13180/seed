@@ -23,7 +23,7 @@ export function errorHandlerMiddleware(err: Error, c: Context): Response {
   let errors: Record<string, string[]> | undefined
 
   if (err instanceof ValidationError) {
-    httpStatus = 400
+    httpStatus = mapCodeToHttpStatus(ResponseCode.VALIDATION_ERROR)
     code = err.code
     message = err.message
     errors = err.errors
@@ -32,7 +32,7 @@ export function errorHandlerMiddleware(err: Error, c: Context): Response {
     message = err.message
     httpStatus = mapCodeToHttpStatus(code)
   } else if (err instanceof ZodError) {
-    httpStatus = 400
+    httpStatus = mapCodeToHttpStatus(ResponseCode.VALIDATION_ERROR)
     code = ResponseCode.VALIDATION_ERROR
     const fieldErrors: Record<string, string[]> = {}
     for (const issue of err.issues) {

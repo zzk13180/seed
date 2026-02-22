@@ -1,0 +1,40 @@
+{
+  "name": "@seed/spa-console",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/spa/console/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite serve --mode development",
+        "cwd": "apps/spa/console"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "vite build --mode production",
+        "cwd": "apps/spa/console"
+      },
+      "outputs": ["{projectRoot}/dist"],
+      "configurations": {
+        "development": {
+          "command": "vite build --mode development"
+        },
+        "production": {
+          "command": "vite build --mode production"
+        }
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite preview",
+        "cwd": "apps/spa/console"
+      }
+    }
+  },
+  "tags": ["type:app", "platform:web", "framework:vue"]
+}

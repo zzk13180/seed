@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "crates/*",
-    "apps/desktop/crates/seed",
+    "apps/native/seed/crates/seed",
 ]
 resolver = "2"
 

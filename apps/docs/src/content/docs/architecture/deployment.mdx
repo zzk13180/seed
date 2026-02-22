@@ -1,0 +1,60 @@
+---
+title: 部署与安全
+description: 部署架构与安全策略
+---
+
+## 部署架构
+
+```
+┌────────────────────────────────────┐
+│      Cloudflare Workers            │
+│  apps/api/edge/ (Hono, Serverless) │
+│  Auth · CRUD · Updater · Health    │
+│          ↓                         │
+│  Neon PostgreSQL (HTTP)            │
+└────────────────────────────────────┘
+
+┌────────────────────────────────────┐
+│      Docker Container              │
+│  apps/api/bun/ (Hono on Bun)       │
+│  WebSocket · Cron · 文件处理       │
+│          ↓                         │
+│  Neon PostgreSQL (TCP)             │
+└────────────────────────────────────┘
+
+┌────────────────────────────────────┐
+│      Cloudflare Pages / Docker     │
+│  apps/spa/admin/  (Vue SPA)        │
+│  apps/docs/       (Astro SSG)      │
+└────────────────────────────────────┘
+```
+
+## 安全策略
+
+### 执行链路防线
+
+- **Zod 验证** — 协议边界实现全量运行时入参校验，抹平输入层盲区。
+- **LIKE 转义** — `escapeLikeString()` 方法阻断 SQL 通配符拼接注入。
+- **排序白名单** — Repository 层固化 `SORTABLE_FIELDS` 类型收束。
+
+### 认证层
+
+- **Bearer Token** — Session-based 认证，Bearer Token 传输
+- **Token 存储** — Web: localStorage, Native: secure storage
+
+### 传输层
+
+- **Secure Headers** — CSP / X-Frame-Options / HSTS
+- **CORS 白名单** — 生产环境显式域名，禁止反射来源
+- **Rate Limiting** — 按 IP 限流（CF Workers 用 `cf-connecting-ip`）
+
+### 数据层
+
+- **敏感字段脱敏** — Logger 递归脱敏 password/token（深度 3 层）
+- **软删除** — `deleted` 标记，不物理删除用户数据
+- **响应头保留** — Transform 中间件保留上游安全头（CSP/CORS/Set-Cookie）
+
+### 工程层
+
+- **依赖边界** — `@nx/enforce-module-boundaries` 禁止跨层 import
+- **版本统一** — pnpm catalogs 集中管理依赖版本

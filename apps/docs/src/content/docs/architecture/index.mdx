@@ -1,0 +1,70 @@
+---
+title: 架构概述
+description: 分层架构、依赖规则与缓存策略
+---
+
+## apps 目录结构
+
+```
+apps/
+├── spa/              # Web SPA 应用集合（不区分桌面/移动端）
+│   ├── admin/        # 平台管理后台（Vue + Element Plus）
+│   └── console/      # 通用控制台（Vue + Ionic）
+├── native/           # Tauri 原生应用集合（桌面 + Android + iOS）
+│   └── seed/         # 主应用
+├── api/              # 后端 API 集合（双运行时）
+│   ├── edge/         # Serverless API（Hono → Cloudflare Workers）
+│   └── bun/          # 重型任务（Hono on Bun, Docker）
+├── docs/             # 文档站（Astro SSG）
+└── robotics/         # 机器人（ROS1 + Python）
+```
+
+## 分层架构
+
+Seed 将所有代码分为四层，依赖方向严格单向：
+
+```
+Layer 3  apps/**          应用层（spa/* / native/* / api/edge / api/bun）
+  ↓
+Layer 2  packages/services  业务模块（user / auth / health）
+  ↓
+Layer 1  packages/kit + db  基础设施（中间件 / ORM / BaseController）
+  ↓
+Layer 0  packages/contracts 契约层（Zod schemas / 枚举 / 错误类）
+```
+
+`services` 中的业务代码同时被 `api/edge` 和 `api/bun` 复用。前端 app 共享 `kit/frontend` 和 `contracts`。`contracts` 零依赖，可被任何层安全引用。
+
+## 共享包职责
+
+| 包 | 层级 | 职责 | 依赖 |
+|---|---|---|---|
+| `@seed/contracts` | 0 | Zod schemas、枚举、错误类 | 仅 zod |
+| `@seed/kit` | 1 | Hono 中间件工厂、前端 BaseController、工具函数 | contracts |
+| `@seed/db` | 1 | Drizzle schema、AnyDatabase 类型、连接工厂 | drizzle-orm |
+| `@seed/services` | 2 | 业务模块（Controller → Service → Repository） | kit + db + contracts |
+| `@seed/ui` | — | Svelte 5 Web Components | 无 |
+
+## Nx 缓存策略
+
+可缓存任务：`build` / `test` / `lint` / `type-check`
+不缓存任务：`dev` / `preview`
+
+`namedInputs` 根据依赖链路确立边界关系：服务端变更仅使 Server 按需失效，前端域缓存维持独立稳定。
+
+```jsonc
+{
+  "serverSource": [
+    "{projectRoot}/src/**/*.ts",
+    "packages/contracts/src/**",
+    "packages/kit/src/hono/**",
+    "packages/db/**",
+    "packages/services/**"
+  ],
+  "frontendSource": [
+    "{projectRoot}/src/**/*.{ts,vue}",
+    "packages/contracts/src/**",
+    "packages/kit/src/frontend/**"
+  ]
+}
+```

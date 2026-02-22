@@ -35,7 +35,7 @@ export function rolesGuardMiddleware(...roles: string[]) {
   return async (c: Context, next: Next) => {
     const session = c.get('session')
     if (!session?.user) {
-      throw ForbiddenError.insufficientPermissions()
+      throw UnauthorizedError.tokenInvalid()
     }
 
     const userRole = session.user.role ?? 'user'

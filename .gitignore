@@ -40,15 +40,10 @@ coverage/
 *.tmp
 *.temp
 
-# Vue/Vite (apps/admin, apps/mobile)
-apps/admin/auto-import-components.d.ts
-apps/admin/auto-import-vue.d.ts
-.eslintrc-auto-import.json
-
 # Astro (apps/docs)
 .astro/
 
-# Tauri/Rust (apps/desktop)
+# Tauri/Rust (apps/native)
 target/
 gen/
 Cargo.lock

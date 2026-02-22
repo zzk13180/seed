@@ -2,9 +2,17 @@
 
 > **架构层级**: Layer 2 — Domain Modules（可复用的业务逻辑单元）
 
+## AI 参考指引
+
+- **新增后端 API 必须在此包创建模块**，不要写在 `apps/api/` 下
+- 模块遵循三层架构：controller（路由）→ service（业务）→ repository（数据访问）
+- Controller 导出工厂函数 `createXxxRoutes(db)`，接收 db 实例作为参数
+- 新增模块后需在 `src/index.ts` re-export，`package.json` exports 添加子路径，app 的 `app.ts` 注册路由
+- 错误抛出语义化 BusinessError（NotFoundError / ConflictError 等），不手写 HTTP 状态码
+
 ## 定位
 
-业务代码只写一份，`apps/api/` 和 `apps/server/` 都从这里导入。每个模块导出工厂函数，接收数据库实例作为参数（依赖注入），app 层只负责组装。
+业务代码只写一份，`apps/api/edge/` 和 `apps/api/bun/` 都从这里导入。每个模块导出工厂函数，接收数据库实例作为参数（依赖注入），app 层只负责组装。
 
 ## 目录结构
 
@@ -21,13 +29,14 @@ src/
 │   ├── user.controller.ts # createUserRoutes(db) → Hono
 │   ├── user.repository.ts # 数据访问层
 │   ├── user.service.ts    # 业务逻辑层
-│   ├── user.schema.ts     # Zod 验证 schemas
 │   ├── user.vo.ts         # 视图对象转换
+│   ├── __tests__/         # 单元测试
 │   └── index.ts
 ├── tauri-updater/         # Tauri 桌面端更新模块
 │   ├── tauri-updater.controller.ts  # createTauriUpdaterRoutes() → Hono
 │   ├── tauri-updater.service.ts
 │   └── index.ts
+├── api-preset.ts          # registerCoreRoutes() — 核心路由批量注册
 └── index.ts               # Barrel export
 
 ```
@@ -35,7 +44,7 @@ src/
 ## 使用方式
 
 ```typescript
-// apps/api/src/app.ts
+// apps/api/edge/src/app.ts
 import {
   createAuthRoutes,
   createHealthRoutes,

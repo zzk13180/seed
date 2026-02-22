@@ -1,7 +1,7 @@
 /**
  * Hono 应用工厂
  *
- * 统一中间件链配置，消除 apps/api 和 apps/server 的重复代码。
+ * 统一中间件链配置，消除 apps/api/edge 和 apps/api/bun 的重复代码。
  * 各 app 只需传入差异参数（auth 实例、环境模式、CORS 白名单）。
  *
  * @example 默认中间件全开

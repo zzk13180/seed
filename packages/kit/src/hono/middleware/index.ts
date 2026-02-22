@@ -1,7 +1,7 @@
 /**
  * @seed/kit Hono 中间件
  *
- * 共享中间件，供 apps/api/ 和 apps/server/ 统一使用
+ * 共享中间件，供 apps/api/edge/ 和 apps/api/bun/ 统一使用
  *
  * @example
  * ```ts

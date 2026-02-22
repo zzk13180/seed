@@ -1,0 +1,67 @@
+---
+title: Seed
+description: Nx monorepo 全栈模板
+---
+
+Seed 是一个**平台型 Monorepo**（而非单一产品仓库），提供最小完整的全栈架构参考实现。它通过严格的分层依赖边界与共享的基础设施（契约、ORM、中间件），将底层架构决策前置固化。无论是开发者还是 AI Agent，均可依循既定规范复用底层能力，专注于应用与业务模块的组装。
+
+## 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| 编排 | Nx 22 + pnpm 10 |
+| 后端 | Hono（Cloudflare Workers + Bun） |
+| 认证 | Better Auth（Session-based，Bearer Token 传输） |
+| 数据库 | Neon PostgreSQL + Drizzle ORM |
+| 验证 | Zod |
+| Web SPA | Vue 3.5 + Vite 7（Element Plus / Ionic 8） |
+| 原生端 | Tauri 2（Rust + WebView） |
+| 文档 | Astro 5 + Starlight |
+
+## 架构权衡
+
+| 决策 | 获得的工程能力 | 引入的系统约束 |
+|------|------|------|
+| Monorepo | 原子级提交、跨端类型共享、收敛工具链版本 | 提高初始理解门槛、增加 CI 逻辑复杂度 |
+| Session 替代 JWT | 支持凭证即时静默撤销、消除 token 暴露窗口 | 依赖持久化状态存储 |
+| Controller 模式 | 业务逻辑纯 TS 化、独立于 UI 框架、提升测试覆盖率 | 增加单向数据流的文件层级 |
+| Serverless+Docker 双轨 | Serverless 收敛闲置成本，Docker 支撑长连接/后台任务 | 需维系两套等效的部署基础设施 |
+
+## 工作区结构
+
+```
+seed-monorepo/
+├── apps/
+│   ├── api/          # 后端 API 集合（双运行时）
+│   │   ├── edge/     # Serverless（Hono → Cloudflare Workers，80% 流量）
+│   │   └── bun/      # Docker（Hono on Bun，WebSocket/Cron/文件）
+│   ├── spa/          # Web SPA 应用集合
+│   │   ├── admin/    # 平台管理后台（Vue + Element Plus）
+│   │   └── console/  # 通用控制台（Vue + Ionic）
+│   ├── native/       # Tauri 原生应用集合
+│   │   └── seed/     # 主应用（桌面 + Android + iOS）
+│   ├── docs/         # Astro 文档站
+│   └── robotics/     # 机器人（ROS1 + Python）
+│
+├── packages/
+│   ├── contracts/    # Layer 0 — Zod schemas + 枚举 + 错误体系
+│   ├── kit/          # Layer 1 — Hono 中间件 + 前端 BaseController + 工具
+│   ├── db/           # Layer 1 — Drizzle schema + 连接工厂
+│   ├── services/     # Layer 2 — 共享业务模块（Controller → Service → Repository）
+│   ├── ui/           # Svelte 5 Web Components
+│   └── configs/      # ESLint / TSConfig / Tailwind 共享配置
+│
+└── crates/           # Rust 共享 crate（Tauri 使用）
+```
+
+## 依赖规则
+
+```
+apps (Layer 3) → services (Layer 2) → kit + db (Layer 1) → contracts (Layer 0)
+```
+
+三条硬约束（ESLint `@nx/enforce-module-boundaries` 强制）：
+
+1. **App 间禁止互相依赖** — `admin` 不能 import `mobile` 的代码
+2. **Kit 不依赖 DB** — 中间件不耦合数据库表定义
+3. **Contracts 不依赖任何包** — 纯 Zod，零副作用

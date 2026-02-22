@@ -1,0 +1,53 @@
+{
+  "name": "@seed/native-seed",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/native/seed/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tauri dev",
+        "cwd": "apps/native/seed/crates/seed"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "cargo tauri build",
+        "cwd": "apps/native/seed/crates/seed"
+      },
+      "outputs": ["{workspaceRoot}/target"]
+    },
+    "android:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tauri android dev",
+        "cwd": "apps/native/seed/crates/seed"
+      }
+    },
+    "android:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tauri android build",
+        "cwd": "apps/native/seed/crates/seed"
+      }
+    },
+    "ios:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tauri ios dev",
+        "cwd": "apps/native/seed/crates/seed"
+      }
+    },
+    "ios:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tauri ios build",
+        "cwd": "apps/native/seed/crates/seed"
+      }
+    }
+  },
+  "tags": ["type:app", "platform:native", "framework:tauri"]
+}

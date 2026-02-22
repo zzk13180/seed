@@ -16,10 +16,10 @@
 | --- | --- | --- |
 | `@seed/kit` | 主入口（minimal） | — |
 | `@seed/kit/utils` | 工具函数（date-fns wrappers, escapeLikeString 等） | 全部 |
-| `@seed/kit/frontend` | BaseController + Logger（纯 TS） | admin, mobile |
-| `@seed/kit/auth/server` | Better Auth 服务端配置工厂 | api, server |
-| `@seed/kit/hono/middleware` | Hono 中间件集合 | api, server, modules |
-| `@seed/kit/hono/app-factory` | createHonoApp() 工厂 | api, server |
+| `@seed/kit/frontend` | BaseController + Logger（纯 TS） | spa/admin, spa/console |
+| `@seed/kit/auth/server` | Better Auth 服务端配置工厂 | api/edge, api/bun |
+| `@seed/kit/hono/middleware` | Hono 中间件集合 | api/edge, api/bun, services |
+| `@seed/kit/hono/app-factory` | createHonoApp() 工厂 | api/edge, api/bun |
 
 > **注意**：Schemas / Enums / Errors 已迁移至 `@seed/contracts`，请使用 `@seed/contracts/schemas/*`、`@seed/contracts/errors` 等路径
 
@@ -31,7 +31,7 @@ src/
 ├── auth/
 │   └── server.ts           # Better Auth 服务端配置工厂
 ├── frontend/
-│   ├── base-controller.ts  # BaseController 抽象类
+│   ├── base.controller.ts  # BaseController 抽象类
 │   └── logger.service.ts   # 日志服务
 ├── hono/
 │   ├── app-factory.ts      # createHonoApp() 中间件链组装工厂
@@ -54,10 +54,10 @@ src/
            → zod（error-handler 需要捕获 ZodError）
 
 @seed/kit ← @seed/services
-           ← @seed/api
-           ← @seed/server
-           ← @seed/admin
-           ← @seed/mobile
+           ← @seed/api-edge
+           ← @seed/api-bun
+           ← @seed/spa-admin
+           ← @seed/spa-console
 
 可选 peer dependencies:
   - hono（仅 hono/* 导出需要）

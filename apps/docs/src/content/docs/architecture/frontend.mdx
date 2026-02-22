@@ -1,0 +1,81 @@
+---
+title: 前端架构
+description: Controller + Store 分层与 DI 模式
+---
+
+## 分层模型
+
+业务逻辑抽为纯 TS 类（Controller），通过 Pinia Store 桥接 Vue 响应式。Controller 不依赖 Vue API，可独立单测。
+
+## 前端应用分类
+
+| 目录 | 框架 | 定位 |
+|------|------|------|
+| `apps/spa/admin/` | Vue + Element Plus | 平台管理后台 |
+| `apps/spa/console/` | Vue + Ionic | 通用 Web 控制台 |
+| `apps/native/seed/` | Tauri 2（嵌入 WebView） | 原生桌面 + 移动端 |
+
+所有前端应用共享 `@seed/kit/frontend`（BaseController）和 `@seed/contracts`（类型）。认证使用 Bearer Token。
+
+## 五件套
+
+每个页面模块由 5 个文件组成：
+
+```
+views/{module}/
+├── {Module}.vue              # View — 绑定 store.state，调用 store.controller
+├── {module}.types.ts         # 类型 — State + Deps 接口定义
+├── {module}.controller.ts    # 逻辑 — 纯 TS 类，不导入 Vue/Pinia
+├── {module}.service.ts       # 网络 — Hono RPC 调用
+└── {module}.store.ts         # 胶水 — Pinia defineStore，组装 DI
+```
+
+### 数据流
+
+```
+View ──读取──→ store.state（reactive）
+View ──调用──→ store.controller.方法()
+          │
+Controller ──修改──→ this.state
+Controller ──调用──→ this.deps.apiService.方法()
+          │
+Service ──HTTP──→ 后端 API
+```
+
+### 复杂度分级
+
+| 级别 | 文件 | 场景 |
+|------|------|------|
+| 简单 CRUD | 四件套（无 controller） | 字典管理 |
+| 标准业务 | 五件套 | 用户管理 |
+| 复杂交互 | 六件套（+ query.ts） | 地图轮询、乐观更新 |
+
+## BaseController
+
+`@seed/kit/frontend` 提供 `BaseController<State, Deps>`，用于需要异步生命周期的场景：
+
+| 场景 | 是否继承 | 示例 |
+|------|---------|------|
+| 有异步初始化/销毁（WebSocket、RxJS） | ✅ extends BaseController | AppController |
+| 纯同步 CRUD | ❌ 普通类即可 | UserManagementController |
+
+BaseController 提供：
+- `initialize()` / `dispose()` 竞态保护
+- 自动重试机制
+- 生命周期状态管理
+
+## Store 层约定
+
+```typescript
+export const useXxxStore = defineStore('xxx', () => {
+  const state = reactive<State>({ ... })
+  const service = new XxxService()    // 实例化 Service
+  const deps: Deps = { apiService: service }
+  const controller = markRaw(new XxxController(state, deps))
+  //                 ^^^^^^^ 避免 Controller 被深响应式代理
+
+  return { state, controller }
+})
+```
+
+View 层仅读取 `state`（订阅响应式数据）并调用 `controller`（触发方法），禁止且无法直接操作 Service 实例。

@@ -1,0 +1,134 @@
+---
+title: 脚手架模板
+description: 新增模块的标准操作步骤
+---
+
+## 新增后端业务模块
+
+**位置**：`packages/services/src/{name}/`
+
+### 文件清单
+
+| 文件 | 职责 | 必需 |
+|------|------|------|
+| `{name}.controller.ts` | `createXxxRoutes(db)` 工厂函数 | ✅ |
+| `{name}.service.ts` | 业务逻辑 | ✅ |
+| `{name}.repository.ts` | Drizzle 数据访问 | 有 DB 时 |
+| `{name}.schema.ts` | Zod 验证 | 有验证时 |
+| `{name}.vo.ts` | Entity → VO | 有转换时 |
+| `index.ts` | 公开导出 | ✅ |
+
+### 注册步骤
+
+1. `packages/services/src/index.ts` — 添加 re-export
+2. `packages/services/package.json` — `exports` 添加 `"./{name}"` 子路径
+3. `apps/api/edge/src/app.ts` — `app.route('/api/v1/{name}', createXxxRoutes(db))`
+4. `apps/api/bun/src/app.ts` — 按需注册
+
+### 依赖注入
+
+```typescript
+import type { AnyDatabase } from '@seed/db'
+
+export function createXxxRoutes(db: AnyDatabase) {
+  const repo = new XxxRepository(db)
+  const service = new XxxService(repo)
+  return new Hono()
+    .get('/', zValidator('query', xxxQuerySchema), async (c) => {
+      const result = await service.findPage(c.req.valid('query'))
+      return c.json(result)
+    })
+}
+```
+
+---
+
+## 新增前端页面模块
+
+**位置**：`apps/spa/{admin|console}/src/views/{name}/`
+
+### 文件清单（五件套）
+
+| 文件 | 职责 |
+|------|------|
+| `{Name}.vue` | UI 渲染 |
+| `{name}.types.ts` | State + Deps 接口 |
+| `{name}.controller.ts` | 纯 TS 逻辑 |
+| `{name}.service.ts` | HTTP 调用 |
+| `{name}.store.ts` | Pinia 胶水 |
+
+### 步骤
+
+1. 创建 `views/{name}/` 及上述文件
+2. `types.ts` 定义 `State` 和 `Deps`
+3. `controller.ts` — 需异步生命周期则继承 `BaseController`，否则普通类
+4. `store.ts` — `reactive(state)` + `markRaw(controller)`
+5. `{Name}.vue` — 从 store 获取 state 渲染
+6. `router/index.ts` — 添加路由
+7. （六件套）追加 `query.ts` — TanStack Query hooks
+
+---
+
+## 新增 Zod Schema
+
+**位置**：`packages/contracts/src/schemas/{name}.schema.ts`
+
+1. 创建 schema（`z.object({...})`）
+2. `packages/contracts/src/schemas/index.ts` — 添加 re-export
+3. 类型用 `z.infer<typeof xxxSchema>` 推导
+
+分页查询用 `pageRequestSchema.extend()` 扩展。
+
+---
+
+## 新增数据库表
+
+**位置**：`packages/db/src/schema/{name}.schema.ts`
+
+1. `pgTable(...)` 定义表
+2. `packages/db/src/schema/index.ts` — 添加 re-export
+3. 运行迁移：
+   ```bash
+   pnpm nx db:generate @seed/api-edge
+   pnpm nx db:migrate @seed/api-edge
+   ```
+
+约定：
+- 主键 `text('id').primaryKey()`（UUID）
+- 时间 `timestamp(..., { mode: 'date' })`
+- 软删除 `deleted: integer('deleted').notNull().default(0)`
+
+---
+
+## 新增 Hono 中间件
+
+**位置**：`packages/kit/src/hono/middleware/{name}.middleware.ts`
+
+1. 创建中间件
+2. `middleware/index.ts` — 添加 re-export
+3. `app.ts` 中注册
+
+插入位置参考链顺序：
+```
+TraceId → SecureHeaders → CORS → RateLimiter → Logger → Transform → Session → [路由] → ErrorHandler
+```
+
+---
+
+## 新增工具函数
+
+**位置**：`packages/kit/src/utils/{name}.util.ts`
+
+1. 创建纯函数（零副作用、无框架依赖）
+2. `utils/index.ts` — 添加 re-export
+3. 编写 JSDoc + `@example`
+
+---
+
+## 验收清单
+
+每次执行模板开发后，核对以下配置：
+
+- [ ] 后端业务模块是否已在且仅在 `packages/services/` 中实现？
+- [ ] 共享包导入路径是否严格遵循子路径规范（避免引入冗余依赖）？
+- [ ] API 或数据变更是否已在相关文档中同步记录？

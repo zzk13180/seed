@@ -1,7 +1,7 @@
 /**
  * @seed/services — 共享业务模块
  *
- * 业务代码只写一份，apps/api 和 apps/server 都从这里导入。
+ * 业务代码只写一份，apps/api/edge 和 apps/api/bun 都从这里导入。
  * 每个模块导出工厂函数，接收依赖（db, auth）作为参数。
  */
 

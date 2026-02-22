@@ -1,0 +1,10 @@
+{
+  "extends": "@seed/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "*.ts"],
+  "exclude": ["dist", "build", "node_modules"]
+}

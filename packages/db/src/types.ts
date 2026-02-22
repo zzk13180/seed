@@ -5,8 +5,8 @@ import type * as schema from './schema/index'
  * 通用数据库类型 — 兼容所有 PostgreSQL 驱动
  *
  * 两个后端 app 使用不同的 Drizzle 驱动:
- * - apps/api/  → Neon HTTP (NeonHttpDatabase, Serverless 适配)
- * - apps/server/ → node-postgres TCP (NodePgDatabase, 长连接)
+ * - apps/api/edge/  → Neon HTTP (NeonHttpDatabase, Serverless 适配)
+ * - apps/api/bun/ → node-postgres TCP (NodePgDatabase, 长连接)
  *
  * 两者都继承自 PgDatabase，因此共享模块使用此类型即可同时兼容。
  *

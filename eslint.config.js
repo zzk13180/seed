@@ -17,8 +17,6 @@
  * - eslint/custom-rules/: 自定义规则实现
  */
 
-import fs from 'node:fs'
-import path from 'node:path'
 import globals from 'globals'
 import js from '@eslint/js'
 import { defineConfig } from 'eslint/config'
@@ -51,34 +49,6 @@ import {
 } from './packages/configs/eslint/rules/index.js'
 import { noIsolatedComments } from './packages/configs/eslint/custom-rules/index.js'
 
-/**
- * 加载 unplugin-auto-import 生成的 ESLint 全局变量配置
- *
- * 该文件由 apps/admin/vite-config/auto-import-vue.ts 中的 eslintrc 选项自动生成，
- * 包含所有通过 unplugin-auto-import 自动导入的 Vue/Pinia/VueRouter API。
- *
- * 首次使用前需要运行一次 admin 项目的开发服务器来生成此文件：
- *   pnpm --filter admin dev
- *
- * 如果文件不存在，将使用空对象，不会影响 ESLint 运行。
- */
-function loadAutoImportGlobals() {
-  const configPath = path.resolve(import.meta.dirname, 'apps/admin/.eslintrc-auto-import.json')
-  try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
-    if (fs.existsSync(configPath)) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename
-      const content = fs.readFileSync(configPath, 'utf-8')
-      const config = JSON.parse(content)
-      return config.globals || {}
-    }
-  } catch {
-    console.warn('[ESLint] 无法加载 auto-import 全局变量配置，使用空配置')
-  }
-  return {}
-}
-
-const autoImportGlobals = loadAutoImportGlobals()
 const nxEslintPlugin = await import('@nx/eslint-plugin')
 
 export default defineConfig([
@@ -114,16 +84,7 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      /**
-       * 全局变量配置
-       * - globals.browser: 浏览器环境全局变量（window, document 等）
-       * - globals.node: Node.js 环境全局变量（process, __dirname 等）
-       * - autoImportGlobals: unplugin-auto-import 自动导入的 API（ref, computed 等）
-       *
-       * 注意：autoImportGlobals 由 apps/admin/.eslintrc-auto-import.json 自动生成，
-       * 无需手动维护 Vue/Pinia/Element Plus 的 API 列表。
-       */
-      globals: { ...globals.browser, ...globals.node, ...autoImportGlobals },
+      globals: { ...globals.browser, ...globals.node },
     },
     rules: {
       // 引入推荐规则集
@@ -416,9 +377,9 @@ export default defineConfig([
     },
   },
 
-  // ----- Server (Hono + Bun) -----
+  // ----- API / Bun (Hono + Bun Docker) -----
   {
-    files: ['apps/server/**/*.ts'],
+    files: ['apps/api/bun/**/*.ts'],
     rules: {
       'unicorn/no-anonymous-default-export': 'off',
       'unicorn/no-process-exit': 'off',
@@ -426,17 +387,11 @@ export default defineConfig([
     },
   },
 
+  // ----- API / Edge (Hono → Cloudflare Workers) -----
   {
-    files: ['apps/api/**/*.ts'],
+    files: ['apps/api/edge/**/*.ts'],
     rules: {
       'unicorn/no-process-exit': 'off',
-    },
-  },
-
-  {
-    files: ['packages/configs/vite/**/*.ts'],
-    rules: {
-      'sonarjs/function-return-type': 'off',
     },
   },
 
@@ -454,7 +409,7 @@ export default defineConfig([
       '**/*.test.ts',
       '**/*.spec.js',
       '**/*.test.js',
-      'apps/server/test/**/*.ts',
+      'apps/api/bun/test/**/*.ts',
     ],
     languageOptions: {
       globals: {

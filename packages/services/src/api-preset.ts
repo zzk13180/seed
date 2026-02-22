@@ -11,11 +11,11 @@
  *
  * @example
  * ```ts
- * // apps/api/src/app.ts
+ * // apps/api/edge/src/app.ts
  * import { registerCoreRoutes } from '@seed/services'
  * const routes = registerCoreRoutes(app, { auth, db: database })
  *
- * // apps/admin/src/api/client.ts
+ * // apps/spa/admin/src/api/client.ts
  * import type { CoreRoutesApp } from '@seed/services'
  * const api = hc<CoreRoutesApp>('')
  * ```
@@ -49,7 +49,7 @@ export interface CoreRouteDeps {
  *   - `/api/health/**`   — 健康检查（liveness + readiness）
  *   - `/api/v1/users/**` — 用户管理 CRUD
  *
- * apps/server 可在此基础上追加 server-only 路由（如 /api/updater）
+ * apps/api/bun 可在此基础上追加 bun-only 路由（如 /api/updater）
  */
 export function registerCoreRoutes<TApp extends Hono<any>>(app: TApp, deps: CoreRouteDeps) {
   return app

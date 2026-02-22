@@ -2,6 +2,14 @@
 
 > ROS 机器人控制核心包 - 提供节点管理、地图管理、点位管理和文件操作等服务
 
+## AI 参考指引
+
+- 这是 **Python + ROS** 包，与 TypeScript 技术栈无关
+- Python 节点代码在 `scripts/`，C++ 节点代码在 `src/`，启动配置在 `launch/`，服务定义在 `srv/`
+- 依赖管理用 `requirements.txt` + `pyproject.toml`，不用 pnpm
+- Lint/Format 用 Ruff，类型检查用 Pyright (Pylance)
+- 前端显示在 `public/`，无构建工具，纯静态 HTML/JS
+
 [![ROS Version](https://img.shields.io/badge/ROS-Noetic-blue)](http://wiki.ros.org/noetic) [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.8+-yellow.svg)](https://www.python.org/)
 
 ## 📋 目录
@@ -330,24 +338,26 @@ seed_core/
 
 ### 代码规范
 
-本项目遵循以下规范：
+本项目使用以下工具（配置见 `pyproject.toml`）：
 
+- 使用 **Ruff** 进行代码格式化和 Lint 检查
+- 使用 **Pyright** (VS Code Pylance) 进行静态类型检查
 - Python 代码遵循 PEP 8 规范
-- 使用 Black 进行代码格式化
-- 使用 isort 排序导入
-- 使用 Pylint 进行静态检查
 
-### 运行测试
+### 运行检查
 
 ```bash
 # 安装开发依赖
 pip install -r requirements-dev.txt
 
-# 运行 lint 检查
-pylint scripts/
+# 格式化代码
+ruff format scripts/
 
-# 运行类型检查
-mypy scripts/
+# Lint 检查
+ruff check scripts/
+
+# 自动修复
+ruff check scripts/ --fix
 ```
 
 ### 添加新服务
